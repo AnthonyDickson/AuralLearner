@@ -2,9 +2,9 @@
 
 ## Group Members
 
-* Rory Jackson - [ID Number],
+* Rory Jackson - 2208377,
 * Anthony Dickson - 3348967,
-* Johnny Mann - [ID Number]
+* Johnny Mann - 3891999
 
 ## What We Are Building
 
