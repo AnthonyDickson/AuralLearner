@@ -1,0 +1,74 @@
+Alpha is due 28 May
+	April 16 – 22
+	April 23 – 29
+	April 30 – May 6
+	May 7 – 13
+	May 14 – 20
+	May 21 – 27
+	May 28 (Monday) is due date)
+What do we want done by then?
+	At least in my opinion we’d want it to take in microphone information, convert it to Hz,
+  output what it’s meant to output in terms of pitch feedback, set a couple of different basic
+  exercises up, research into ways in which user interfaces are made for blind people, and then
+  create the ability to navigate between the exercises aurally
+How will we get that stuff done?
+	Johnny and Rory will create exercises, process microphone input, match it with a target
+  pitch and output feedback. Anthony will create the AUI and GUI based around the features
+  that will be made by the end of the semester.
+
+
+Stage 1 – final planning
+	Johnny and Rory
+		Go over the conceptual idea of how we’re going to give feedback (since we couldn’t
+    figure out what each other was talking about on Friday)
+		Figure out how to take data in through the microphone in a Java file
+		Figure out how to get information about the pitch of that waveform through Java (i.e.
+    make a Java program that takes in microphone information and outputs the pitch in
+    Hz, not worrying about the context of the app)
+		Figure out how we’re going to code some basic test exercises just for this
+    preliminary section (for the sake of the alpha version)
+	Anthony
+		Research different user interface ideas for visually impaired people
+		Get a list together, and maybe some scholarly articles if possible (it might be useful
+    for the assignment or whatever)
+		Create some kind of plan/design/thing that describes the structure of the app (so what
+    happens when you open it, the structure of what menus will be available (minus the
+    extra stuff if we have time – so ignore user profiles etc for now), specifically how
+    you’ll navigate through each one without having to look at a screen), and then show
+    Johnny and Rory so everyone’s sure that all of our work is consistent
+
+Stage 2 – building basic functionality
+	Johnny
+		Write a Java function that converts microphone data into Hz (assuming you already have
+    the microphone data being sent to this subroutine - Rory will be writing that part)
+	Rory
+		Write a Java function that takes in microphone data and outputs whatever
+    information we’ll be using to get a frequency out of it with Johnny’s function
+	Anthony
+		Plan out conceptually how the different menu options will be coded (maybe home
+    will be a function with specific words that come out and the responses call other
+    functions that do the same thing, and the other menu places and the theory exercises
+    will be functions that work in the same way, but not necessarily (considering if we go
+    with that I basically did what I just told you to do)
+		Write a Java function that acts as a handler for the voice commands that navigate
+    through the menu screens (so if we go with the example above, it’ll be called in the
+    menu function and it’ll output the menu option the user wants, meaning the menu
+    function will call this function, this function will take in the voice command and turn
+    it into maybe a String that the menu function will use to go to the next screen, just as
+    a potential example)
+
+Stage 3
+	Johnny
+		Code a few simple exercises for each context we’ll be using in the end (i.e. a couple
+    of single note exercises, a couple interval ones and maybe some three-plus-note
+    exercises) possibly (just ideas) by outputting a sine wave or whatever, then calling
+    the functions from Stage 2, then calling the function Rory will be writing that gives
+    feedback
+	Rory
+		Code a function for pitch feedback – so this will be based on the discussion from
+    Stage 1
+	Anthony
+		Code the menu screens we’ll need for the alpha – so probably a home menu and a
+    thing that runs the exercises Johnny will be coding at this point (hopefully)
+
+By that point we should have a program that has all the basic functionality we’ll need for the alpha
