@@ -9,6 +9,7 @@
 \begin{document}	
 \maketitle
 \tableofcontents
+\newpage
 
 \section{Group Members}
 \begin{itemize}
@@ -17,35 +18,46 @@
 	\item Johnny Mann - 3891999
 \end{itemize}
 	
-
 \section{Background}
-Blind students often spend more time memorising and listening than normal students. Compared to normal sheet music, braille sheet music is often more cumbersome and cannot be read in the same way, as it often relies on memorisation and listening \cite{teachingcollege}. Furthermore, teaching visually impaired students is often more difficult considering that there are fewer resources available and extra accommodations must be made \cite{mtosmt}. In one particular case, very little accommodation was made for one student, and even when they found someone to teach the student an instrument, they could not find anyone to teach this student theory initially \cite{thestar}. There some people visually impaired musicians out there who believe that they tend to focus more strongly on the aural (ear training component) aspect \cite{stuff, ncbi}. While there are some computer programs that deal with composition and notation \cite{nydailynews}, we struggled to find anything that taught anything other than online lessons and one person who offered audio discs \cite{musicfortheblind}. 
+Blind students often spend more time memorising and listening than normal students. Compared to normal sheet music, braille sheet music is often more cumbersome and cannot be read in the same way, as it often relies on memorisation and listening \cite{teachingcollege}. Furthermore, teaching visually impaired students is often more difficult considering that there are fewer resources available and extra accommodations must be made \cite{mtosmt}. In one particular case, very little accommodation was made for one student, and even when they found someone to teach the student an instrument, they could not find anyone to teach this student theory initially \cite{thestar}. 
 
-There has been call for people to develop more apps for blind musicians \cite{cdm}. So we think that developing an app that caters to this aural strength of visually impaired musicians, while also teaching music theory in a limited sense, will be very helpful to musicians who require knowledge of scales and intervals. There is also the added benefit that it will improve the user's ability to sing in tune since they will have to match pitches with their voice, and this involves having a trained ear.
+There are some visually-impaired musicians out there who believe that they tend to focus more strongly on the aural (ear training component) aspect \cite{stuff}\cite{ncbi}. While there are some computer programs that deal with composition and notation \cite{nydailynews}, we struggled to find anything that taught anything other than online lessons and one person who offered audio discs \cite{musicfortheblind}. 
 
-We have made contact with an organisation called Blind Music Student \cite{blindmusicstudent}, but we are waiting for a reply. We could not tell whether the website was unused and out of date, or simply lacking modern layout because the person who made the website intended it for Braille reading. There were no obvious websites to look at that we could find easily.
+There has been call for people to develop more apps for blind musicians \cite{cdm}. So we think that developing an app that caters to this aural strength of visually-impaired musicians, while also teaching music theory in a limited sense, will be very helpful to musicians who require knowledge of scales, intervals and rhythms. There is also the added benefit that it will improve the user's ability to sing in tune since they will have to match pitches with their voice, and this involves having a trained ear.
 
-\section{What We Are Building}
-We will make an Android app that will allow the visually-impaired to learn many of the aural components of music theory on their own (and by visually impaired we mean anyone who has trouble reading text, e.g. blind, dyslexic, etc). The idea is that the app will start with some basic pitch matching exercises which will involve matching your vocal pitch to some musical pitch. Then the exercises will become more and more complicated, involving singing musical intervals and melodies. By the end of using our app, users will have a reasonable foundation in aural music theory and an improved singing ability. 
+\section{Contact With Blind Music Student}
+We made contact with an organisation called Blind Music Student \cite{blindmusicstudent}. We were given valuable advice on what are the important parts of aural music theory. The key takeaways were that:
+\begin{itemize}
+	\item the most important aspect of aural music theory is learning the distance between notes (i.e.  intervals).
+	\item pitch matching a single note would make for a good warm-up.
+	\item the most difficult part with braille sheet music is interpreting rhythms, hence including exercises that teach this aspect would be valuable.
+	\item mobile devices are difficult to use [for blind people], so it would be important to follow some guidelines on making the app easy to use.
+\end{itemize}
+
+\section{What We Will Make}
+We will make an Android app that will allow the visually-impaired to learn many of the aural components of music theory on their own (and by visually impaired we mean anyone who has trouble reading text, e.g. blind, dyslexic, etc). The idea is that the app will start with some basic pitch matching exercises which will involve matching your vocal pitch to some musical pitch. Then the exercises will become more and more complicated, involving singing musical intervals, melodies, and rhythm exercises. By the end of using our app, users will have a reasonable foundation in aural music theory and an improved singing ability. 
 
 
 \section{How We Will Build the App}
-We plan to make this app fully usable by those who are visually impaired. The visually-impaired have trouble using mobile devices because they cannot read what is on the screen, which renders most apps unusable to the visually-impaired. To remedy this, users will be able to use our app purely with voice commands, and the app will use text-to-speech/screen-reading to provide feedback to the user. Typical aural theory and singing apps require the user to sing a pitch and then match it while only providing on-screen affirmation and guidance. Our app will guide the user with a pitch that tells them where their vocal pitch is in relation to the target pitch and provide positive affirmation.
+We plan to make this app fully usable by those who are visually impaired. The visually-impaired have trouble using mobile devices because they cannot read what is on the screen, which renders most apps unusable to the visually-impaired. To remedy this, users will be able to use our app purely with voice commands, and the app will use text-to-speech/screen-reading to provide feedback to the user. Typical aural theory and singing apps require the user to sing a pitch and then match it while only providing on-screen affirmation and guidance. Our app will guide users with aural cues (such as a guiding pitch) that tells them where their vocal pitch is in relation to the target pitch and provide positive affirmation.
 
-\subsection{Technologies That We Will Use}
-\subsubsection{Pitch Detection \& Exercises}
-For detecting the user's pitch we can the Fast Fourier Transformation algorithm. It will allow us to convert microphone input data into a format that we can use to figure out the note the user is singing based on the frequency of each note (for example, the note A is 440Hz in the fourth octave). This will be used in conjunction with music theory exercises, which we can write ourselves based on our own personal music theory knowledge. 
-\subsubsection{User Interface}
-The user interface will have two parts: the GUI and the AUI (Auditory User Interface). The GUI will be your typical Android app GUI, and the AUI will include voice-based navigation and text-to-speech. For these features we can use the CMUSphinx voice-recognition system and the built-in text-to-speech API.
+\subsection{Pitch Detection \& Exercises}
+For detecting a user's pitch we can the Fast Fourier Transformation algorithm. This algorithm will allow us to convert microphone input data into a format that we can use to figure out what note the user is singing. This functionality will enable us to make interactive music theory exercises, which we can write ourselves based on our own personal music theory knowledge. 
+\subsection{User Interface}
+The user interface will have two parts: the GUI and the AUI (Auditory User Interface). The GUI will be your typical Android app GUI, and the AUI will include voice-based navigation and text-to-speech. For these features we can use a voice-recognition system called CMUSphinx and the built-in text-to-speech API.
 
 \section{Platforms That We Will Support}
 Our app will run on Android devices that have a built-in microphone (phones, tablets, etc). We will aim to support Android versions 4.x onwards, as this will cover the vast majority (about 99\%) of Android users \cite{googledevelopers}. 
 
-\section{Distribution of Workload}
-Johnny and Rory will be in charge of creating the exercises and the features that are required for those exercises, such as processing microphone input and matching it with a target pitch. Anthony will be in charge of building the user interface and related functionality. This will include creating the GUI, and adding voice-based navigation and text-to-speech capabilities.
-
 \section{How Long the App Will Take}
-We estimate that the app will take the rest of the academic year to build. The alpha version will be ready before the end of this semester. This version will include the pitch matching functionality and a simple user interface. The beta version will be ready before the end of the second semester. This version will include more complex music theory exercises and a more fleshed-out user interface.
+For the alpha version that is due by May 28, we plan to have basic exercises implemented and a basic user interface that can be navigated with voice commands \& screen-reading. Implementing basic exercises means that we will also have implemented the functionality needed to process microphone input and compare the user's pitch with some reference pitch.
+
+For the beta version that is due in semester two, we aim to have the systems needed for the theory exercises to be fleshed out and close to completion, and to have the user interface in a completed state.
+
+Once the beta version is complete, all that should be left is adding more content to the theory exercises, polishing up the existing codebase and, squashing any remaining bugs.
+
+\section{Distribution of Workload}
+Johnny and Rory will be in charge of creating the exercises and the functionality that is required for those exercises, such as processing microphone input and matching it with a target pitch. Anthony will be in charge of building the user interface and the related functionality. This will include creating the GUI, and adding voice-based navigation and text-to-speech capabilities.
 
 \begin{thebibliography}{10}
 	\bibitem{teachingcollege} 
