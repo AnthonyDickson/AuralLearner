@@ -1,0 +1,91 @@
+\documentclass{article}
+\title{COSC345 Assignment 1 - Report}
+\author{Rory Jackson, Anthony Dickson, Johnny Mann}
+\bibliographystyle{plain}
+
+\usepackage{url}
+\usepackage[nottoc,numbib]{tocbibind}
+
+\begin{document}	
+\maketitle
+\tableofcontents
+
+\section{Group Members}
+\begin{itemize}
+	\item Rory Jackson - 2208377
+	\item Anthony Dickson - 3348967
+	\item Johnny Mann - 3891999
+\end{itemize}
+	
+
+\section{Background}
+Blind students often spend more time memorising and listening than normal students. Compared to normal sheet music, braille sheet music is often more cumbersome and cannot be read in the same way, as it often relies on memorisation and listening \cite{teachingcollege}. Furthermore, teaching visually impaired students is often more difficult considering that there are fewer resources available and extra accommodations must be made \cite{mtosmt}. In one particular case, very little accommodation was made for one student, and even when they found someone to teach the student an instrument, they could not find anyone to teach this student theory initially \cite{thestar}. There some people visually impaired musicians out there who believe that they tend to focus more strongly on the aural (ear training component) aspect \cite{stuff, ncbi}. While there are some computer programs that deal with composition and notation \cite{nydailynews}, we struggled to find anything that taught anything other than online lessons and one person who offered audio discs \cite{musicfortheblind}. 
+
+There has been call for people to develop more apps for blind musicians \cite{cdm}. So we think that developing an app that caters to this aural strength of visually impaired musicians, while also teaching music theory in a limited sense, will be very helpful to musicians who require knowledge of scales and intervals. There is also the added benefit that it will improve the user's ability to sing in tune since they will have to match pitches with their voice, and this involves having a trained ear.
+
+We have made contact with an organisation called Blind Music Student \cite{blindmusicstudent}, but we are waiting for a reply. We could not tell whether the website was unused and out of date, or simply lacking modern layout because the person who made the website intended it for Braille reading. There were no obvious websites to look at that we could find easily.
+
+\section{What We Are Building}
+We will make an Android app that will allow the visually-impaired to learn many of the aural components of music theory on their own (and by visually impaired we mean anyone who has trouble reading text, e.g. blind, dyslexic, etc). The idea is that the app will start with some basic pitch matching exercises which will involve matching your vocal pitch to some musical pitch. Then the exercises will become more and more complicated, involving singing musical intervals and melodies. By the end of using our app, users will have a reasonable foundation in aural music theory and an improved singing ability. 
+
+
+\section{How We Will Build the App}
+We plan to make this app fully usable by those who are visually impaired. The visually-impaired have trouble using mobile devices because they cannot read what is on the screen, which renders most apps unusable to the visually-impaired. To remedy this, users will be able to use our app purely with voice commands, and the app will use text-to-speech/screen-reading to provide feedback to the user. Typical aural theory and singing apps require the user to sing a pitch and then match it while only providing on-screen affirmation and guidance. Our app will guide the user with a pitch that tells them where their vocal pitch is in relation to the target pitch and provide positive affirmation.
+
+\subsection{Technologies That We Will Use}
+\subsubsection{Pitch Detection \& Exercises}
+For detecting the user's pitch we can the Fast Fourier Transformation algorithm. It will allow us to convert microphone input data into a format that we can use to figure out the note the user is singing based on the frequency of each note (for example, the note A is 440Hz in the fourth octave). This will be used in conjunction with music theory exercises, which we can write ourselves based on our own personal music theory knowledge. 
+\subsubsection{User Interface}
+The user interface will have two parts: the GUI and the AUI (Auditory User Interface). The GUI will be your typical Android app GUI, and the AUI will include voice-based navigation and text-to-speech. For these features we can use the CMUSphinx voice-recognition system and the built-in text-to-speech API.
+
+\section{Platforms That We Will Support}
+Our app will run on Android devices that have a built-in microphone (phones, tablets, etc). We will aim to support Android versions 4.x onwards, as this will cover the vast majority (about 99\%) of Android users \cite{googledevelopers}. 
+
+\section{Distribution of Workload}
+Johnny and Rory will be in charge of creating the exercises and the features that are required for those exercises, such as processing microphone input and matching it with a target pitch. Anthony will be in charge of building the user interface and related functionality. This will include creating the GUI, and adding voice-based navigation and text-to-speech capabilities.
+
+\section{How Long the App Will Take}
+We estimate that the app will take the rest of the academic year to build. The alpha version will be ready before the end of this semester. This version will include the pitch matching functionality and a simple user interface. The beta version will be ready before the end of the second semester. This version will include more complex music theory exercises and a more fleshed-out user interface.
+
+\begin{thebibliography}{10}
+	\bibitem{teachingcollege} 
+	De Zeeuw, Anne Marie. 1971. Teaching College Music Theory To Classes That Include Blind Students. 
+	
+	\bibitem{mtosmt}
+	Janna Saslaw. 2008. ``Teaching Blind'': Methods for Teaching Music Theory to Visually Impaired Students
+	\\\texttt{\path{http://www.mtosmt.org/issues/mto.09.15.3/mto.09.15.3.saslaw.html}}
+	
+	\bibitem{thestar}
+	Ista Kyra Sharmugam. 2008. Colin Ng dreams of becoming a music teacher, especially to the blind.
+	\\\texttt{\path{https://www.thestar.com.my/news/community/2008/03/29/colin-ng-dreams-of-becoming-a-music-teacher-especially-to-the-blind/}}
+	
+	\bibitem{stuff}
+	Donna-Lee Biddle. 2014. No Sight But a Keen Ear For Music, Stuff.
+	\\\texttt{\path{https://www.stuff.co.nz/national/health/63503805/No-sight-but-a-keen-ear-for-music}}
+	
+	\bibitem{ncbi}
+	Hamilton RH, Pascual-Leone A, Schlaug G. 2004. Absolute pitch in blind musicians.	
+	\\\texttt{\path{https://www.ncbi.nlm.nih.gov/pubmed/15073518}}
+	
+	\bibitem{nydailynews}
+	Tracy Miller. 2013. New computer programs Goodfeel and Lime Lighter help blind read, write music.
+	\\\texttt{\path{http://www.nydailynews.com/news/national/computer-programs-blind-read-write-music-article-1.1398144}}
+	
+	\bibitem{musicfortheblind}
+	Music For The Blind.
+	\\\texttt{\path{http://www.musicfortheblind.com/about-us/}}
+	
+	\bibitem{cdm}
+	2013. As a Musician Loses Her Sight, A Rush For Music Apps For the Blind.
+	\\\texttt{\path{http://cdm.link/2013/03/as-a-musician-loses-her-sight-a-rush-for-music-apps-for-the-blind-hack-listen/}}
+	
+	\bibitem{blindmusicstudent}
+	National Resource Center for Blind Musicians.
+	\\\texttt{\path{http://www.blindmusicstudent.org/}}
+	
+	\bibitem{googledevelopers}
+	Dashboards $\vert$ Android Developers.
+	\\\texttt{\path{https://developer.android.com/about/dashboards/index.html}}
+\end{thebibliography}
+	
+\end{document}

@@ -1,0 +1,11 @@
+\contentsline {section}{\numberline {1}Group Members}{1}
+\contentsline {section}{\numberline {2}Background}{1}
+\contentsline {section}{\numberline {3}What We Are Building}{2}
+\contentsline {section}{\numberline {4}How We Will Build the App}{2}
+\contentsline {subsection}{\numberline {4.1}Technologies That We Will Use}{3}
+\contentsline {subsubsection}{\numberline {4.1.1}Pitch Detection \& Exercises}{3}
+\contentsline {subsubsection}{\numberline {4.1.2}User Interface}{3}
+\contentsline {section}{\numberline {5}Platforms That We Will Support}{3}
+\contentsline {section}{\numberline {6}Distribution of Workload}{3}
+\contentsline {section}{\numberline {7}How Long the App Will Take}{3}
+\contentsline {section}{\numberline {8}References}{3}
