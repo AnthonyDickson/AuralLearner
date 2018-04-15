@@ -1,11 +1,12 @@
-\contentsline {section}{\numberline {1}Group Members}{2}
-\contentsline {section}{\numberline {2}Background}{2}
-\contentsline {section}{\numberline {3}Contact With Blind Music Student}{2}
-\contentsline {section}{\numberline {4}What We Will Make}{3}
+\contentsline {section}{\numberline {1}Overview}{1}
+\contentsline {section}{\numberline {2}Group Members}{1}
+\contentsline {section}{\numberline {3}Background}{2}
+\contentsline {subsection}{\numberline {3.1}Contact With Blind Music Student}{2}
+\contentsline {section}{\numberline {4}What We Will Make}{2}
+\contentsline {subsection}{\numberline {4.1}Platforms That We Will Support}{3}
 \contentsline {section}{\numberline {5}How We Will Build the App}{3}
 \contentsline {subsection}{\numberline {5.1}Pitch Detection \& Exercises}{3}
 \contentsline {subsection}{\numberline {5.2}User Interface}{3}
-\contentsline {section}{\numberline {6}Platforms That We Will Support}{3}
-\contentsline {section}{\numberline {7}How Long the App Will Take}{4}
-\contentsline {section}{\numberline {8}Distribution of Workload}{4}
-\contentsline {section}{\numberline {9}References}{4}
+\contentsline {section}{\numberline {6}How Long the App Will Take}{3}
+\contentsline {subsection}{\numberline {6.1}Milestones}{4}
+\contentsline {subsection}{\numberline {6.2}Distribution of Workload}{4}

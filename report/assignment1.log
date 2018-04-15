@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.4.15)  15 APR 2018 17:23
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.4.15)  16 APR 2018 11:47
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -26,14 +26,6 @@ File: size10.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
 (/usr/share/texlive/texmf-dist/tex/latex/url/url.sty
 \Urlmuskip=\muskip10
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
-)
-(/usr/share/texlive/texmf-dist/tex/latex/tocbibind/tocbibind.sty
-Package: tocbibind 2010/10/13 v1.5k extra ToC listings
-Package tocbibind Info: The document has section divisions on input line 50.
-
-
-Package tocbibind Note: Using section or other style headings.
-
 ) (./assignment1.aux)
 \openout1 = `assignment1.aux'.
 
@@ -55,56 +47,56 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <8> on input line 10.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <6> on input line 10.
- (./assignment1.toc
+
+(./assignment1.toc
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 6.
+(Font)              <7> on input line 4.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 6.
+(Font)              <5> on input line 4.
 )
 \tf@toc=\write3
 \openout3 = `assignment1.toc'.
 
- [1
-
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 16.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 18.
  (/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 16.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 18.
 
-[2] [3]
-Underfull \hbox (badness 10000) in paragraph at lines 67--69
+[1
+
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2] [3]
+Underfull \hbox (badness 10000) in paragraph at lines 88--90
 \OT1/cmtt/m/n/10 http : / / www . mtosmt . org / issues / mto . 09 . 15 . 3 / m
 to . 09 . 15 . 3 . saslaw .
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 71--73
+Underfull \hbox (badness 10000) in paragraph at lines 92--94
 \OT1/cmtt/m/n/10 https : / / www . thestar . com . my / news / community / 2008
  / 03 / 29 /
  []
 
 
-Overfull \hbox (38.05249pt too wide) in paragraph at lines 71--73
+Overfull \hbox (38.05249pt too wide) in paragraph at lines 92--94
 \OT1/cmtt/m/n/10 colin-[]ng-[]dreams-[]of-[]becoming-[]a-[]music-[]teacher-[]es
 pecially-[]to-[]the-[]blind/$ 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 75--77
+[4]
+Underfull \hbox (badness 10000) in paragraph at lines 96--98
 \OT1/cmtt/m/n/10 https : / / www . stuff . co . nz / national / health / 635038
 05 /
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 83--85
+Underfull \hbox (badness 10000) in paragraph at lines 104--106
 \OT1/cmtt/m/n/10 http : / / www . nydailynews . com / news / national /
  []
 
-[4]
-Overfull \hbox (218.55093pt too wide) in paragraph at lines 91--93
+
+Overfull \hbox (218.55093pt too wide) in paragraph at lines 112--114
 \OT1/cmtt/m/n/10 http : / / cdm . link / 2013 / 03 / as-[]a-[]musician-[]loses-
 []her-[]sight-[]a-[]rush-[]for-[]music-[]apps-[]for-[]the-[]blind-[]hack-[]list
 en/$ 
@@ -112,13 +104,13 @@ en/$
 
 [5] (./assignment1.aux) ) 
 Here is how much of TeX's memory you used:
- 428 strings out of 493029
- 5151 string characters out of 6136234
- 59467 words of memory out of 5000000
- 4023 multiletter control sequences out of 15000+600000
+ 340 strings out of 493029
+ 3909 string characters out of 6136234
+ 58373 words of memory out of 5000000
+ 3939 multiletter control sequences out of 15000+600000
  8063 words of font info for 29 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 23i,6n,19p,738b,304s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 23i,6n,19p,738b,280s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsf
 onts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/c
 m/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr1
@@ -126,7 +118,7 @@ m/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr1
 /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/sh
 are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/te
 xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on assignment1.pdf (5 pages, 111652 bytes).
+Output written on assignment1.pdf (5 pages, 110598 bytes).
 PDF statistics:
  48 PDF objects out of 1000 (max. 8388607)
  33 compressed objects within 1 object stream
