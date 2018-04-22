@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">COSC345 App</string>
+    <string name="mainMenuText">Exercise Modes</string>
+    <string name="intervalMenuBtn">intervals</string>
+    <string name="melodiesMenuBtn">Melodies</string>
+    <string name="rhythmsMenuBtn">Rhythms</string>
 </resources>
