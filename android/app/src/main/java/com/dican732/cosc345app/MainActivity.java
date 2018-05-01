@@ -7,13 +7,21 @@ import android.view.View;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
+    VoiceRecognition voiceRecognition; // TODO: Make it so that the voice recogniser isn't reinitialised every time the user navigates to this activity.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        voiceRecognition = new VoiceRecognition(this);
         setupMenuButtons();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        voiceRecognition.close();
     }
 
     private void setupMenuButtons() {

@@ -1,0 +1,5 @@
+#JSGF V1.0;
+
+grammar mymenu;
+
+public <smart> = (red | blue | green | yellow | cyan | magenta);
