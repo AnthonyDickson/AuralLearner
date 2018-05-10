@@ -1,5 +1,6 @@
 #JSGF V1.0;
 
-grammar mymenu;
+grammar menu;
 
-public <smart> = (red | blue | green | yellow | cyan | magenta);
+public <menu> = greeting |
+                count    ;

@@ -3,10 +3,12 @@ package com.dican732.cosc345app;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 
 import edu.cmu.pocketsphinx.Assets;
 import edu.cmu.pocketsphinx.Hypothesis;
@@ -14,19 +16,25 @@ import edu.cmu.pocketsphinx.RecognitionListener;
 import edu.cmu.pocketsphinx.SpeechRecognizer;
 import edu.cmu.pocketsphinx.SpeechRecognizerSetup;
 
-public class VoiceRecognition implements RecognitionListener {
-    public static final String LOG_TAG = "Voice Recognition";
+/**
+ * Manage voice recognition and voice control.
+ *
+ * @author Anthony Dickson
+ */
+public class VoiceRecognitionManager implements RecognitionListener {
+    public static final String LOG_TAG = "VoiceRecognition";
     /* We only need the keyphrase to start recognition, one menu with list of choices,
        and one word that is required for method switchSearch - it will bring recogniser
        back to listening for the keyphrase*/
     private static final String KWS_SEARCH = "wakeup";
     private static final String MENU_SEARCH = "menu";
     /* Keyword we are looking for to activate recognition */
-    private static final String KEYPHRASE = "open menu";
+    private static final String KEYPHRASE = "menu";
     private SpeechRecognizer recogniser;
     private Context parentContext;
+    private ArrayList<MenuAction> actions = new ArrayList<>();
 
-    public VoiceRecognition(Context parentContext) {
+    public VoiceRecognitionManager(Context parentContext) {
         this.parentContext = parentContext;
         // recogniser initialization is a time-consuming and it involves IO,
         // so we execute it in async task
@@ -58,10 +66,10 @@ public class VoiceRecognition implements RecognitionListener {
         // Create keyword-activation search.
         recogniser.addKeyphraseSearch(KWS_SEARCH, KEYPHRASE);
         // Create your custom grammar-based search
-//        File menuGrammar = new File(assetsDir, "mymenu.gram");
-//        recogniser.addGrammarSearch(MENU_SEARCH, menuGrammar);
-        File menuGrammar = new File(assetsDir, "menu.gram");
-        recogniser.addKeywordSearch(MENU_SEARCH, menuGrammar);
+        File menuGrammar = new File(assetsDir, "mymenu.gram");
+        recogniser.addGrammarSearch(MENU_SEARCH, menuGrammar);
+//        File menuGrammar = new File(assetsDir, "menu.gram");
+//        recogniser.addKeywordSearch(MENU_SEARCH, menuGrammar);
     }
 
     @Override
@@ -73,7 +81,9 @@ public class VoiceRecognition implements RecognitionListener {
         if (hypothesis == null)
             return;
 
-        handleHypothesis(hypothesis);
+        if (hypothesis.getHypstr().equals(KEYPHRASE)) {
+            switchSearch(KWS_SEARCH);
+        }
     }
 
     @Override
@@ -96,32 +106,36 @@ public class VoiceRecognition implements RecognitionListener {
             return;
         }
 
+        Log.i(LOG_TAG, String.format("Full result: %s", hypothesis.getHypstr()));
         handleHypothesis(hypothesis);
     }
 
     private void handleHypothesis(Hypothesis hypothesis) {
         String text = hypothesis.getHypstr();
+        Log.i(LOG_TAG, String.format("Current hypothesis string: %s", text));
+        Log.i(LOG_TAG, String.format("Hypothesis probability: %d", hypothesis.getProb()));
+        Log.i(LOG_TAG, String.format("Hypothesis best score: %d", hypothesis.getBestScore()));
 
-        switch (text) {
-            case KEYPHRASE:
-                switchSearch(MENU_SEARCH);
-                break;
-
-            default:
-                // Do nothing.
+        if (text.equals(KEYPHRASE)) {
+            switchSearch(MENU_SEARCH);
+        } else {
+            for (MenuAction a: actions) {
+                if (text.equals(a.activation)) {
+                    a.execute();
+                }
+            }
         }
-
-        Log.i(LOG_TAG, "Current hypothesis string - %s".format(text));
     }
 
     private void switchSearch(String searchName) {
         recogniser.stop();
 
         if (searchName.equals(KWS_SEARCH)) {
-            recogniser.startListening(searchName);
+            recogniser.startListening(KWS_SEARCH);
         } else {
             if (searchName.equals(MENU_SEARCH)) {
                 Log.i(LOG_TAG, "Started listening.");
+                Toast.makeText(parentContext,"Im listening...", Toast.LENGTH_SHORT).show();
             }
 
             recogniser.startListening(searchName, 10000);
@@ -133,18 +147,29 @@ public class VoiceRecognition implements RecognitionListener {
         Log.e(LOG_TAG, error.getMessage());
     }
 
+    /**
+     * Register an action to be made available in the voice recognition menu.
+     * Note: Make sure the string used for the action's <code>activation</code>
+     * is in the mymenu.gram file inside the assets folder, otherwise it will
+     * not work.
+     * @param action The menu action to register.
+     */
+    public void registerAction(MenuAction action) {
+        actions.add(action);
+    }
+
     private static class VoiceRecognitionInitialiser extends AsyncTask<Void, Void, Exception> {
-        private WeakReference<VoiceRecognition> activityReference;
+        private WeakReference<VoiceRecognitionManager> activityReference;
 
         // only retain a weak reference to the activity
-        VoiceRecognitionInitialiser(VoiceRecognition context) {
+        VoiceRecognitionInitialiser(VoiceRecognitionManager context) {
             activityReference = new WeakReference<>(context);
         }
 
         @Override
         protected Exception doInBackground(Void... params) {
             try {
-                VoiceRecognition context = activityReference.get();
+                VoiceRecognitionManager context = activityReference.get();
 
                 Assets assets = new Assets(context.parentContext);
                 File assetDir = assets.syncAssets();
@@ -160,7 +185,7 @@ public class VoiceRecognition implements RecognitionListener {
             if (result != null) {
                 System.out.println(result.getMessage());
             } else {
-                VoiceRecognition context = activityReference.get();
+                VoiceRecognitionManager context = activityReference.get();
                 context.switchSearch(KWS_SEARCH);
                 Log.i(LOG_TAG, "Initialisation Complete.");
             }
