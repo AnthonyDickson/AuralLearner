@@ -1,16 +1,18 @@
-package com.dican732.cosc345app;
+package cosc345.app.views;
 
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-public class MelodiesMenu extends AppCompatActivity {
+import cosc345.app.R;
+
+public class RhythmsMenu extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_melodies_menu);
+        setContentView(R.layout.activity_rhythms_menu);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 

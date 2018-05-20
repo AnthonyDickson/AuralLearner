@@ -1,6 +1,6 @@
-package com.dican732.cosc345app;
+package cosc345.app.lib;
 
-class MenuAction {
+public class MenuAction {
     String activation;
     MenuActionInterface menuActionInterface;
 

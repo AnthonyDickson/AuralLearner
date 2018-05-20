@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.dican732.cosc345app">
+    package="cosc345.app">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".MainActivity">
+        <activity android:name="cosc345.app.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,22 +21,22 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".IntervalsMenu">
+        <activity android:name="cosc345.app.views.IntervalsMenu">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.dican732.cosc345app.MainActivity" />
+                android:value="cosc345.app.MainActivity" />
         </activity>
 
-        <activity android:name=".MelodiesMenu">
+        <activity android:name="cosc345.app.views.MelodiesMenu">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.dican732.cosc345app.MainActivity" />
+                android:value="cosc345.app.MainActivity" />
         </activity>
 
-        <activity android:name=".RhythmsMenu">
+        <activity android:name="cosc345.app.views.RhythmsMenu">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.dican732.cosc345app.MainActivity" />
+                android:value="cosc345.app.MainActivity" />
         </activity>
     </application>
 

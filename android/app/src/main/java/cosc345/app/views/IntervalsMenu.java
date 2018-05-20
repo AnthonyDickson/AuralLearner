@@ -1,9 +1,11 @@
-package com.dican732.cosc345app;
+package cosc345.app.views;
 
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+
+import cosc345.app.R;
 
 public class IntervalsMenu extends AppCompatActivity {
 

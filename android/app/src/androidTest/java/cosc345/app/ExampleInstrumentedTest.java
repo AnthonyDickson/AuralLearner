@@ -1,4 +1,4 @@
-package com.dican732.cosc345app;
+package cosc345.app;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

@@ -1,4 +1,4 @@
-package com.dican732.cosc345app;
+package cosc345.app.lib;
 
 import android.content.Context;
 import android.speech.tts.TextToSpeech;

@@ -1,28 +1,18 @@
-package com.example.rory.cosc345;
-import java.lang.Runnable;
-import java.lang.Thread;
-import java.lang.Math;
-import java.util.HashMap;
+package cosc345.app.lib;
 
-import android.media.AudioRecord;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import java.lang.*;
-import java.util.HashMap;
-import android.app.AlertDialog;
 import android.media.AudioFormat;
-import android.media.MediaRecorder.AudioSource;
-import android.os.Handler;
-
+import android.media.AudioRecord;
 import android.media.MediaRecorder;
+import android.util.Log;
 
-public class COSC345_main extends AppCompatActivity {
+import java.util.Arrays;
+import java.util.HashMap;
 
-    private AudioRecord recorder_;
+public class FFT {
+
     private final static int RATE = 8000;
     private final static int CHANNEL_MODE = AudioFormat.CHANNEL_CONFIGURATION_MONO;
     private final static int ENCODING = AudioFormat.ENCODING_PCM_16BIT;
-
     private final static int BUFFER_SIZE_IN_MS = 3000;
     private final static int CHUNK_SIZE_IN_SAMPLES = 4096; // = 2 ^
     // CHUNK_SIZE_IN_SAMPLES_POW2
@@ -35,12 +25,60 @@ public class COSC345_main extends AppCompatActivity {
     private final static int MIN_FREQUENCY = 50; // HZ
     private final static int MAX_FREQUENCY = 600; // HZ - it's for guitar, should be enough
     private final static int DRAW_FREQUENCY_STEP = 5;
+    private AudioRecord recorder_;
 
+    public static void DoFFT(double[] data, int nn) {
+        long n, mmax, m, istep;
+        int j, i;
+        double wtemp, wr, wpr, wpi, wi, theta;
+        double tempr, tempi, tempj;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cosc345_main);
+        //reverse-binary reindexing
+        n = nn << 1;
+        j = 1;
+        for (i = 1; i < n; i += 2) {
+            if (j > i) {
+                tempj = data[j - 1];
+                data[j - 1] = data[i - 1];
+                data[i - 1] = tempj;
+                tempj = data[j];
+                data[j] = data[i];
+                data[i] = tempj;
+            }
+            m = nn;
+            while (m >= 2 && j > m) {
+                j -= m;
+                m >>= 1;
+            }
+            j += m;
+        }
+
+        //here begins the Danielson-Lanczos section
+        mmax = 2;
+        while (n > mmax) {
+            istep = mmax << 1;
+            theta = -(2 * Math.PI / mmax); //check this
+            wtemp = Math.sin(0.5 * theta); //check this
+            wpr = -2.0 * wtemp * wtemp;
+            wpi = Math.sin(theta); //check this
+            wr = 1.0;
+            wi = 0.0;
+            for (m = 1; m < mmax; m += 2) {
+                for (i = (int) m; i <= n; i += istep) {
+                    j = (int) (i + mmax);
+                    tempr = wr * data[j - 1] - wi * data[j];
+                    tempi = wr * data[j] + wi * data[j - 1];
+                    data[j - 1] = data[i - 1] - tempr;
+                    data[j] = data[i] - tempi;
+                    data[i - 1] += tempr;
+                    data[i] += tempi;
+                }
+                wtemp = wr;
+                wr += wr * wpr - wi * wpi;
+                wi += wi * wpr + wtemp * wpi;
+            }
+            mmax = istep;
+        }
     }
 
     public void run() {
@@ -98,60 +136,9 @@ public class COSC345_main extends AppCompatActivity {
                 }
             }
             //PostToUI(frequencies, best_frequency);
-        }
-    }
-
-    public static void DoFFT(double[] data, int nn){
-        long n, mmax, m, istep;
-        int j, i;
-        double wtemp, wr, wpr, wpi, wi, theta;
-        double tempr, tempi, tempj;
-
-        //reverse-binary reindexing
-        n = nn<<1;
-        j = 1;
-        for(i = 1; i < n; i += 2){
-            if(j > i){
-                tempj = data[j-1];
-                data[j-1] = data[i-1];
-                data[i-1] = tempj;
-                tempj = data[j];
-                data[j] = data[i];
-                data[i] = tempj;
-            }
-            m = nn;
-            while(m>=2 && j>m){
-                j -= m;
-                m >>= 1;
-            }
-            j += m;
-        }
-
-        //here begins the Danielson-Lanczos section
-        mmax = 2;
-        while(n>mmax){
-            istep = mmax<<1;
-            theta = -(2*Math.PI/mmax); //check this
-            wtemp = Math.sin(0.5*theta); //check this
-            wpr = -2.0*wtemp*wtemp;
-            wpi = Math.sin(theta); //check this
-            wr = 1.0;
-            wi = 0.0;
-            for(m=1; m<mmax; m+=2){
-                for(i= (int) m; i<=n; i+=istep){
-                    j= (int) (i+mmax);
-                    tempr = wr*data[j-1] - wi*data[j];
-                    tempi = wr*data[j] + wi*data[j-1];
-                    data[j-1] = data[i-1] - tempr;
-                    data[j] = data[i] - tempi;
-                    data[i-1] += tempr;
-                    data[i] += tempi;
-                }
-                wtemp=wr;
-                wr += wr*wpr - wi*wpi;
-                wi += wi*wpr + wtemp*wpi;
-            }
-            mmax=istep;
+            Log.i("FFT", String.format("Frequencies: %s; Best (?) Frequency: %d",
+                    Arrays.toString(frequencies.values().toArray()),
+                    best_frequency));
         }
     }
 }
