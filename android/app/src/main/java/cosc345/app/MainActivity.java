@@ -8,6 +8,7 @@ import android.widget.Button;
 import cosc345.app.lib.MenuAction;
 import cosc345.app.lib.TextToSpeechManager;
 import cosc345.app.lib.VoiceRecognitionManager;
+import cosc345.app.views.fftTest;
 import cosc345.app.views.IntervalsMenu;
 import cosc345.app.views.MelodiesMenu;
 import cosc345.app.views.RhythmsMenu;
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         setupMenuButton(cosc345.app.R.id.intervalsMenuBtn, IntervalsMenu.class);
         setupMenuButton(cosc345.app.R.id.melodiesMenuBtn, MelodiesMenu.class);
         setupMenuButton(cosc345.app.R.id.rhythmsMenuBtn, RhythmsMenu.class);
+        setupMenuButton(cosc345.app.R.id.fftTestBtn, fftTest.class);
     }
 
     private void setupMenuButton(int btnResourceId, final Class<?> activityToOpen) {

@@ -7,8 +7,11 @@ import android.util.Log;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
-public class FFT {
+import cosc345.app.views.fftTest;
+
+public class FFT implements Runnable {
 
     private final static int RATE = 8000;
     private final static int CHANNEL_MODE = AudioFormat.CHANNEL_CONFIGURATION_MONO;
@@ -25,7 +28,16 @@ public class FFT {
     private final static int MIN_FREQUENCY = 50; // HZ
     private final static int MAX_FREQUENCY = 600; // HZ - it's for guitar, should be enough
     private final static int DRAW_FREQUENCY_STEP = 5;
-    private AudioRecord recorder_;
+    private static final String LOG_TAG = "FFT";
+
+    private final fftTest parent;
+    private final android.os.Handler handler;
+    private AudioRecord recorder;
+
+    public FFT(fftTest parent, android.os.Handler handler) {
+        this.parent = parent;
+        this.handler = handler;
+    }
 
     public static void DoFFT(double[] data, int nn) {
         long n, mmax, m, istep;
@@ -84,12 +96,16 @@ public class FFT {
     public void run() {
         android.os.Process
                 .setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_AUDIO);
-        recorder_ = new AudioRecord(MediaRecorder.AudioSource.MIC, RATE, CHANNEL_MODE,
+        recorder = new AudioRecord(MediaRecorder.AudioSource.MIC, RATE, CHANNEL_MODE,
                 ENCODING, 6144);
-        if (recorder_.getState() != AudioRecord.STATE_INITIALIZED) {
-            System.err.println("Can't initialize AudioRecord");
+
+        if (recorder.getState() != AudioRecord.STATE_INITIALIZED) {
+            Log.e(LOG_TAG, "Can't initialize AudioRecord");
             return;
+        } else {
+            Log.i(LOG_TAG, "FFT thread started.");
         }
+
         short[] audio_data = new short[BUFFER_SIZE_IN_BYTES / 2];
         double[] data = new double[CHUNK_SIZE_IN_SAMPLES * 2];
         final int min_frequency_fft = Math.round(MIN_FREQUENCY
@@ -97,9 +113,9 @@ public class FFT {
         final int max_frequency_fft = Math.round(MAX_FREQUENCY
                 * CHUNK_SIZE_IN_SAMPLES / RATE);
         while (!Thread.interrupted()) {
-            recorder_.startRecording();
-            recorder_.read(audio_data, 0, CHUNK_SIZE_IN_BYTES / 2);
-            recorder_.stop();
+            recorder.startRecording();
+            recorder.read(audio_data, 0, CHUNK_SIZE_IN_BYTES / 2);
+            recorder.stop();
             for (int i = 0; i < CHUNK_SIZE_IN_SAMPLES; i++) {
                 data[i * 2] = audio_data[i];
                 data[i * 2 + 1] = 0;
@@ -125,8 +141,9 @@ public class FFT {
                         Math.pow(MIN_FREQUENCY * MAX_FREQUENCY, 0.5) / current_frequency;
                 Double current_sum_for_this_slot = frequencies
                         .get(draw_frequency);
-                if (current_sum_for_this_slot == null)
+                if (current_sum_for_this_slot == null) {
                     current_sum_for_this_slot = 0.0;
+                }
                 frequencies.put(draw_frequency, Math
                         .pow(current_amplitude, 0.5)
                         / draw_frequency_step + current_sum_for_this_slot);
@@ -136,9 +153,16 @@ public class FFT {
                 }
             }
             //PostToUI(frequencies, best_frequency);
-            Log.i("FFT", String.format("Frequencies: %s; Best (?) Frequency: %d",
+            Log.i(LOG_TAG, String.format("Frequencies: %s; Best (?) Frequency: %f",
                     Arrays.toString(frequencies.values().toArray()),
                     best_frequency));
+            postToUI(frequencies, best_frequency);
         }
+
+        Log.i(LOG_TAG, "FFT thread closed.");
+    }
+
+    private void postToUI(final Map<Double, Double> frequencies, final double pitch) {
+        handler.post(() -> parent.updateUI(frequencies, pitch));
     }
 }

@@ -12,28 +12,29 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity android:name="cosc345.app.MainActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name="cosc345.app.views.IntervalsMenu">
+        <activity android:name=".views.IntervalsMenu">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="cosc345.app.MainActivity" />
         </activity>
-
-        <activity android:name="cosc345.app.views.MelodiesMenu">
+        <activity android:name=".views.MelodiesMenu">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="cosc345.app.MainActivity" />
         </activity>
-
-        <activity android:name="cosc345.app.views.RhythmsMenu">
+        <activity android:name=".views.RhythmsMenu">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="cosc345.app.MainActivity" />
+        </activity>
+        <activity android:name=".views.fftTest">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="cosc345.app.MainActivity" />

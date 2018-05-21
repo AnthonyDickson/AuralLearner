@@ -46,5 +46,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/rhythmsMenuBtn" />
+
+        <Button
+            android:id="@+id/fftTestBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="FFT Test" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
