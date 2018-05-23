@@ -1,3 +1,12 @@
+/* Copyright (C) 2009 by Aleksey Surkov.
+ *
+ * Permission to use, copy, modify, and distribute this software and its
+ * documentation for any purpose and without fee is hereby granted, provided
+ * that the above copyright notice appear in all copies and that both that
+ * copyright notice and this permission notice appear in supporting
+ * documentation.  This software is provided "as is" without express or
+ * implied warranty.
+ */
 package cosc345.app.lib;
 
 import android.media.AudioFormat;
@@ -11,6 +20,12 @@ import java.util.Map;
 
 import cosc345.app.views.fftTest;
 
+/**
+ * A class that takes mic input from an Android device and uses a variation of
+ * the Fast Fourier Transformation to convert that input into a frequency.
+ * <p>
+ * Code adapted from https://github.com/eresid/android-guitar-tuner
+ */
 public class FFT implements Runnable {
 
     private final static int RATE = 8000;
@@ -34,11 +49,23 @@ public class FFT implements Runnable {
     private final android.os.Handler handler;
     private AudioRecord recorder;
 
+    /**
+     * @param parent  the parent activity - this where GUI output should be sent.
+     * @param handler the handler used for posting GUI updates to <code>parent</code>.
+     */
     public FFT(fftTest parent, android.os.Handler handler) {
         this.parent = parent;
         this.handler = handler;
     }
 
+    // Adapted from http://www.drdobbs.com/cpp/a-simple-and-efficient-fft-implementatio/199500857
+
+    /**
+     * Perform the FFT algorithm on the given audio input.
+     *
+     * @param data the byte buffer containing the audio input.
+     * @param nn
+     */
     public static void DoFFT(double[] data, int nn) {
         long n, mmax, m, istep;
         int j, i;
@@ -48,6 +75,7 @@ public class FFT implements Runnable {
         //reverse-binary reindexing
         n = nn << 1;
         j = 1;
+
         for (i = 1; i < n; i += 2) {
             if (j > i) {
                 tempj = data[j - 1];
@@ -57,16 +85,19 @@ public class FFT implements Runnable {
                 data[j] = data[i];
                 data[i] = tempj;
             }
+
             m = nn;
             while (m >= 2 && j > m) {
                 j -= m;
                 m >>= 1;
             }
+
             j += m;
         }
 
         //here begins the Danielson-Lanczos section
         mmax = 2;
+
         while (n > mmax) {
             istep = mmax << 1;
             theta = -(2 * Math.PI / mmax); //check this
@@ -75,6 +106,7 @@ public class FFT implements Runnable {
             wpi = Math.sin(theta); //check this
             wr = 1.0;
             wi = 0.0;
+
             for (m = 1; m < mmax; m += 2) {
                 for (i = (int) m; i <= n; i += istep) {
                     j = (int) (i + mmax);
@@ -85,10 +117,12 @@ public class FFT implements Runnable {
                     data[i - 1] += tempr;
                     data[i] += tempi;
                 }
+
                 wtemp = wr;
                 wr += wr * wpr - wi * wpi;
                 wi += wi * wpr + wtemp * wpi;
             }
+
             mmax = istep;
         }
     }
@@ -112,6 +146,7 @@ public class FFT implements Runnable {
                 * CHUNK_SIZE_IN_SAMPLES / RATE);
         final int max_frequency_fft = Math.round(MAX_FREQUENCY
                 * CHUNK_SIZE_IN_SAMPLES / RATE);
+
         while (!Thread.interrupted()) {
             recorder.startRecording();
             recorder.read(audio_data, 0, CHUNK_SIZE_IN_BYTES / 2);
@@ -141,19 +176,22 @@ public class FFT implements Runnable {
                         Math.pow(MIN_FREQUENCY * MAX_FREQUENCY, 0.5) / current_frequency;
                 Double current_sum_for_this_slot = frequencies
                         .get(draw_frequency);
+
                 if (current_sum_for_this_slot == null) {
                     current_sum_for_this_slot = 0.0;
                 }
+
                 frequencies.put(draw_frequency, Math
                         .pow(current_amplitude, 0.5)
                         / draw_frequency_step + current_sum_for_this_slot);
+
                 if (normalized_amplitude > best_amplitude) {
                     best_frequency = current_frequency;
                     best_amplitude = normalized_amplitude;
                 }
             }
-            //PostToUI(frequencies, best_frequency);
-            Log.i(LOG_TAG, String.format("Frequencies: %s; Best (?) Frequency: %f",
+
+            Log.i(LOG_TAG, String.format("Frequencies: %s; Best Frequency: %f",
                     Arrays.toString(frequencies.values().toArray()),
                     best_frequency));
             postToUI(frequencies, best_frequency);

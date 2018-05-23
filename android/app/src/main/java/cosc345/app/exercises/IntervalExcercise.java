@@ -1,4 +1,4 @@
-/*
+package cosc345.app.exercises;/*
  * This is not necessarily going to be functioning yet, just a mock up
  * Unsure whether to have a dedicated rhythm class
  * This definitley will require a pitch detector class
@@ -7,15 +7,18 @@
  */
 import java.util.concurrent.TimeUnit;
 import java.util.Random;
- 
+
+import cosc345.app.lib.Note;
+import cosc345.app.lib.Tone;
+
 public class IntervalExcercise{
   //TimeUnit.MINUTES.sleep(1);
   //TimeUnit.SECONDS.sleep(1);
   //long startTime = System.currentTimeMillis(); //fetch starting time
   //while(false||(System.currentTimeMillis()-startTime)<10000)
   
-  Random random = new Random();
-   // maybe make this part of Note
+  static Random random = new Random();
+   // maybe make this part of cosc345.app.lib.Note
   
   /* easy, you can sing 1st 4th or a 5th(no inversions 
    * For now this will play the pitch, then check if you are matching
@@ -27,18 +30,18 @@ public class IntervalExcercise{
     Note note2 = new Note(note1, intervalSelection[random.nextInt(2)]);
     //play the notes
     Tone.play(note1);
-    Timeunit.MILLISECONDS.sleep(500);
+    TimeUnit.MILLISECONDS.sleep(500);
     Tone.play(note2);
-    Timeunit.MILLISECONDS.sleep(500);
+    TimeUnit.MILLISECONDS.sleep(500);
     //part for user to do
     //these should happen at same time
     note1.playPerfect();
     note1.detectNote();
-    Timeunit.MILLISECONDS.sleep(500);
+    TimeUnit.MILLISECONDS.sleep(500);
     
     note1.playPerfect();
     note2.detectNote();
-    Timeunit.MILLISECONDS.sleep(500);
+    TimeUnit.MILLISECONDS.sleep(500);
     //feedback
     note1.playPerfect();
     note1.playUser();
@@ -71,7 +74,6 @@ public class IntervalExcercise{
   
 
 }
-  
   
   
   
