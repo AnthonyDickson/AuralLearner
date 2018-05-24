@@ -2,5 +2,8 @@
 
 grammar menu;
 
-public <menu> = greeting |
-                count    ;
+public <menu> = test     |
+                intervals|
+                rhythms  |
+                melodies |
+                help     ;

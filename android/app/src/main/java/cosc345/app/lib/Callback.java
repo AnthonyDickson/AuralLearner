@@ -1,5 +1,5 @@
 package cosc345.app.lib;
 
-public interface MenuActionInterface {
+public interface Callback {
     void execute();
 }

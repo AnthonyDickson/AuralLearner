@@ -153,12 +153,14 @@ public class FFT implements Runnable {
                 }
             }
             //PostToUI(frequencies, best_frequency);
-            Log.i(LOG_TAG, String.format("Frequencies: %s; Best (?) Frequency: %f",
+            Log.i(LOG_TAG + "/Output", String.format("Frequencies: %s; Best (?) Frequency: %f",
                     Arrays.toString(frequencies.values().toArray()),
                     best_frequency));
             postToUI(frequencies, best_frequency);
         }
 
+        recorder.release();
+        recorder = null;
         Log.i(LOG_TAG, "FFT thread closed.");
     }
 

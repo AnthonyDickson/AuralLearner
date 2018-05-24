@@ -8,40 +8,41 @@ import android.widget.Button;
 import cosc345.app.lib.MenuAction;
 import cosc345.app.lib.TextToSpeechManager;
 import cosc345.app.lib.VoiceRecognitionManager;
-import cosc345.app.views.fftTest;
 import cosc345.app.views.IntervalsMenu;
 import cosc345.app.views.MelodiesMenu;
 import cosc345.app.views.RhythmsMenu;
+import cosc345.app.views.fftTest;
 
 public class MainActivity extends AppCompatActivity {
-    VoiceRecognitionManager voiceRecognitionManager; // TODO: Make it so that the voice recogniser isn't reinitialised every time the user navigates to this activity.
+    VoiceRecognitionManager voiceRecognitionManager;
+    // TODO: Allow the voice recognition to persist to the submenus.
     TextToSpeechManager textToSpeechManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(cosc345.app.R.layout.activity_main);
-        voiceRecognitionManager = new VoiceRecognitionManager(this);
-        voiceRecognitionManager.registerAction(new MenuAction("greeting", () -> textToSpeechManager.speak("Hello")));
-        voiceRecognitionManager.registerAction(new MenuAction("count", () -> textToSpeechManager.speak("1 2 3 4 5 6 7 8 9 10")));
-        textToSpeechManager = new TextToSpeechManager(this);
+
+        setupVoiceRecognition();
+        setupTextToSpeech();
         setupMenuButtons();
     }
 
-    @Override
-    protected void onPause() {
-        voiceRecognitionManager.close();
-        textToSpeechManager.close();
-
-        super.onPause();
+    private void setupTextToSpeech() {
+        textToSpeechManager = new TextToSpeechManager(this, () -> voiceRecognitionManager.pause(),
+                () -> voiceRecognitionManager.resume());
     }
 
-    @Override
-    protected void onDestroy() {
-        voiceRecognitionManager.close();
-        textToSpeechManager.close();
-
-        super.onDestroy();
+    private void setupVoiceRecognition() {
+        voiceRecognitionManager = new VoiceRecognitionManager(this);
+        voiceRecognitionManager.registerAction(new MenuAction("intervals", () -> startActivity(new Intent(MainActivity.this, IntervalsMenu.class))));
+        voiceRecognitionManager.registerAction(new MenuAction("melodies", () -> startActivity(new Intent(MainActivity.this, MelodiesMenu.class))));
+        voiceRecognitionManager.registerAction(new MenuAction("rhythms", () -> startActivity(new Intent(MainActivity.this, RhythmsMenu.class))));
+        voiceRecognitionManager.registerAction(new MenuAction("test", () -> startActivity(new Intent(MainActivity.this, fftTest.class))));
+        voiceRecognitionManager.registerAction(new MenuAction("help", () -> {
+            String text = getResources().getString(R.string.menuHelpText);
+            textToSpeechManager.speak(text);
+        }));
     }
 
     private void setupMenuButtons() {
@@ -57,5 +58,36 @@ public class MainActivity extends AppCompatActivity {
             /* TODO: Add slide left animations for when switching between activities. */
             startActivity(new Intent(MainActivity.this, activityToOpen));
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        voiceRecognitionManager.resume();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
+        setupVoiceRecognition();
+        setupTextToSpeech();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        voiceRecognitionManager.pause();
+        textToSpeechManager.pause();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        voiceRecognitionManager.close();
+        textToSpeechManager.close();
     }
 }

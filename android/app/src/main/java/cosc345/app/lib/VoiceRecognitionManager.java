@@ -54,6 +54,23 @@ public class VoiceRecognitionManager implements RecognitionListener {
         }
     }
 
+    /**
+     * Cancel any voice recognition activity and pause the voice recognition service.
+     */
+    public void pause() {
+        if (recogniser != null) {
+            recogniser.cancel();
+            Log.i(LOG_TAG, "Paused.");
+        }
+    }
+
+    public void resume() {
+        if (recogniser != null) {
+            recogniser.startListening(KWS_SEARCH);
+            Log.i(LOG_TAG, "Resumed.");
+        }
+    }
+
     private void setupRecognizer(File assetsDir) throws IOException {
         recogniser = SpeechRecognizerSetup.defaultSetup()
                 .setAcousticModel(new File(assetsDir, "en-us-ptm"))
