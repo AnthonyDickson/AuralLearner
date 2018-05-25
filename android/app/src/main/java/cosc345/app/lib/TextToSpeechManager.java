@@ -31,6 +31,12 @@ public class TextToSpeechManager {
         tts = new TextToSpeech(parentContext, status -> init(status, onStart, onDone));
     }
 
+    /**
+     * Handle any additional setup of the text-to-speech service.
+     * @param status the result of the TextToSpeech initialisation.
+     * @param onStart the callback to be called when an utterance is begun.
+     * @param onDone the callback to be called when an utterance is finished.
+     */
     private void init(int status, Callback onStart, Callback onDone) {
         if (status != TextToSpeech.ERROR) {
             tts.setLanguage(Locale.UK);
@@ -82,6 +88,9 @@ public class TextToSpeechManager {
         }
     }
 
+    /**
+     * Stop the current utterance (if there is one) and pause the text-to-speech service.
+     */
     public void pause() {
         if (tts != null) {
             tts.stop();

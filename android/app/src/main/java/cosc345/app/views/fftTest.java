@@ -14,6 +14,9 @@ import cosc345.app.R;
 import cosc345.app.lib.FFT;
 import cosc345.app.lib.VoiceRecognitionManager;
 
+/**
+ * An activity to test the functionality of the FFT class.
+ */
 public class fftTest extends AppCompatActivity {
     Thread fftThread;
     TextView frequencyOutput;
@@ -56,6 +59,11 @@ public class fftTest extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Use the data from the FFT algorithm to update the UI.
+     * @param frequency the 'best' frequency.
+     * @param frequencies the frequencies calculated from the last recorded audio chunk.
+     */
     public void updateUI(double frequency, Map<Double, Double> frequencies) {
         frequencyOutput.setText(String.format(Locale.ENGLISH, "%.2f", frequency));
     }

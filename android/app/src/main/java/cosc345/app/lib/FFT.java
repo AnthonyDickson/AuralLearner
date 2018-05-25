@@ -1,3 +1,12 @@
+/* Copyright (C) 2009 by Aleksey Surkov.
+ *
+ * Permission to use, copy, modify, and distribute this software and its
+ * documentation for any purpose and without fee is hereby granted, provided
+ * that the above copyright notice appear in all copies and that both that
+ * copyright notice and this permission notice appear in supporting
+ * documentation.  This software is provided "as is" without express or
+ * implied warranty.
+ */
 package cosc345.app.lib;
 
 import android.media.AudioFormat;
@@ -11,6 +20,12 @@ import java.util.Map;
 
 import cosc345.app.views.fftTest;
 
+/**
+ * A class that takes mic input from an Android device and uses a variation of
+ * the Fast Fourier Transformation to convert that input into a frequency.
+ * <p>
+ * Code adapted from https://github.com/eresid/android-guitar-tuner
+ */
 public class FFT implements Runnable {
     private final static int RATE = 8000;
     private final static int CHANNEL_MODE = AudioFormat.CHANNEL_CONFIGURATION_MONO;
@@ -34,6 +49,10 @@ public class FFT implements Runnable {
     private volatile double latestFrequency;
     private volatile double latestAmplitude;
 
+    /**
+     * @param parent  the parent activity - this where GUI output should be sent.
+     * @param handler the handler used for posting GUI updates to <code>parent</code>.
+     */
     public FFT(fftTest parent, android.os.Handler handler) {
         this.parent = parent;
         this.handler = handler;
@@ -41,6 +60,15 @@ public class FFT implements Runnable {
         this.latestAmplitude = 0.0;
     }
 
+
+    // Adapted from http://www.drdobbs.com/cpp/a-simple-and-efficient-fft-implementatio/199500857
+
+    /**
+     * Perform the FFT algorithm on the given audio input.
+     *
+     * @param data the byte buffer containing the audio input.
+     * @param nn
+     */
     private static void DoFFT(double[] data, int nn) {
         long n, mmax, m, istep;
         int j, i;
@@ -93,10 +121,12 @@ public class FFT implements Runnable {
                     data[i - 1] += tempr;
                     data[i] += tempi;
                 }
+
                 wtemp = wr;
                 wr += wr * wpr - wi * wpi;
                 wi += wi * wpr + wtemp * wpi;
             }
+
             mmax = istep;
         }
     }
