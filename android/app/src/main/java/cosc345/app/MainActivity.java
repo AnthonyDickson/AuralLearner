@@ -3,6 +3,7 @@ package cosc345.app;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Button;
 
 import cosc345.app.lib.MenuAction;
@@ -15,7 +16,6 @@ import cosc345.app.views.fftTest;
 
 public class MainActivity extends AppCompatActivity {
     VoiceRecognitionManager voiceRecognitionManager;
-    // TODO: Allow the voice recognition to persist to the submenus.
     TextToSpeechManager textToSpeechManager;
 
     @Override
@@ -34,7 +34,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupVoiceRecognition() {
-        voiceRecognitionManager = new VoiceRecognitionManager(this);
+        if (voiceRecognitionManager != null) {
+            voiceRecognitionManager.resume();
+            return;
+        }
+
+        voiceRecognitionManager = VoiceRecognitionManager.getInstance(this);
         voiceRecognitionManager.registerAction(new MenuAction("intervals", () -> startActivity(new Intent(MainActivity.this, IntervalsMenu.class))));
         voiceRecognitionManager.registerAction(new MenuAction("melodies", () -> startActivity(new Intent(MainActivity.this, MelodiesMenu.class))));
         voiceRecognitionManager.registerAction(new MenuAction("rhythms", () -> startActivity(new Intent(MainActivity.this, RhythmsMenu.class))));
@@ -64,28 +69,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+        Log.i("MainActivity", "Resumed.");
         voiceRecognitionManager.resume();
     }
 
     @Override
-    protected void onRestart() {
-        super.onRestart();
-
-        setupVoiceRecognition();
-        setupTextToSpeech();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        voiceRecognitionManager.pause();
-        textToSpeechManager.pause();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
 
         voiceRecognitionManager.close();
         textToSpeechManager.close();

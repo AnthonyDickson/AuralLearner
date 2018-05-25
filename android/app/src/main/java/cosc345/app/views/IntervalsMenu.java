@@ -7,9 +7,7 @@ import android.view.MenuItem;
 
 import java.util.Objects;
 
-import cosc345.app.MainActivity;
 import cosc345.app.R;
-import cosc345.app.lib.VoiceRecognitionManager;
 
 public class IntervalsMenu extends AppCompatActivity {
     @Override
