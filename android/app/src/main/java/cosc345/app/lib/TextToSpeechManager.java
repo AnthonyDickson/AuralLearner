@@ -1,6 +1,5 @@
 package cosc345.app.lib;
 
-import android.app.Activity;
 import android.content.Context;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
@@ -18,22 +17,18 @@ public class TextToSpeechManager {
     private static final String LOG_TAG = "TextToSpeech";
 
     private TextToSpeech tts;
-    private Context parentContext;
     private HashMap<String, String> ttsParams = new HashMap<>();
 
     /**
      * Set up the text-to-speech service.
      *
-     * @param parentContext
-     * @param onStart the callback to called once TTS has begun.
-     * @param onDone  the callback to called once TTS has finished.
+     * @param parentContext the parent context (Activity).
+     * @param onStart       the callback to called once TTS has begun.
+     * @param onDone        the callback to called once TTS has finished.
      */
     public TextToSpeechManager(Context parentContext, Callback onStart, Callback onDone) {
-        this.parentContext = parentContext;
         ttsParams.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "id");
-        tts = new TextToSpeech(parentContext, status -> {
-            init(status, onStart, onDone);
-        });
+        tts = new TextToSpeech(parentContext, status -> init(status, onStart, onDone));
     }
 
     private void init(int status, Callback onStart, Callback onDone) {
