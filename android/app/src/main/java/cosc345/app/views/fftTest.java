@@ -38,7 +38,7 @@ public class fftTest extends AppCompatActivity {
         fftThread.interrupt();
     }
 
-    public void updateUI(Map<Double, Double> frequencies, double frequency) {
+    public void updateUI(double frequency, Map<Double, Double> frequencies) {
         frequencyOutput.setText(String.format(Locale.ENGLISH, "%.2f", frequency));
     }
 }

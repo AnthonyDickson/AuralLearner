@@ -2,7 +2,7 @@
 
 ## Voice Control
 
-Say 'menu' to activate voice control. At present you can say either 'greeting' or 'count'. Saying 'greeting' will make the app say 'hello', and saying 'count' will make the app count from one to ten. These are just for testing purposes and to demonstrate that the voice control is working.
+Say 'menu' to activate voice control. At present you can say 'test' to start the fft test activity, or any of 'intervals', 'rhythms', or 'melodies' to open the respective menu. Additionally you can say 'help', which will tell you how use voice control and the commands available. Voice control is not active in the fft test activity, the reason for this is that both of these need access to the audio recording resource, which does not allow concurrent use as far as I can tell.
 
 ## FFT Test
 

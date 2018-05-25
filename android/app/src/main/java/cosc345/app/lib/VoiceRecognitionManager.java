@@ -22,7 +22,7 @@ import edu.cmu.pocketsphinx.SpeechRecognizerSetup;
  * @author Anthony Dickson
  */
 public class VoiceRecognitionManager implements RecognitionListener {
-    public static final String LOG_TAG = "VoiceRecognition";
+    private static final String LOG_TAG = "VoiceRecognition";
     /* We only need the keyphrase to start recognition, one menu with list of choices,
        and one word that is required for method switchSearch - it will bring recogniser
        back to listening for the keyphrase*/
@@ -51,6 +51,23 @@ public class VoiceRecognitionManager implements RecognitionListener {
             recogniser.shutdown();
 
             Log.i(LOG_TAG, "Shutdown.");
+        }
+    }
+
+    /**
+     * Cancel any voice recognition activity and pause the voice recognition service.
+     */
+    public void pause() {
+        if (recogniser != null) {
+            recogniser.cancel();
+            Log.i(LOG_TAG, "Paused.");
+        }
+    }
+
+    public void resume() {
+        if (recogniser != null) {
+            recogniser.startListening(KWS_SEARCH);
+            Log.i(LOG_TAG, "Resumed.");
         }
     }
 

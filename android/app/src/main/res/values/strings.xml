@@ -4,4 +4,5 @@
     <string name="intervalMenuBtn">intervals</string>
     <string name="melodiesMenuBtn">Melodies</string>
     <string name="rhythmsMenuBtn">Rhythms</string>
+    <string name="menuHelpText">This is the help section. To activate voice control, say \'menu\', followed by a command. Available commands at present are \'test\', \'intervals\', \'rhythms\', \'melodies\' and \'help\'. If you need this help section again at a later time, say \"menu\", followed by \"help\".</string>
 </resources>

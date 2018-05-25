@@ -27,7 +27,6 @@ import cosc345.app.views.fftTest;
  * Code adapted from https://github.com/eresid/android-guitar-tuner
  */
 public class FFT implements Runnable {
-
     private final static int RATE = 8000;
     private final static int CHANNEL_MODE = AudioFormat.CHANNEL_CONFIGURATION_MONO;
     private final static int ENCODING = AudioFormat.ENCODING_PCM_16BIT;
@@ -41,13 +40,14 @@ public class FFT implements Runnable {
     private final static int CHUNK_SIZE_IN_BYTES = RATE * CHUNK_SIZE_IN_MS
             / 1000 * 2;
     private final static int MIN_FREQUENCY = 50; // HZ
-    private final static int MAX_FREQUENCY = 600; // HZ - it's for guitar, should be enough
+    private final static int MAX_FREQUENCY = 600; // HZ
     private final static int DRAW_FREQUENCY_STEP = 5;
     private static final String LOG_TAG = "FFT";
 
     private final fftTest parent;
     private final android.os.Handler handler;
-    private AudioRecord recorder;
+    private volatile double latestFrequency;
+    private volatile double latestAmplitude;
 
     /**
      * @param parent  the parent activity - this where GUI output should be sent.
@@ -56,7 +56,10 @@ public class FFT implements Runnable {
     public FFT(fftTest parent, android.os.Handler handler) {
         this.parent = parent;
         this.handler = handler;
+        this.latestFrequency = 0.0;
+        this.latestAmplitude = 0.0;
     }
+
 
     // Adapted from http://www.drdobbs.com/cpp/a-simple-and-efficient-fft-implementatio/199500857
 
@@ -66,7 +69,7 @@ public class FFT implements Runnable {
      * @param data the byte buffer containing the audio input.
      * @param nn
      */
-    public static void DoFFT(double[] data, int nn) {
+    private static void DoFFT(double[] data, int nn) {
         long n, mmax, m, istep;
         int j, i;
         double wtemp, wr, wpr, wpi, wi, theta;
@@ -87,6 +90,7 @@ public class FFT implements Runnable {
             }
 
             m = nn;
+
             while (m >= 2 && j > m) {
                 j -= m;
                 m >>= 1;
@@ -130,7 +134,7 @@ public class FFT implements Runnable {
     public void run() {
         android.os.Process
                 .setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_AUDIO);
-        recorder = new AudioRecord(MediaRecorder.AudioSource.MIC, RATE, CHANNEL_MODE,
+        AudioRecord recorder = new AudioRecord(MediaRecorder.AudioSource.MIC, RATE, CHANNEL_MODE,
                 ENCODING, 6144);
 
         if (recorder.getState() != AudioRecord.STATE_INITIALIZED) {
@@ -151,6 +155,7 @@ public class FFT implements Runnable {
             recorder.startRecording();
             recorder.read(audio_data, 0, CHUNK_SIZE_IN_BYTES / 2);
             recorder.stop();
+
             for (int i = 0; i < CHUNK_SIZE_IN_SAMPLES; i++) {
                 data[i * 2] = audio_data[i];
                 data[i * 2 + 1] = 0;
@@ -160,9 +165,10 @@ public class FFT implements Runnable {
 
             double best_frequency = min_frequency_fft;
             double best_amplitude = 0;
-            HashMap<Double, Double> frequencies = new HashMap<Double, Double>();
+            HashMap<Double, Double> frequencies = new HashMap<>();
             final double draw_frequency_step = 1.0 * RATE
                     / CHUNK_SIZE_IN_SAMPLES;
+
             for (int i = min_frequency_fft; i <= max_frequency_fft; i++) {
                 final double current_frequency = i * 1.0 * RATE
                         / CHUNK_SIZE_IN_SAMPLES;
@@ -191,16 +197,36 @@ public class FFT implements Runnable {
                 }
             }
 
-            Log.i(LOG_TAG, String.format("Frequencies: %s; Best Frequency: %f",
-                    Arrays.toString(frequencies.values().toArray()),
-                    best_frequency));
-            postToUI(frequencies, best_frequency);
+            Log.i(LOG_TAG + "/Output",
+                    String.format("Best Frequency: %f; Best Amplitude: %f; Frequencies: %s",
+                            best_frequency, best_amplitude,
+                            Arrays.toString(frequencies.values().toArray())));
+            latestFrequency = best_frequency;
+            latestAmplitude = best_amplitude;
+            postToUI(best_frequency, frequencies);
         }
 
+        recorder.release();
         Log.i(LOG_TAG, "FFT thread closed.");
     }
 
-    private void postToUI(final Map<Double, Double> frequencies, final double pitch) {
-        handler.post(() -> parent.updateUI(frequencies, pitch));
+    private void postToUI(final double frequency, final Map<Double, Double> frequencies) {
+        handler.post(() -> parent.updateUI(frequency, frequencies));
+    }
+
+    /**
+     * Get the most recent frequency (Hz) reading.
+     * @return the most recent frequency reading.
+     */
+    public double getHertz() {
+        return latestFrequency;
+    }
+
+    /**
+     * Get the most recent amplitude reading.
+     * @return the most recent amplitude reading.
+     */
+    public double getAmplitude() {
+        return latestAmplitude;
     }
 }
