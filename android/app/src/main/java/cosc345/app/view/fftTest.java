@@ -1,4 +1,4 @@
-package cosc345.app.views;
+package cosc345.app.view;
 
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -9,8 +9,8 @@ import android.widget.TextView;
 import java.util.Locale;
 
 import cosc345.app.R;
-import cosc345.app.lib.FFT;
 import cosc345.app.lib.Note;
+import cosc345.app.model.FFT;
 
 /**
  * An activity to test the functionality of the FFT class.
@@ -68,7 +68,7 @@ public class fftTest extends AppCompatActivity {
      * @param amplitude    the 'best' amplitude of the mic input.
      */
     public void updateUI(double frequency, double avgFrequency, double amplitude) {
-        if (amplitude < UPDATE_THRESHOLD) {
+        if (amplitude < fftTest.UPDATE_THRESHOLD) {
             frequencyOutput.setText("-");
             noteOutput.setText("-");
             return;

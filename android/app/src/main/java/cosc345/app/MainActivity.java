@@ -5,14 +5,14 @@ import android.os.Bundle;
 import android.widget.Button;
 
 import cosc345.app.lib.MenuAction;
-import cosc345.app.lib.TextToSpeechManager;
-import cosc345.app.lib.VoiceRecognitionManager;
-import cosc345.app.views.IntervalsMenu;
-import cosc345.app.views.MelodiesMenu;
-import cosc345.app.views.PlayNote;
-import cosc345.app.views.RhythmsMenu;
-import cosc345.app.views.VoiceControlActivity;
-import cosc345.app.views.fftTest;
+import cosc345.app.model.TextToSpeechManager;
+import cosc345.app.model.VoiceRecognitionManager;
+import cosc345.app.view.IntervalsMenu;
+import cosc345.app.view.MelodiesMenu;
+import cosc345.app.view.PlayNote;
+import cosc345.app.view.RhythmsMenu;
+import cosc345.app.view.VoiceControlActivity;
+import cosc345.app.view.fftTest;
 
 /**
  * The main entry point for the application.
@@ -57,7 +57,7 @@ public class MainActivity extends VoiceControlActivity {
         setupMenuButton(R.id.playNoteMenuBtn, PlayNote.class);
     }
 
-    private void setupMenuButton(int btnResourceId, final Class<?> activityToOpen) {
+    private void setupMenuButton(int btnResourceId, Class<?> activityToOpen) {
         Button btn = findViewById(btnResourceId);
         btn.setOnClickListener(v -> {
             /* TODO: Add slide left animations for when switching between activities. */

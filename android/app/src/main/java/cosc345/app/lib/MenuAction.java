@@ -4,7 +4,7 @@ package cosc345.app.lib;
  * Representation of an action executable from the voice control menu.
  */
 public class MenuAction {
-    final String activation;
+    public final String activation;
     private Callback action;
 
     /**

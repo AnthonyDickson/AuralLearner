@@ -1,4 +1,4 @@
-package cosc345.app.views;
+package cosc345.app.view;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,7 +10,7 @@ import android.widget.Spinner;
 
 import cosc345.app.R;
 import cosc345.app.lib.Note;
-import cosc345.app.lib.NotePlayer;
+import cosc345.app.model.NotePlayer;
 
 /**
  * An activity to test the functionality of <code>NotePlayer</code>.
@@ -19,12 +19,14 @@ public class PlayNote extends AppCompatActivity implements AdapterView.OnItemSel
     Thread notePlayerThread;
     // originally from http://marblemice.blogspot.com/2010/04/generate-and-play-tone-in-android.html
     // and modified by Steve Pomeroy <steve@staticfree.info>
-    private double freqOfTone = 440; // hz
+    private double freqOfTone;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_note);
+
+        freqOfTone = 440.0; //Hz
 
         Spinner spinner = findViewById(R.id.noteSelectionSpinner);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,

@@ -1,4 +1,4 @@
-package cosc345.app.views;
+package cosc345.app.view;
 
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -8,11 +8,12 @@ import java.util.Objects;
 
 import cosc345.app.R;
 
-public class IntervalsMenu extends VoiceControlActivity {
+public class RhythmsMenu extends VoiceControlActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_intervals_menu);
+        setContentView(R.layout.activity_rhythms_menu);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
     }
 

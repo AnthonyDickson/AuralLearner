@@ -1,10 +1,13 @@
-package cosc345.app.lib;
+package cosc345.app.model;
 
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.os.Handler;
 import android.util.Log;
+
+import cosc345.app.lib.Callback;
+import cosc345.app.lib.Note;
 
 /**
  * Takes a note or frequency and plays it.

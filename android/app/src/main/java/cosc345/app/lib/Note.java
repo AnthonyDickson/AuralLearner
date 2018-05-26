@@ -1,9 +1,11 @@
 package cosc345.app.lib;
 
+import android.support.annotation.NonNull;
+
 /**
  * Represents a musical note.
  */
-public class Note {
+public class Note implements Comparable<Note> {
     public static final String[] NOTE_NAMES = {
             "C2", "C#2", "D2", "D#2", "E2", "F2", "F#2", "G2", "G#2", "A2", "A#2", "B2",
             "C3", "C#3", "D3", "D#3", "E3", "F3", "F#3", "G3", "G#3", "A3", "A#3", "B3",
@@ -42,7 +44,6 @@ public class Note {
             throw new IllegalArgumentException();
         }
 
-        // Formulas found at http://newt.phys.unsw.edu.au/jw/notes.html
         int hsDist = Note.halfStepDistance(frequency);
         double refFreq = Note.frequency(hsDist);
         int centDist = (int) Math.round(Note.NUM_CENTS * Math.log(frequency / refFreq) / Math.log(2.0));
@@ -107,6 +108,11 @@ public class Note {
      */
     public static double frequency(int halfStepsDistance) {
         return Math.pow(2, 1.0 * halfStepsDistance / Note.NUM_HALF_STEPS) * Note.A4_FREQUENCY;
+    }
+
+    @Override
+    public int compareTo(@NonNull Note o) {
+        return nameIndex - o.nameIndex;
     }
 
     public int getNameIndex() {

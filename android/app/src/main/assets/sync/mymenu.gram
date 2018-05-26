@@ -7,4 +7,5 @@ public <menu> = test     |
                 intervals|
                 rhythms  |
                 melodies |
-                help     ;
+                help     |
+                cancel   ;

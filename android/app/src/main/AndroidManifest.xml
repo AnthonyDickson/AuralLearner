@@ -19,32 +19,32 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".views.IntervalsMenu">
+        <activity android:name=".view.IntervalsMenu">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="cosc345.app.MainActivity" />
         </activity>
-        <activity android:name=".views.MelodiesMenu">
+        <activity android:name=".view.MelodiesMenu">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="cosc345.app.MainActivity" />
         </activity>
-        <activity android:name=".views.RhythmsMenu">
+        <activity android:name=".view.RhythmsMenu">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="cosc345.app.MainActivity" />
         </activity>
-        <activity android:name=".views.fftTest">
+        <activity android:name=".view.fftTest">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="cosc345.app.MainActivity" />
         </activity>
-        <activity android:name=".views.PlayNote">
+        <activity android:name=".view.PlayNote">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="cosc345.app.MainActivity" />
         </activity>
-        <activity android:name=".views.VoiceControlActivity"></activity>
+        <activity android:name=".view.VoiceControlActivity"></activity>
     </application>
 
 </manifest>

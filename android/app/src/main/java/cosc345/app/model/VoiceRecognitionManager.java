@@ -1,4 +1,4 @@
-package cosc345.app.lib;
+package cosc345.app.model;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
+import cosc345.app.lib.MenuAction;
+import cosc345.app.lib.State;
 import edu.cmu.pocketsphinx.Assets;
 import edu.cmu.pocketsphinx.Hypothesis;
 import edu.cmu.pocketsphinx.RecognitionListener;
@@ -31,7 +33,7 @@ public class VoiceRecognitionManager implements RecognitionListener {
     private State state = State.NOT_READY;
     private SpeechRecognizer recogniser;
     private WeakReference<Context> parentContext;
-    private ArrayList<MenuAction> actions = new ArrayList<>();
+    private final ArrayList<MenuAction> actions = new ArrayList<>();
 
     private VoiceRecognitionManager() {}
 
@@ -40,16 +42,16 @@ public class VoiceRecognitionManager implements RecognitionListener {
      * @return the instance of the voice recognition manager.
      */
     public static VoiceRecognitionManager getInstance() {
-        if (instance == null)
-            instance = new VoiceRecognitionManager();
+        if (VoiceRecognitionManager.instance == null) {
+            VoiceRecognitionManager.instance = new VoiceRecognitionManager();
+        }
 
-        return instance;
+        return VoiceRecognitionManager.instance;
     }
 
     /**
      * Initialise the voice recogniser.
      * @param parentContext the parent activity.
-     * @return the instance of this single object.
      */
     public void init(Context parentContext) {
         this.parentContext = new WeakReference<>(parentContext);
@@ -73,10 +75,10 @@ public class VoiceRecognitionManager implements RecognitionListener {
                 .getRecognizer();
         recogniser.addListener(this);
         // Create keyword-activation search.
-        recogniser.addKeyphraseSearch(KWS_SEARCH, KEYPHRASE);
+        recogniser.addKeyphraseSearch(VoiceRecognitionManager.KWS_SEARCH, VoiceRecognitionManager.KEYPHRASE);
         // Create your custom grammar-based search
         File menuGrammar = new File(assetsDir, "mymenu.gram");
-        recogniser.addGrammarSearch(MENU_SEARCH, menuGrammar);
+        recogniser.addGrammarSearch(VoiceRecognitionManager.MENU_SEARCH, menuGrammar);
 //        File menuGrammar = new File(assetsDir, "menu.gram");
 //        recogniser.addKeywordSearch(MENU_SEARCH, menuGrammar);
     }
@@ -87,27 +89,29 @@ public class VoiceRecognitionManager implements RecognitionListener {
 
     @Override
     public void onPartialResult(Hypothesis hypothesis) {
-        if (hypothesis == null)
+        if (hypothesis == null) {
             return;
+        }
 
-        if (hypothesis.getHypstr().equals(KEYPHRASE)) {
-            switchSearch(KWS_SEARCH);
+        if (hypothesis.getHypstr().equals(VoiceRecognitionManager.KEYPHRASE)) {
+            switchSearch(VoiceRecognitionManager.KWS_SEARCH);
         }
     }
 
     @Override
     public void onTimeout() {
-        Log.i(LOG_TAG, "Timed out.");
-        switchSearch(KWS_SEARCH);
+        Log.i(VoiceRecognitionManager.LOG_TAG, "Timed out.");
+        switchSearch(VoiceRecognitionManager.KWS_SEARCH);
     }
 
     @Override
     public void onEndOfSpeech() {
-        if (!recogniser.getSearchName().equals(KWS_SEARCH))
-            switchSearch(KWS_SEARCH);
+        if (!recogniser.getSearchName().equals(VoiceRecognitionManager.KWS_SEARCH)) {
+            switchSearch(VoiceRecognitionManager.KWS_SEARCH);
+        }
 
         state = State.READY;
-        Log.i(LOG_TAG, "Finished Listening");
+        Log.i(VoiceRecognitionManager.LOG_TAG, "Finished Listening");
     }
 
     @Override
@@ -116,7 +120,7 @@ public class VoiceRecognitionManager implements RecognitionListener {
             return;
         }
 
-        Log.i(LOG_TAG, String.format("Full result: %s", hypothesis.getHypstr()));
+        Log.i(VoiceRecognitionManager.LOG_TAG, String.format("Full result: %s", hypothesis.getHypstr()));
         handleHypothesis(hypothesis);
     }
 
@@ -126,12 +130,12 @@ public class VoiceRecognitionManager implements RecognitionListener {
      */
     private void handleHypothesis(Hypothesis hypothesis) {
         String text = hypothesis.getHypstr();
-        Log.i(LOG_TAG, String.format("Current hypothesis string: %s", text));
-        Log.i(LOG_TAG, String.format("Hypothesis probability: %d", hypothesis.getProb()));
-        Log.i(LOG_TAG, String.format("Hypothesis best score: %d", hypothesis.getBestScore()));
+        Log.i(VoiceRecognitionManager.LOG_TAG, String.format("Current hypothesis string: %s", text));
+        Log.i(VoiceRecognitionManager.LOG_TAG, String.format("Hypothesis probability: %d", hypothesis.getProb()));
+        Log.i(VoiceRecognitionManager.LOG_TAG, String.format("Hypothesis best score: %d", hypothesis.getBestScore()));
 
-        if (text.equals(KEYPHRASE)) {
-            switchSearch(MENU_SEARCH);
+        if (text.equals(VoiceRecognitionManager.KEYPHRASE)) {
+            switchSearch(VoiceRecognitionManager.MENU_SEARCH);
         } else {
             for (MenuAction a : actions) {
                 if (text.equals(a.activation)) {
@@ -148,12 +152,12 @@ public class VoiceRecognitionManager implements RecognitionListener {
     private void switchSearch(String searchName) {
         recogniser.stop();
 
-        if (searchName.equals(KWS_SEARCH)) {
-            recogniser.startListening(KWS_SEARCH);
+        if (searchName.equals(VoiceRecognitionManager.KWS_SEARCH)) {
+            recogniser.startListening(VoiceRecognitionManager.KWS_SEARCH);
             state = State.READY;
         } else {
-            if (searchName.equals(MENU_SEARCH)) {
-                Log.i(LOG_TAG, "Started listening.");
+            if (searchName.equals(VoiceRecognitionManager.MENU_SEARCH)) {
+                Log.i(VoiceRecognitionManager.LOG_TAG, "Started listening.");
                 Toast.makeText(parentContext.get(), "Im listening...", Toast.LENGTH_SHORT).show();
                 state = State.BUSY;
             }
@@ -164,7 +168,7 @@ public class VoiceRecognitionManager implements RecognitionListener {
 
     @Override
     public void onError(Exception error) {
-        Log.e(LOG_TAG, error.getMessage());
+        Log.e(VoiceRecognitionManager.LOG_TAG, error.getMessage());
     }
 
     /**
@@ -187,7 +191,7 @@ public class VoiceRecognitionManager implements RecognitionListener {
             recogniser.cancel();
             state = State.PAUSED;
 
-            Log.i(LOG_TAG, "Paused.");
+            Log.i(VoiceRecognitionManager.LOG_TAG, "Paused.");
         }
     }
 
@@ -196,10 +200,10 @@ public class VoiceRecognitionManager implements RecognitionListener {
      */
     public void resume() {
         if (recogniser != null && state == State.PAUSED) {
-            recogniser.startListening(KWS_SEARCH);
+            recogniser.startListening(VoiceRecognitionManager.KWS_SEARCH);
             state = State.READY;
 
-            Log.i(LOG_TAG, "Resumed.");
+            Log.i(VoiceRecognitionManager.LOG_TAG, "Resumed.");
         }
     }
 
@@ -212,7 +216,7 @@ public class VoiceRecognitionManager implements RecognitionListener {
         }
 
         if (state == State.NOT_READY || state == State.SHUTDOWN) {
-            Log.i(LOG_TAG, "Restarted.");
+            Log.i(VoiceRecognitionManager.LOG_TAG, "Restarted.");
             new VoiceRecognitionInitialiser(this).execute();
         }
     }
@@ -226,7 +230,7 @@ public class VoiceRecognitionManager implements RecognitionListener {
             recogniser.shutdown();
             state = State.SHUTDOWN;
 
-            Log.i(LOG_TAG, "Shutdown.");
+            Log.i(VoiceRecognitionManager.LOG_TAG, "Shutdown.");
         }
     }
 
@@ -234,7 +238,7 @@ public class VoiceRecognitionManager implements RecognitionListener {
      * Initialises the voice recogniser asynchronously.
      */
     private static class VoiceRecognitionInitialiser extends AsyncTask<Void, Void, Exception> {
-        private WeakReference<VoiceRecognitionManager> activityReference;
+        private final WeakReference<VoiceRecognitionManager> activityReference;
 
         // only retain a weak reference to the activity
         VoiceRecognitionInitialiser(VoiceRecognitionManager context) {
@@ -263,9 +267,9 @@ public class VoiceRecognitionManager implements RecognitionListener {
                 System.out.println(result.getMessage());
             } else {
                 VoiceRecognitionManager context = activityReference.get();
-                context.switchSearch(KWS_SEARCH);
+                context.switchSearch(VoiceRecognitionManager.KWS_SEARCH);
                 context.state = State.READY;
-                Log.i(LOG_TAG, "Initialisation Complete.");
+                Log.i(VoiceRecognitionManager.LOG_TAG, "Initialisation Complete.");
             }
         }
     }

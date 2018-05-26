@@ -7,7 +7,7 @@
  * documentation.  This software is provided "as is" without express or
  * implied warranty.
  */
-package cosc345.app.lib;
+package cosc345.app.model;
 
 import android.media.AudioFormat;
 import android.media.AudioRecord;
@@ -18,7 +18,7 @@ import android.util.Log;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import cosc345.app.views.fftTest;
+import cosc345.app.view.fftTest;
 
 /**
  * A class that takes mic input from an Android device and uses a variation of
