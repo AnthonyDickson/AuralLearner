@@ -5,7 +5,7 @@ package cosc345.app.lib;
  */
 public interface Callback {
     /**
-     * The method to be executed.
+     * Execute the callback.
      */
     void execute();
 }

@@ -2,8 +2,6 @@ package cosc345.app;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.Button;
 
 import cosc345.app.lib.MenuAction;
@@ -12,12 +10,13 @@ import cosc345.app.lib.VoiceRecognitionManager;
 import cosc345.app.views.IntervalsMenu;
 import cosc345.app.views.MelodiesMenu;
 import cosc345.app.views.RhythmsMenu;
+import cosc345.app.views.VoiceControlActivity;
 import cosc345.app.views.fftTest;
 
-public class MainActivity extends AppCompatActivity {
-    VoiceRecognitionManager voiceRecognitionManager;
-    TextToSpeechManager textToSpeechManager;
-
+/**
+ * The main entry point for the application.
+ */
+public class MainActivity extends VoiceControlActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,24 +28,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupTextToSpeech() {
-        textToSpeechManager = new TextToSpeechManager(this, () -> voiceRecognitionManager.pause(),
-                () -> voiceRecognitionManager.resume());
+        TextToSpeechManager.getInstance().init(
+                this,
+                () -> VoiceRecognitionManager.getInstance().pause(),
+                () -> VoiceRecognitionManager.getInstance().resume());
     }
 
     private void setupVoiceRecognition() {
-        if (voiceRecognitionManager != null) {
-            voiceRecognitionManager.resume();
-            return;
-        }
-
-        voiceRecognitionManager = VoiceRecognitionManager.getInstance(this);
+        VoiceRecognitionManager voiceRecognitionManager = VoiceRecognitionManager.getInstance();
+        voiceRecognitionManager.init(this);
         voiceRecognitionManager.registerAction(new MenuAction("intervals", () -> startActivity(new Intent(MainActivity.this, IntervalsMenu.class))));
         voiceRecognitionManager.registerAction(new MenuAction("melodies", () -> startActivity(new Intent(MainActivity.this, MelodiesMenu.class))));
         voiceRecognitionManager.registerAction(new MenuAction("rhythms", () -> startActivity(new Intent(MainActivity.this, RhythmsMenu.class))));
         voiceRecognitionManager.registerAction(new MenuAction("test", () -> startActivity(new Intent(MainActivity.this, fftTest.class))));
         voiceRecognitionManager.registerAction(new MenuAction("help", () -> {
             String text = getResources().getString(R.string.menuHelpText);
-            textToSpeechManager.speak(text);
+            TextToSpeechManager.getInstance().speak(text);
         }));
     }
 
@@ -66,18 +63,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-
-        Log.i("MainActivity", "Resumed.");
-        voiceRecognitionManager.resume();
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
 
-        voiceRecognitionManager.close();
-        textToSpeechManager.close();
+        VoiceRecognitionManager.getInstance().close();
+        TextToSpeechManager.getInstance().close();
     }
 }

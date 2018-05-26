@@ -39,7 +39,6 @@ public class fftTest extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        VoiceRecognitionManager.getInstance().close();
         fftThread = new Thread(new FFT(this, new Handler()));
         fftThread.start();
     }
@@ -50,7 +49,6 @@ public class fftTest extends AppCompatActivity {
 
         fftThread.interrupt();
         fftThread = null;
-        VoiceRecognitionManager.getInstance().resume();
     }
 
     @Override

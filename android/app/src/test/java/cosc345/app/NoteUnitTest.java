@@ -27,10 +27,10 @@ public class NoteUnitTest {
         assertEquals(0, c4.getCents());
         assertEquals("C4", c4.getName());
 
-        Note aSharp3 = new Note(233);
+        Note aSharp3 = new Note(227);
 
         assertEquals(3, aSharp3.getOctave());
-        assertEquals(-1, aSharp3.getCents());
+        assertEquals(-46, aSharp3.getCents());
         assertEquals("A#3", aSharp3.getName(false));
         assertEquals("Bb3", aSharp3.getName(true));
 
@@ -40,6 +40,10 @@ public class NoteUnitTest {
         assertEquals(10, e5.getCents());
         assertEquals("E5", e5.getName(false));
         assertEquals("E5", e5.getName(true));
+
+        Note d4 = new Note(295.41);
+
+        assertEquals(10, d4.getCents());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -67,6 +71,7 @@ public class NoteUnitTest {
 
         assertEquals(5, fSharp5.getOctave());
         assertEquals(0, fSharp5.getCents());
+        assertEquals(739.99, Note.frequency(fSharp5), 1e-1);
         assertEquals("F#5", fSharp5.getName(false));
         assertEquals("Gb5", fSharp5.getName(true));
 

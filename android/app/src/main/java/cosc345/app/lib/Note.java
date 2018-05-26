@@ -70,10 +70,10 @@ public class Note {
      *             For example a note name may look like: A#3 or Db4.
      */
     public Note(String name) {
-        int noteIndex = Utilities.find(NOTE_NAMES, name);
+        int noteIndex = Utilities.indexOf(name, NOTE_NAMES);
 
         if (noteIndex < 0)
-            noteIndex = Utilities.find(NOTE_NAMES_FLATS, name);
+            noteIndex = Utilities.indexOf(name, NOTE_NAMES_FLATS);
 
         if (noteIndex < 0)
             throw new IllegalArgumentException("Invalid Note Name");
@@ -101,18 +101,18 @@ public class Note {
      * @param frequency the frequency of the note.
      * @return the distance in half steps from A4.
      */
-    private static int halfStepDistance(double frequency) {
+    public static int halfStepDistance(double frequency) {
         return (int) Math.round(NUM_HALF_STEPS * Math.log(frequency / A4_FREQUENCY) / Math.log(2.0));
     }
 
     /**
      * Calculate the frequency of a note given its distance in half steps from A4.
      *
-     * @param halfStepsFromA4 the number of half steps from A4
+     * @param halfStepsDistance the number of half steps from A4
      * @return the frequency of the note in Hertz. This is the frequency assuming perfect pitch.
      */
-    public static double frequency(int halfStepsFromA4) {
-        return Math.pow(2, halfStepsFromA4 / NUM_HALF_STEPS) * A4_FREQUENCY;
+    public static double frequency(int halfStepsDistance) {
+        return Math.pow(2, 1.0 * halfStepsDistance / NUM_HALF_STEPS) * A4_FREQUENCY;
     }
 
     /**
