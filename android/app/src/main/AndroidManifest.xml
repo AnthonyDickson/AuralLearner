@@ -34,17 +34,21 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="cosc345.app.MainActivity" />
         </activity>
-        <activity android:name=".view.fftTest">
+        <activity android:name=".view.testing.fftTest">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="cosc345.app.MainActivity" />
         </activity>
-        <activity android:name=".view.PlayNote">
+        <activity android:name=".view.testing.PlayNote">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="cosc345.app.MainActivity" />
         </activity>
-        <activity android:name=".view.VoiceControlActivity"></activity>
+        <activity android:name=".view.PitchMatching">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="cosc345.app.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

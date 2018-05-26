@@ -18,7 +18,7 @@ import android.util.Log;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import cosc345.app.view.fftTest;
+import cosc345.app.view.testing.fftTest;
 
 /**
  * A class that takes mic input from an Android device and uses a variation of

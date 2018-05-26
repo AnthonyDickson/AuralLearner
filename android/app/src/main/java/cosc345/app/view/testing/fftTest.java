@@ -1,4 +1,4 @@
-package cosc345.app.view;
+package cosc345.app.view.testing;
 
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;

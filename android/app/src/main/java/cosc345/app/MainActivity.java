@@ -9,10 +9,11 @@ import cosc345.app.model.TextToSpeechManager;
 import cosc345.app.model.VoiceRecognitionManager;
 import cosc345.app.view.IntervalsMenu;
 import cosc345.app.view.MelodiesMenu;
-import cosc345.app.view.PlayNote;
+import cosc345.app.view.PitchMatching;
 import cosc345.app.view.RhythmsMenu;
 import cosc345.app.view.VoiceControlActivity;
-import cosc345.app.view.fftTest;
+import cosc345.app.view.testing.PlayNote;
+import cosc345.app.view.testing.fftTest;
 
 /**
  * The main entry point for the application.
@@ -43,10 +44,12 @@ public class MainActivity extends VoiceControlActivity {
         voiceRecognitionManager.registerAction(new MenuAction("rhythms", () -> startActivity(new Intent(MainActivity.this, RhythmsMenu.class))));
         voiceRecognitionManager.registerAction(new MenuAction("test", () -> startActivity(new Intent(MainActivity.this, fftTest.class))));
         voiceRecognitionManager.registerAction(new MenuAction("note player", () -> startActivity(new Intent(MainActivity.this, PlayNote.class))));
+        voiceRecognitionManager.registerAction(new MenuAction("pitch matching", () -> startActivity(new Intent(MainActivity.this, PitchMatching.class))));
         voiceRecognitionManager.registerAction(new MenuAction("help", () -> {
             String text = getResources().getString(R.string.menuHelpText);
             TextToSpeechManager.getInstance().speak(text);
         }));
+        voiceRecognitionManager.registerAction(new MenuAction("cancel", () -> VoiceRecognitionManager.getInstance().pause()));
     }
 
     private void setupMenuButtons() {
@@ -55,6 +58,7 @@ public class MainActivity extends VoiceControlActivity {
         setupMenuButton(cosc345.app.R.id.rhythmsMenuBtn, RhythmsMenu.class);
         setupMenuButton(cosc345.app.R.id.fftTestBtn, fftTest.class);
         setupMenuButton(R.id.playNoteMenuBtn, PlayNote.class);
+        setupMenuButton(R.id.pitchMatchingMenuBtn, PitchMatching.class);
     }
 
     private void setupMenuButton(int btnResourceId, Class<?> activityToOpen) {

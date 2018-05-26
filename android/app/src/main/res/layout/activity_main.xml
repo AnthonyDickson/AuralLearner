@@ -58,5 +58,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Note Player" />
+
+        <Button
+            android:id="@+id/pitchMatchingMenuBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pitch Matching" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

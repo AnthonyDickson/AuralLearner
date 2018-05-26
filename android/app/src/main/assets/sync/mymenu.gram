@@ -4,6 +4,7 @@ grammar menu;
 
 public <menu> = test     |
                 note player|
+                pitch matching|
                 intervals|
                 rhythms  |
                 melodies |

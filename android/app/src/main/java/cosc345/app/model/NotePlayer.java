@@ -23,6 +23,7 @@ public class NotePlayer implements Runnable {
     private final Callback callback;
     private final double frequency;
     private final Handler handler = new Handler();
+    private AudioTrack audioTrack;
 
     /**
      * Create a new note player.
@@ -89,7 +90,7 @@ public class NotePlayer implements Runnable {
     private void play() {
         Log.i(NotePlayer.LOG_TAG, String.format("Playing note with a frequency of %.2f for %d seconds",
                 frequency, duration));
-        AudioTrack audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC,
+        audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC,
                 NotePlayer.SAMPLE_RATE, AudioFormat.CHANNEL_OUT_MONO,
                 AudioFormat.ENCODING_PCM_16BIT, generatedSnd.length,
                 AudioTrack.MODE_STATIC);
@@ -111,6 +112,19 @@ public class NotePlayer implements Runnable {
         });
 
         audioTrack.play();
+    }
+
+    public synchronized void stop() {
+        if (audioTrack != null && audioTrack.getPlayState() == AudioTrack.PLAYSTATE_PLAYING) {
+            audioTrack.pause();
+            audioTrack.flush();
+            audioTrack.release();
+
+        }
+
+        if (callback != null) {
+            callback.execute();
+        }
     }
 
 }

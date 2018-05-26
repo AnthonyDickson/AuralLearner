@@ -1,4 +1,4 @@
-package cosc345.app.view;
+package cosc345.app.view.testing;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,10 +16,13 @@ import cosc345.app.model.NotePlayer;
  * An activity to test the functionality of <code>NotePlayer</code>.
  */
 public class PlayNote extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-    Thread notePlayerThread;
     // originally from http://marblemice.blogspot.com/2010/04/generate-and-play-tone-in-android.html
     // and modified by Steve Pomeroy <steve@staticfree.info>
+    private NotePlayer notePlayer;
+    private Thread notePlayerThread;
     private double freqOfTone;
+    private boolean isPlaying;
+    private Button play, stop;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,15 +39,40 @@ public class PlayNote extends AppCompatActivity implements AdapterView.OnItemSel
         spinner.setOnItemSelectedListener(this);
         spinner.setSelection(Note.A4_INDEX);
 
-        Button btn = findViewById(R.id.playNoteBtn);
-        btn.setOnClickListener(v -> {
-            if (notePlayerThread != null) {
-                notePlayerThread.interrupt();
-            }
+        play = findViewById(R.id.playNoteBtn);
+        play.setOnClickListener(v -> play());
+        stop = findViewById(R.id.stopNoteBtn);
+        stop.setOnClickListener(v -> stop());
+    }
 
-            notePlayerThread = new Thread(new NotePlayer(freqOfTone, 3, null));
-            notePlayerThread.start();
-        });
+    private void play() {
+        if (isPlaying) {
+            return;
+        }
+
+        notePlayer = new NotePlayer(freqOfTone, 3, this::onPlayBackDone);
+        notePlayerThread = new Thread(notePlayer);
+        notePlayerThread.start();
+        play.setVisibility(View.GONE);
+        stop.setVisibility(View.VISIBLE);
+        isPlaying = true;
+    }
+
+    private void stop() {
+        if (!isPlaying) {
+            return;
+        }
+
+        notePlayer.stop();
+        notePlayerThread.interrupt();
+        notePlayerThread = null;
+        onPlayBackDone();
+    }
+
+    private void onPlayBackDone() {
+        play.setVisibility(View.VISIBLE);
+        stop.setVisibility(View.GONE);
+        isPlaying = false;
     }
 
     @Override
@@ -57,5 +85,12 @@ public class PlayNote extends AppCompatActivity implements AdapterView.OnItemSel
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
         freqOfTone = Note.A4_FREQUENCY;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        stop();
     }
 }
