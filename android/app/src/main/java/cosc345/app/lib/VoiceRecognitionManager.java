@@ -19,7 +19,7 @@ import edu.cmu.pocketsphinx.SpeechRecognizerSetup;
 /**
  * Manages voice recognition and voice control.
  * This is a singleton object.
- *
+ * TODO: Close the manager when the app is no longer open (running in background).
  * @author Anthony Dickson
  */
 public class VoiceRecognitionManager implements RecognitionListener {

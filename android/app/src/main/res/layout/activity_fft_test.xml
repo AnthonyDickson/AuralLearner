@@ -54,6 +54,20 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/frequencyOutputLabel" />
+
+        <TextView
+            android:id="@+id/noteOutputLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Note" />
+
+        <TextView
+            android:id="@+id/noteTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Current Note" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

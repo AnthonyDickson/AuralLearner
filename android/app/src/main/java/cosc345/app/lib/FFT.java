@@ -42,11 +42,13 @@ public class FFT implements Runnable {
     private final static int MIN_FREQUENCY = 50; // HZ
     private final static int MAX_FREQUENCY = 600; // HZ
     private final static int DRAW_FREQUENCY_STEP = 5;
+    private final static int MOVING_AVG_PERIOD = 4;
     private static final String LOG_TAG = "FFT";
 
     private final fftTest parent;
     private final android.os.Handler handler;
     private volatile double latestFrequency;
+    private volatile double avgFrequency;
     private volatile double latestAmplitude;
 
     /**
@@ -150,6 +152,7 @@ public class FFT implements Runnable {
                 * CHUNK_SIZE_IN_SAMPLES / RATE);
         final int max_frequency_fft = Math.round(MAX_FREQUENCY
                 * CHUNK_SIZE_IN_SAMPLES / RATE);
+        double[] freqMovingAvg = new double[MOVING_AVG_PERIOD];
 
         while (!Thread.interrupted()) {
             recorder.startRecording();
@@ -163,8 +166,8 @@ public class FFT implements Runnable {
 
             DoFFT(data, CHUNK_SIZE_IN_SAMPLES);
 
-            double best_frequency = min_frequency_fft;
-            double best_amplitude = 0;
+            double bestFrequency = min_frequency_fft;
+            double bestAmplitude = 0;
             HashMap<Double, Double> frequencies = new HashMap<>();
             final double draw_frequency_step = 1.0 * RATE
                     / CHUNK_SIZE_IN_SAMPLES;
@@ -191,27 +194,40 @@ public class FFT implements Runnable {
                         .pow(current_amplitude, 0.5)
                         / draw_frequency_step + current_sum_for_this_slot);
 
-                if (normalized_amplitude > best_amplitude) {
-                    best_frequency = current_frequency;
-                    best_amplitude = normalized_amplitude;
+                if (normalized_amplitude > bestAmplitude) {
+                    bestFrequency = current_frequency;
+                    bestAmplitude = normalized_amplitude;
                 }
             }
 
+            double avg = 0;
+
+            for (int i = 0; i < freqMovingAvg.length; i++) {
+                if (i == freqMovingAvg.length - 1) {
+                    freqMovingAvg[freqMovingAvg.length - 1] = bestFrequency;
+                } else {
+                    freqMovingAvg[i] = freqMovingAvg[i +1];
+                }
+
+                avg += freqMovingAvg[i];
+            }
+
+            avg /= freqMovingAvg.length;
+
+
             Log.i(LOG_TAG + "/Output",
-                    String.format("Best Frequency: %f; Best Amplitude: %f; Frequencies: %s",
-                            best_frequency, best_amplitude,
+                    String.format("Best Frequency: %.2f; Avg Frequency %.2f; Best Amplitude: %.2f; Frequencies: %s",
+                            bestFrequency, avgFrequency, bestAmplitude,
                             Arrays.toString(frequencies.values().toArray())));
-            latestFrequency = best_frequency;
-            latestAmplitude = best_amplitude;
-            postToUI(best_frequency, frequencies);
+            avgFrequency = avg;
+            latestFrequency = bestFrequency;
+            latestAmplitude = bestAmplitude;
+
+            handler.post(() -> parent.updateUI(latestFrequency, avgFrequency, latestAmplitude));
         }
 
         recorder.release();
         Log.i(LOG_TAG, "FFT thread closed.");
-    }
-
-    private void postToUI(final double frequency, final Map<Double, Double> frequencies) {
-        handler.post(() -> parent.updateUI(frequency, frequencies));
     }
 
     /**

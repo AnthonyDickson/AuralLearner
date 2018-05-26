@@ -12,14 +12,18 @@ import java.util.Map;
 
 import cosc345.app.R;
 import cosc345.app.lib.FFT;
+import cosc345.app.lib.Note;
 import cosc345.app.lib.VoiceRecognitionManager;
 
 /**
  * An activity to test the functionality of the FFT class.
  */
 public class fftTest extends AppCompatActivity {
+    private static final double UPDATE_THRESHOLD = 8e9;
+
     Thread fftThread;
     TextView frequencyOutput;
+    TextView noteOutput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +31,8 @@ public class fftTest extends AppCompatActivity {
         setContentView(R.layout.activity_fft_test);
 
         frequencyOutput = findViewById(R.id.fftFrequencyTextView);
+        noteOutput = findViewById(R.id.noteTextView);
 
-        fftThread = new Thread(new FFT(this, new Handler()));
     }
 
     @Override
@@ -36,6 +40,7 @@ public class fftTest extends AppCompatActivity {
         super.onResume();
 
         VoiceRecognitionManager.getInstance().close();
+        fftThread = new Thread(new FFT(this, new Handler()));
         fftThread.start();
     }
 
@@ -44,6 +49,7 @@ public class fftTest extends AppCompatActivity {
         super.onPause();
 
         fftThread.interrupt();
+        fftThread = null;
         VoiceRecognitionManager.getInstance().resume();
     }
 
@@ -61,10 +67,20 @@ public class fftTest extends AppCompatActivity {
 
     /**
      * Use the data from the FFT algorithm to update the UI.
-     * @param frequency the 'best' frequency.
-     * @param frequencies the frequencies calculated from the last recorded audio chunk.
+     * @param frequency the 'best' frequency of the mic input.
+     * @param avgFrequency the frequency calculated as a moving average.
+     * @param amplitude the 'best' amplitude of the mic input.
      */
-    public void updateUI(double frequency, Map<Double, Double> frequencies) {
-        frequencyOutput.setText(String.format(Locale.ENGLISH, "%.2f", frequency));
+    public void updateUI(double frequency, double avgFrequency, double amplitude) {
+        if (amplitude < UPDATE_THRESHOLD) {
+            frequencyOutput.setText("-");
+            noteOutput.setText("-");
+            return;
+        }
+
+        frequencyOutput.setText(String.format(Locale.ENGLISH, "%.2f (Avg: %.2f)", frequency,
+                avgFrequency));
+        Note note = new Note(avgFrequency);
+        noteOutput.setText(String.format(Locale.ENGLISH, "%s %d cents", note, note.getCents()));
     }
 }
