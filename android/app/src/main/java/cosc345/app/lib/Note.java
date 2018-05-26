@@ -20,13 +20,12 @@ public class Note {
 
     public static final int A4_INDEX = 33;
     public static final double A4_FREQUENCY = 440.0; // in Hertz
+    public static final int NUM_HALF_STEPS = 12; // per octave.
     private static final int A4_OCTAVE = 4;
     private static final int HALF_STEPS_IN_OCTAVE_BELOW_A4 = 9; // before the octave changes.
-    private static final int NUM_HALF_STEPS = 12; // per octave.
     private static final int NUM_CENTS = Note.NUM_HALF_STEPS * 100; // per octave.
     private static final double MIN_FREQUENCY = 63.57; // C2 minus 49 cents
     private static final double MAX_FREQUENCY = 2034.0; // B6 plus 50 cents
-
     private final int nameIndex;
     private final double frequency;
     private final int halfStepDistance;
@@ -110,28 +109,20 @@ public class Note {
         return Math.pow(2, 1.0 * halfStepsDistance / Note.NUM_HALF_STEPS) * Note.A4_FREQUENCY;
     }
 
-    /**
-     * Getter for the frequency of a note.
-     *
-     * @return the frequency of a note.
-     */
+    public int getNameIndex() {
+        return nameIndex;
+    }
+
     public double getFrequency() {
         return frequency;
     }
 
-    /**
-     * Getter for the octave of a note.
-     *
-     * @return the octave of the note.
-     */
     public int getOctave() {
         return octave;
     }
 
     /**
-     * Getter for the cents of a note.
-     *
-     * @return the cents of the note.
+     * @return the cents of the note from the closest note.
      */
     public int getCents() {
         return cents;

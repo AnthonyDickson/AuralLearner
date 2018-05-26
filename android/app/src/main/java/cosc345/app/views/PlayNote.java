@@ -40,7 +40,7 @@ public class PlayNote extends AppCompatActivity implements AdapterView.OnItemSel
                 notePlayerThread.interrupt();
             }
 
-            notePlayerThread = new Thread(new NotePlayer(freqOfTone, 3));
+            notePlayerThread = new Thread(new NotePlayer(freqOfTone, 3, null));
             notePlayerThread.start();
         });
     }
