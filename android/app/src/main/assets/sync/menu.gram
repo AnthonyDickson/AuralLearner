@@ -1,4 +1,7 @@
 #JSGF V1.0;
 
-say hello /1e-1/
-count to ten/1e-2/
+intervals /1e-1/
+rhythms /1e-1/
+melodies /1e-1/
+test /1e-2/
+help /1e-1/

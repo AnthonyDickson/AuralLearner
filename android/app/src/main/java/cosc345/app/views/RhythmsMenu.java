@@ -2,14 +2,13 @@ package cosc345.app.views;
 
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import java.util.Objects;
 
 import cosc345.app.R;
 
-public class RhythmsMenu extends AppCompatActivity {
+public class RhythmsMenu extends VoiceControlActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

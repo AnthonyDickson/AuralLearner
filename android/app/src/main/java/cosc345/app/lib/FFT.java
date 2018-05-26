@@ -12,11 +12,11 @@ package cosc345.app.lib;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
+import android.os.Handler;
 import android.util.Log;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
 
 import cosc345.app.views.fftTest;
 
@@ -33,31 +33,32 @@ public class FFT implements Runnable {
     private final static int BUFFER_SIZE_IN_MS = 3000;
     private final static int CHUNK_SIZE_IN_SAMPLES = 4096; // = 2 ^
     // CHUNK_SIZE_IN_SAMPLES_POW2
-    private final static int CHUNK_SIZE_IN_MS = 1000 * CHUNK_SIZE_IN_SAMPLES
-            / RATE;
-    private final static int BUFFER_SIZE_IN_BYTES = RATE * BUFFER_SIZE_IN_MS
+    private final static int CHUNK_SIZE_IN_MS = 1000 * FFT.CHUNK_SIZE_IN_SAMPLES
+            / FFT.RATE;
+    private final static int BUFFER_SIZE_IN_BYTES = FFT.RATE * FFT.BUFFER_SIZE_IN_MS
             / 1000 * 2;
-    private final static int CHUNK_SIZE_IN_BYTES = RATE * CHUNK_SIZE_IN_MS
+    private final static int CHUNK_SIZE_IN_BYTES = FFT.RATE * FFT.CHUNK_SIZE_IN_MS
             / 1000 * 2;
     private final static int MIN_FREQUENCY = 50; // HZ
     private final static int MAX_FREQUENCY = 600; // HZ
     private final static int DRAW_FREQUENCY_STEP = 5;
+    private final static int MOVING_AVG_PERIOD = 4;
     private static final String LOG_TAG = "FFT";
 
     private final fftTest parent;
     private final android.os.Handler handler;
     private volatile double latestFrequency;
+    private volatile double avgFrequency;
     private volatile double latestAmplitude;
 
     /**
      * @param parent  the parent activity - this where GUI output should be sent.
-     * @param handler the handler used for posting GUI updates to <code>parent</code>.
      */
-    public FFT(fftTest parent, android.os.Handler handler) {
+    public FFT(fftTest parent) {
         this.parent = parent;
-        this.handler = handler;
-        this.latestFrequency = 0.0;
-        this.latestAmplitude = 0.0;
+        handler = new Handler();
+        latestFrequency = 0.0;
+        latestAmplitude = 0.0;
     }
 
 
@@ -70,7 +71,10 @@ public class FFT implements Runnable {
      * @param nn
      */
     private static void DoFFT(double[] data, int nn) {
-        long n, mmax, m, istep;
+        long n;
+        long mmax;
+        long m;
+        long istep;
         int j, i;
         double wtemp, wr, wpr, wpi, wi, theta;
         double tempr, tempi, tempj;
@@ -131,55 +135,57 @@ public class FFT implements Runnable {
         }
     }
 
+    @Override
     public void run() {
         android.os.Process
                 .setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_AUDIO);
-        AudioRecord recorder = new AudioRecord(MediaRecorder.AudioSource.MIC, RATE, CHANNEL_MODE,
-                ENCODING, 6144);
+        AudioRecord recorder = new AudioRecord(MediaRecorder.AudioSource.MIC, FFT.RATE, FFT.CHANNEL_MODE,
+                FFT.ENCODING, 6144);
 
         if (recorder.getState() != AudioRecord.STATE_INITIALIZED) {
-            Log.e(LOG_TAG, "Can't initialize AudioRecord");
+            Log.e(FFT.LOG_TAG, "Can't initialize AudioRecord");
             return;
         } else {
-            Log.i(LOG_TAG, "FFT thread started.");
+            Log.i(FFT.LOG_TAG, "FFT thread started.");
         }
 
-        short[] audio_data = new short[BUFFER_SIZE_IN_BYTES / 2];
-        double[] data = new double[CHUNK_SIZE_IN_SAMPLES * 2];
-        final int min_frequency_fft = Math.round(MIN_FREQUENCY
-                * CHUNK_SIZE_IN_SAMPLES / RATE);
-        final int max_frequency_fft = Math.round(MAX_FREQUENCY
-                * CHUNK_SIZE_IN_SAMPLES / RATE);
+        short[] audio_data = new short[FFT.BUFFER_SIZE_IN_BYTES / 2];
+        double[] data = new double[FFT.CHUNK_SIZE_IN_SAMPLES * 2];
+        int min_frequency_fft = Math.round(FFT.MIN_FREQUENCY
+                * FFT.CHUNK_SIZE_IN_SAMPLES / FFT.RATE);
+        int max_frequency_fft = Math.round(FFT.MAX_FREQUENCY
+                * FFT.CHUNK_SIZE_IN_SAMPLES / FFT.RATE);
+        double[] freqMovingAvg = new double[FFT.MOVING_AVG_PERIOD];
 
         while (!Thread.interrupted()) {
             recorder.startRecording();
-            recorder.read(audio_data, 0, CHUNK_SIZE_IN_BYTES / 2);
+            recorder.read(audio_data, 0, FFT.CHUNK_SIZE_IN_BYTES / 2);
             recorder.stop();
 
-            for (int i = 0; i < CHUNK_SIZE_IN_SAMPLES; i++) {
+            for (int i = 0; i < FFT.CHUNK_SIZE_IN_SAMPLES; i++) {
                 data[i * 2] = audio_data[i];
                 data[i * 2 + 1] = 0;
             }
 
-            DoFFT(data, CHUNK_SIZE_IN_SAMPLES);
+            FFT.DoFFT(data, FFT.CHUNK_SIZE_IN_SAMPLES);
 
-            double best_frequency = min_frequency_fft;
-            double best_amplitude = 0;
+            double bestFrequency = min_frequency_fft;
+            double bestAmplitude = 0;
             HashMap<Double, Double> frequencies = new HashMap<>();
-            final double draw_frequency_step = 1.0 * RATE
-                    / CHUNK_SIZE_IN_SAMPLES;
+            double draw_frequency_step = 1.0 * FFT.RATE
+                    / FFT.CHUNK_SIZE_IN_SAMPLES;
 
             for (int i = min_frequency_fft; i <= max_frequency_fft; i++) {
-                final double current_frequency = i * 1.0 * RATE
-                        / CHUNK_SIZE_IN_SAMPLES;
-                final double draw_frequency = Math
-                        .round((current_frequency - MIN_FREQUENCY)
-                                / DRAW_FREQUENCY_STEP)
-                        * DRAW_FREQUENCY_STEP + MIN_FREQUENCY;
-                final double current_amplitude = Math.pow(data[i * 2], 2)
+                double current_frequency = i * 1.0 * FFT.RATE
+                        / FFT.CHUNK_SIZE_IN_SAMPLES;
+                double draw_frequency = Math
+                        .round((current_frequency - FFT.MIN_FREQUENCY)
+                                / FFT.DRAW_FREQUENCY_STEP)
+                        * FFT.DRAW_FREQUENCY_STEP + FFT.MIN_FREQUENCY;
+                double current_amplitude = Math.pow(data[i * 2], 2)
                         + Math.pow(data[i * 2 + 1], 2);
-                final double normalized_amplitude = current_amplitude *
-                        Math.pow(MIN_FREQUENCY * MAX_FREQUENCY, 0.5) / current_frequency;
+                double normalized_amplitude = current_amplitude *
+                        Math.pow(FFT.MIN_FREQUENCY * FFT.MAX_FREQUENCY, 0.5) / current_frequency;
                 Double current_sum_for_this_slot = frequencies
                         .get(draw_frequency);
 
@@ -191,27 +197,40 @@ public class FFT implements Runnable {
                         .pow(current_amplitude, 0.5)
                         / draw_frequency_step + current_sum_for_this_slot);
 
-                if (normalized_amplitude > best_amplitude) {
-                    best_frequency = current_frequency;
-                    best_amplitude = normalized_amplitude;
+                if (normalized_amplitude > bestAmplitude) {
+                    bestFrequency = current_frequency;
+                    bestAmplitude = normalized_amplitude;
                 }
             }
 
-            Log.i(LOG_TAG + "/Output",
-                    String.format("Best Frequency: %f; Best Amplitude: %f; Frequencies: %s",
-                            best_frequency, best_amplitude,
+            double avg = 0;
+
+            for (int i = 0; i < freqMovingAvg.length; i++) {
+                if (i == freqMovingAvg.length - 1) {
+                    freqMovingAvg[freqMovingAvg.length - 1] = bestFrequency;
+                } else {
+                    freqMovingAvg[i] = freqMovingAvg[i + 1];
+                }
+
+                avg += freqMovingAvg[i];
+            }
+
+            avg /= freqMovingAvg.length;
+
+
+            Log.i(FFT.LOG_TAG + "/Output",
+                    String.format("Best Frequency: %.2f; Avg Frequency %.2f; Best Amplitude: %.2f; Frequencies: %s",
+                            bestFrequency, avgFrequency, bestAmplitude,
                             Arrays.toString(frequencies.values().toArray())));
-            latestFrequency = best_frequency;
-            latestAmplitude = best_amplitude;
-            postToUI(best_frequency, frequencies);
+            avgFrequency = avg;
+            latestFrequency = bestFrequency;
+            latestAmplitude = bestAmplitude;
+
+            handler.post(() -> parent.updateUI(latestFrequency, avgFrequency, latestAmplitude));
         }
 
         recorder.release();
-        Log.i(LOG_TAG, "FFT thread closed.");
-    }
-
-    private void postToUI(final double frequency, final Map<Double, Double> frequencies) {
-        handler.post(() -> parent.updateUI(frequency, frequencies));
+        Log.i(FFT.LOG_TAG, "FFT thread closed.");
     }
 
     /**
