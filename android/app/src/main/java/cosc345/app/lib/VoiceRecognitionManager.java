@@ -18,8 +18,6 @@ import edu.cmu.pocketsphinx.SpeechRecognizerSetup;
 
 /**
  * Manages voice recognition and voice control.
- *
- * @author Anthony Dickson
  */
 public class VoiceRecognitionManager implements RecognitionListener {
     private static final String LOG_TAG = "VoiceRecognition";

@@ -52,5 +52,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="FFT Test" />
+
+        <Button
+            android:id="@+id/playNoteMenuBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Note Player" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

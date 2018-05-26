@@ -11,8 +11,6 @@ import java.util.Locale;
 
 /**
  * Encapsulate and manage text-to-speech.
- *
- * @author Anthony Dickson
  */
 public class TextToSpeechManager {
     private static final String LOG_TAG = "TextToSpeech";

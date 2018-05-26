@@ -64,14 +64,14 @@ public class NoteUnitTest {
         assertEquals(0, a4.getCents());
         assertEquals("A4", a4.getName());
         assertEquals("A4", a4.toString());
-        assertEquals(440.0, Note.frequency(a4), 1e-9);
+        assertEquals(440.0, a4.getFrequency(), 1e-9);
 
         Note fSharp5 = new Note("F#5");
         Note gFlat5 = new Note("Gb5");
 
         assertEquals(5, fSharp5.getOctave());
         assertEquals(0, fSharp5.getCents());
-        assertEquals(739.99, Note.frequency(fSharp5), 1e-1);
+        assertEquals(739.99, fSharp5.getFrequency(), 1e-1);
         assertEquals("F#5", fSharp5.getName(false));
         assertEquals("Gb5", fSharp5.getName(true));
 

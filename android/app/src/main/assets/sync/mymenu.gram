@@ -3,6 +3,7 @@
 grammar menu;
 
 public <menu> = test     |
+                note player|
                 intervals|
                 rhythms  |
                 melodies |

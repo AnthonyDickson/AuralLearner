@@ -9,6 +9,7 @@ import cosc345.app.lib.TextToSpeechManager;
 import cosc345.app.lib.VoiceRecognitionManager;
 import cosc345.app.views.IntervalsMenu;
 import cosc345.app.views.MelodiesMenu;
+import cosc345.app.views.PlayNote;
 import cosc345.app.views.RhythmsMenu;
 import cosc345.app.views.VoiceControlActivity;
 import cosc345.app.views.fftTest;
@@ -41,6 +42,7 @@ public class MainActivity extends VoiceControlActivity {
         voiceRecognitionManager.registerAction(new MenuAction("melodies", () -> startActivity(new Intent(MainActivity.this, MelodiesMenu.class))));
         voiceRecognitionManager.registerAction(new MenuAction("rhythms", () -> startActivity(new Intent(MainActivity.this, RhythmsMenu.class))));
         voiceRecognitionManager.registerAction(new MenuAction("test", () -> startActivity(new Intent(MainActivity.this, fftTest.class))));
+        voiceRecognitionManager.registerAction(new MenuAction("note player", () -> startActivity(new Intent(MainActivity.this, PlayNote.class))));
         voiceRecognitionManager.registerAction(new MenuAction("help", () -> {
             String text = getResources().getString(R.string.menuHelpText);
             TextToSpeechManager.getInstance().speak(text);
@@ -52,6 +54,7 @@ public class MainActivity extends VoiceControlActivity {
         setupMenuButton(cosc345.app.R.id.melodiesMenuBtn, MelodiesMenu.class);
         setupMenuButton(cosc345.app.R.id.rhythmsMenuBtn, RhythmsMenu.class);
         setupMenuButton(cosc345.app.R.id.fftTestBtn, fftTest.class);
+        setupMenuButton(R.id.playNoteMenuBtn, PlayNote.class);
     }
 
     private void setupMenuButton(int btnResourceId, final Class<?> activityToOpen) {

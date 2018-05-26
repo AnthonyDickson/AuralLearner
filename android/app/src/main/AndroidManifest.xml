@@ -39,6 +39,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="cosc345.app.MainActivity" />
         </activity>
+        <activity android:name=".views.PlayNote">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="cosc345.app.MainActivity" />
+        </activity>
         <activity android:name=".views.VoiceControlActivity"></activity>
     </application>
 

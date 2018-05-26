@@ -2,46 +2,36 @@ package cosc345.app.lib;
 
 /**
  * Represents a musical note.
- *
- * @author Anthony Dickson
  */
 public class Note {
-    private static final double MIN_FREQUENCY = 27.5;
-    private static final double MAX_FREQUENCY = 4186.0;
-    private static final int NUM_HALF_STEPS = 12; // per octave.
-    private static final int NUM_CENTS = NUM_HALF_STEPS * 100; // per octave.
-    private static final double A4_FREQUENCY = 440.0; // in Hertz
-    private static final int A4_OCTAVE = 4;
-    private static final int A4_INDEX = 57;
-    private static final int HALF_STEPS_IN_OCTAVE_BELOW_A4 = 9; // before the octave changes.
-    private static final String[] NOTE_NAMES = {
-            "C0", "C#0", "D0", "D#0", "E0", "F0", "F#0", "G0", "G#0", "A0", "A#0", "B0",
-            "C1", "C#1", "D1", "D#1", "E1", "F1", "F#1", "G1", "G#1", "A1", "A#1", "B1",
+    public static final String[] NOTE_NAMES = {
             "C2", "C#2", "D2", "D#2", "E2", "F2", "F#2", "G2", "G#2", "A2", "A#2", "B2",
             "C3", "C#3", "D3", "D#3", "E3", "F3", "F#3", "G3", "G#3", "A3", "A#3", "B3",
             "C4", "C#4", "D4", "D#4", "E4", "F4", "F#4", "G4", "G#4", "A4", "A#4", "B4",
             "C5", "C#5", "D5", "D#5", "E5", "F5", "F#5", "G5", "G#5", "A5", "A#5", "B5",
-            "C6", "C#6", "D6", "D#6", "E6", "F6", "F#6", "G6", "G#6", "A6", "A#6", "B6",
-            "C7", "C#7", "D7", "D#7", "E7", "F7", "F#7", "G7", "G#7", "A7", "A#7", "B7",
-            "C8", "C#8", "D8", "D#8", "E8", "F8", "F#8", "G8", "G#8", "A8", "A#8", "B8",
-            "C9", "C#9", "D9", "D#9", "E9", "F9", "F#9", "G9", "G#9", "A9", "A#9", "B9"};
+            "C6", "C#6", "D6", "D#6", "E6", "F6", "F#6", "G6", "G#6", "A6", "A#6", "B6"};
 
-    private static final String[] NOTE_NAMES_FLATS = {
-            "C0", "Db0", "D0", "Eb0", "E0", "F0", "Gb0", "G0", "Ab0", "A0", "Bb0", "B0",
-            "C1", "Db1", "D1", "Eb1", "E1", "F1", "Gb1", "G1", "Ab1", "A1", "Bb1", "B1",
+    public static final String[] NOTE_NAMES_FLATS = {
             "C2", "Db2", "D2", "Eb2", "E2", "F2", "Gb2", "G2", "Ab2", "A2", "Bb2", "B2",
             "C3", "Db3", "D3", "Eb3", "E3", "F3", "Gb3", "G3", "Ab3", "A3", "Bb3", "B3",
             "C4", "Db4", "D4", "Eb4", "E4", "F4", "Gb4", "G4", "Ab4", "A4", "Bb4", "B4",
             "C5", "Db5", "D5", "Eb5", "E5", "F5", "Gb5", "G5", "Ab5", "A5", "Bb5", "B5",
-            "C6", "Db6", "D6", "Eb6", "E6", "F6", "Gb6", "G6", "Ab6", "A6", "Bb6", "B6",
-            "C7", "Db7", "D7", "Eb7", "E7", "F7", "Gb7", "G7", "Ab7", "A7", "Bb7", "B7",
-            "C8", "Db8", "D8", "Eb8", "E8", "F8", "Gb8", "G8", "Ab8", "A8", "Bb8", "B8",
-            "C9", "Db9", "D9", "Eb9", "E9", "F9", "Gb9", "G9", "Ab9", "A9", "Bb9", "B9"};
+            "C6", "Db6", "D6", "Eb6", "E6", "F6", "Gb6", "G6", "Ab6", "A6", "Bb6", "B6"};
 
+    public static final int A4_INDEX = 33;
+    public static final double A4_FREQUENCY = 440.0; // in Hertz
+    private static final int A4_OCTAVE = 4;
+    private static final int HALF_STEPS_IN_OCTAVE_BELOW_A4 = 9; // before the octave changes.
+    private static final int NUM_HALF_STEPS = 12; // per octave.
+    private static final int NUM_CENTS = NUM_HALF_STEPS * 100; // per octave.
+    private static final double MIN_FREQUENCY = 63.57; // C2 minus 49 cents
+    private static final double MAX_FREQUENCY = 2034.0; // B6 plus 50 cents
+
+    private final int nameIndex;
+    private final double frequency;
+    private final int halfStepDistance;
     private final int octave;
     private final int cents;
-    private final int nameIndex;
-    private final int halfStepDistance;
 
     /**
      * Create a musical note based on a frequency.
@@ -57,10 +47,11 @@ public class Note {
         double refFreq = frequency(hsDist);
         int centDist = (int) Math.round(NUM_CENTS * Math.log(frequency / refFreq) / Math.log(2.0));
 
-        nameIndex = A4_INDEX + hsDist;
-        halfStepDistance = hsDist;
-        octave = octave(hsDist);
-        cents = centDist % 100;
+        this.nameIndex = A4_INDEX + hsDist;
+        this.frequency = frequency;
+        this.halfStepDistance = hsDist;
+        this.octave = octave(hsDist);
+        this.cents = centDist % 100;
     }
 
     /**
@@ -79,9 +70,10 @@ public class Note {
             throw new IllegalArgumentException("Invalid Note Name");
 
         nameIndex = noteIndex;
-        cents = 0;
-        octave = Integer.parseInt(Character.toString(name.charAt(name.length() - 1)));
         halfStepDistance = noteIndex - A4_INDEX;
+        frequency = frequency(halfStepDistance);
+        octave = octave(halfStepDistance);
+        cents = 0;
     }
 
     /**
@@ -116,13 +108,12 @@ public class Note {
     }
 
     /**
-     * Calculate the frequency of a given note.
+     * Getter for the frequency of a note.
      *
-     * @param note the note to calculate the frequency of.
-     * @return the frequency of the note in Hertz. This is the frequency assuming perfect pitch.
+     * @return the frequency of a note.
      */
-    public static double frequency(Note note) {
-        return frequency(note.halfStepDistance);
+    public double getFrequency() {
+        return frequency;
     }
 
     /**

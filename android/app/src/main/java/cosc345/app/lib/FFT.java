@@ -12,11 +12,11 @@ package cosc345.app.lib;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
+import android.os.Handler;
 import android.util.Log;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
 
 import cosc345.app.views.fftTest;
 
@@ -53,11 +53,11 @@ public class FFT implements Runnable {
 
     /**
      * @param parent  the parent activity - this where GUI output should be sent.
-     * @param handler the handler used for posting GUI updates to <code>parent</code>.
+     *
      */
-    public FFT(fftTest parent, android.os.Handler handler) {
+    public FFT(fftTest parent) {
         this.parent = parent;
-        this.handler = handler;
+        this.handler = new Handler();
         this.latestFrequency = 0.0;
         this.latestAmplitude = 0.0;
     }
