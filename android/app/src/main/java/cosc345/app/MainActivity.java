@@ -1,7 +1,12 @@
 package cosc345.app;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.widget.Button;
 
 import cosc345.app.lib.MenuAction;
@@ -18,14 +23,34 @@ import cosc345.app.view.testing.fftTest;
 /**
  * The main entry point for the application.
  */
-public class MainActivity extends VoiceControlActivity {
+public class MainActivity extends VoiceControlActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
+
+    public static final int PERMISSIONS_REQUEST_CODE = 101;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(cosc345.app.R.layout.activity_main);
+        setContentView(R.layout.activity_main);
 
-        setupVoiceRecognition();
-        setupTextToSpeech();
+        int recordAudioPermissions = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.RECORD_AUDIO);
+        int writePermissions = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (recordAudioPermissions == PackageManager.PERMISSION_GRANTED &&
+                writePermissions == PackageManager.PERMISSION_GRANTED) {
+            setupVoiceRecognition();
+            setupTextToSpeech();
+        } else {
+            String[] permissionsToRequest = {
+                    Manifest.permission.RECORD_AUDIO,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+            };
+
+            ActivityCompat.requestPermissions(this, permissionsToRequest,
+                    MainActivity.PERMISSIONS_REQUEST_CODE);
+        }
+
         setupMenuButtons();
     }
 
@@ -75,5 +100,18 @@ public class MainActivity extends VoiceControlActivity {
 
         VoiceRecognitionManager.getInstance().close();
         TextToSpeechManager.getInstance().close();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == MainActivity.PERMISSIONS_REQUEST_CODE) {
+            if (grantResults.length > 0 &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                setupVoiceRecognition();
+                setupTextToSpeech();
+            }
+        }
     }
 }
