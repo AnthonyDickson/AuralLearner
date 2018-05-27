@@ -18,8 +18,6 @@ import android.util.Log;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import cosc345.app.view.testing.fftTest;
-
 /**
  * A class that takes mic input from an Android device and uses a variation of
  * the Fast Fourier Transformation to convert that input into a frequency.
@@ -45,20 +43,17 @@ public class FFT implements Runnable {
     private final static int MOVING_AVG_PERIOD = 4;
     private static final String LOG_TAG = "FFT";
 
-    private final fftTest parent;
     private final android.os.Handler handler;
+    private final FFTResultListener onResultListener;
     private volatile double latestFrequency;
     private volatile double avgFrequency;
     private volatile double latestAmplitude;
 
-    /**
-     * @param parent  the parent activity - this where GUI output should be sent.
-     */
-    public FFT(fftTest parent) {
-        this.parent = parent;
+    public FFT(FFTResultListener listener) {
         handler = new Handler();
         latestFrequency = 0.0;
         latestAmplitude = 0.0;
+        onResultListener = listener;
     }
 
 
@@ -155,7 +150,7 @@ public class FFT implements Runnable {
                 * FFT.CHUNK_SIZE_IN_SAMPLES / FFT.RATE);
         int max_frequency_fft = Math.round(FFT.MAX_FREQUENCY
                 * FFT.CHUNK_SIZE_IN_SAMPLES / FFT.RATE);
-        double[] freqMovingAvg = new double[FFT.MOVING_AVG_PERIOD];
+        double[] frequencyReadings = new double[FFT.MOVING_AVG_PERIOD];
 
         while (!Thread.interrupted()) {
             recorder.startRecording();
@@ -205,17 +200,17 @@ public class FFT implements Runnable {
 
             double avg = 0;
 
-            for (int i = 0; i < freqMovingAvg.length; i++) {
-                if (i == freqMovingAvg.length - 1) {
-                    freqMovingAvg[freqMovingAvg.length - 1] = bestFrequency;
+            for (int i = 0; i < frequencyReadings.length; i++) {
+                if (i == frequencyReadings.length - 1) {
+                    frequencyReadings[frequencyReadings.length - 1] = bestFrequency;
                 } else {
-                    freqMovingAvg[i] = freqMovingAvg[i + 1];
+                    frequencyReadings[i] = frequencyReadings[i + 1];
                 }
 
-                avg += freqMovingAvg[i];
+                avg += frequencyReadings[i];
             }
 
-            avg /= freqMovingAvg.length;
+            avg /= frequencyReadings.length;
 
 
             Log.i(FFT.LOG_TAG + "/Output",
@@ -226,7 +221,8 @@ public class FFT implements Runnable {
             latestFrequency = bestFrequency;
             latestAmplitude = bestAmplitude;
 
-            handler.post(() -> parent.updateUI(latestFrequency, avgFrequency, latestAmplitude));
+            handler.post(() -> onResultListener.onFFTResult(latestFrequency, latestAmplitude,
+                    avgFrequency, frequencyReadings));
         }
 
         recorder.release();
@@ -234,18 +230,19 @@ public class FFT implements Runnable {
     }
 
     /**
-     * Get the most recent frequency (Hz) reading.
-     * @return the most recent frequency reading.
+     * Functional interface for receiving results from the FFT thread.
      */
-    public double getHertz() {
-        return latestFrequency;
-    }
-
-    /**
-     * Get the most recent amplitude reading.
-     * @return the most recent amplitude reading.
-     */
-    public double getAmplitude() {
-        return latestAmplitude;
+    @FunctionalInterface
+    public interface FFTResultListener {
+        /**
+         * Method that receives the most recent results from the FFT thread.
+         *
+         * @param frequency         the most recent frequency reading.
+         * @param amplitude         the most recent amplitude reading.
+         * @param averageFrequency  the moving average of the recent frequency readings.
+         * @param recentFrequencies the recent frequency readings.
+         */
+        void onFFTResult(double frequency, double amplitude,
+                         double averageFrequency, double[] recentFrequencies);
     }
 }

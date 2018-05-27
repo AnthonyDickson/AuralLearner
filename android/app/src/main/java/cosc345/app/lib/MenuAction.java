@@ -5,7 +5,7 @@ package cosc345.app.lib;
  */
 public class MenuAction {
     public final String activation;
-    private Callback action;
+    private final Callback action;
 
     /**
      * @param activation the keyword/keyphrase that this action will be
@@ -21,6 +21,8 @@ public class MenuAction {
      * Execute this MenuAction's action.
      */
     public void execute() {
-        action.execute();
+        if (action != null) {
+            action.execute();
+        }
     }
 }

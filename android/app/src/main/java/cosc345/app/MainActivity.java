@@ -49,7 +49,7 @@ public class MainActivity extends VoiceControlActivity {
             String text = getResources().getString(R.string.menuHelpText);
             TextToSpeechManager.getInstance().speak(text);
         }));
-        voiceRecognitionManager.registerAction(new MenuAction("cancel", () -> VoiceRecognitionManager.getInstance().pause()));
+        voiceRecognitionManager.registerAction(new MenuAction("cancel", null));
     }
 
     private void setupMenuButtons() {

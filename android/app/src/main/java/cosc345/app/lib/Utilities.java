@@ -1,9 +1,13 @@
 package cosc345.app.lib;
 
+import java.util.Random;
+
 /**
  * Collection of utility methods.
  */
 public class Utilities {
+    public static final Random random = new Random();
+
     /**
      * Generic function to indexOf the index of an element in an object .
      * Code from http://www.techiedelight.com/find-index-element-array-java/
@@ -14,9 +18,11 @@ public class Utilities {
      */
     public static<T> int indexOf(T target, T[] a)
     {
-        for (int i = 0; i < a.length; i++)
-            if (target.equals(a[i]))
+        for (int i = 0; i < a.length; i++) {
+            if (target.equals(a[i])) {
                 return i;
+            }
+        }
 
         return -1;
     }

@@ -65,7 +65,6 @@ public class PlayNote extends AppCompatActivity implements AdapterView.OnItemSel
 
         notePlayer.stop();
         notePlayerThread.interrupt();
-        notePlayerThread = null;
         onPlayBackDone();
     }
 

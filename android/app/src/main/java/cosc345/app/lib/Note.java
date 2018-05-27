@@ -110,6 +110,14 @@ public class Note implements Comparable<Note> {
         return Math.pow(2, 1.0 * halfStepsDistance / Note.NUM_HALF_STEPS) * Note.A4_FREQUENCY;
     }
 
+    /**
+     * @return a note chosen at random.
+     */
+    public static Note getRandom() {
+        int i = Utilities.random.nextInt(Note.NOTE_NAMES.length);
+        return new Note(Note.NOTE_NAMES[i]);
+    }
+
     @Override
     public int compareTo(@NonNull Note o) {
         return nameIndex - o.nameIndex;

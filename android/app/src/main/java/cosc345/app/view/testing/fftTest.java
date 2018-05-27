@@ -15,12 +15,12 @@ import cosc345.app.model.FFT;
 /**
  * An activity to test the functionality of the FFT class.
  */
-public class fftTest extends AppCompatActivity {
+public class fftTest extends AppCompatActivity implements FFT.FFTResultListener {
     private static final double UPDATE_THRESHOLD = 8e9;
 
-    Thread fftThread;
-    TextView frequencyOutput;
-    TextView noteOutput;
+    private Thread fftThread;
+    private TextView frequencyOutput;
+    private TextView noteOutput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,14 +60,9 @@ public class fftTest extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * Use the data from the FFT algorithm to update the UI.
-     *
-     * @param frequency    the 'best' frequency of the mic input.
-     * @param avgFrequency the frequency calculated as a moving average.
-     * @param amplitude    the 'best' amplitude of the mic input.
-     */
-    public void updateUI(double frequency, double avgFrequency, double amplitude) {
+
+    @Override
+    public void onFFTResult(double frequency, double amplitude, double averageFrequency, double[] recentFrequencies) {
         if (amplitude < fftTest.UPDATE_THRESHOLD) {
             frequencyOutput.setText("-");
             noteOutput.setText("-");
@@ -75,9 +70,9 @@ public class fftTest extends AppCompatActivity {
         }
 
         try {
-            Note note = new Note(avgFrequency);
+            Note note = new Note(averageFrequency);
             frequencyOutput.setText(String.format(Locale.ENGLISH, "%.2f (Avg: %.2f)", frequency,
-                    avgFrequency));
+                    averageFrequency));
             noteOutput.setText(String.format(Locale.ENGLISH, "%s %d cents", note, note.getCents()));
         } catch (IllegalArgumentException e) {
             frequencyOutput.setText("-");
