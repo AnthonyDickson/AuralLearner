@@ -30,19 +30,6 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/pitchMatching_startBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Start" />
-
-        <Button
-            android:id="@+id/pitchMatching_stopBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Stop"
-            android:visibility="gone" />
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -55,19 +42,6 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="-" />
-
-        <Button
-            android:id="@+id/pitchMatching_playTargetPitchBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Play Target Pitch" />
-
-        <Button
-            android:id="@+id/pitchMatching_stopTargetPitchBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Stop Playback"
-            android:visibility="gone" />
 
         <TextView
             android:layout_width="match_parent"
@@ -94,6 +68,38 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="-" />
+
+        <Button
+            android:id="@+id/pitchMatching_startBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Start" />
+
+        <Button
+            android:id="@+id/pitchMatching_stopBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Stop"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/pitchMatching_playTargetPitchBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Play Target Pitch" />
+
+        <Button
+            android:id="@+id/pitchMatching_stopTargetPitchBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Stop Playback"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/pitchMatching_changeTargetPitchBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Change Target Pitch" />
 
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

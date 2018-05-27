@@ -1,6 +1,7 @@
 package cosc345.app.view;
 
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -12,7 +13,7 @@ import cosc345.app.R;
 import cosc345.app.lib.Note;
 import cosc345.app.model.FFT;
 import cosc345.app.model.NotePlayer;
-
+/* TODO: Change so that the target pitch is played back after the user sings the note automatically, and repeat. */
 /**
  * Activity that allows the user to try to match a pitch.
  */
@@ -23,8 +24,13 @@ public class PitchMatching extends AppCompatActivity implements FFT.FFTResultLis
     private NotePlayer notePlayer;
     private Thread fftThread, notePlayerThread;
     private Note targetNote, userNote;
-    private Button start, stop, playTargetPitch, stopTargetPitch;
+    private Button start;
+    private Button stop;
+    private Button playTargetPitch;
+    private Button stopTargetPitch;
     private TextView targetPitch, userPitch, pitchDifference;
+    private AlertDialog chooseNoteDialog;
+    private int choice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +39,6 @@ public class PitchMatching extends AppCompatActivity implements FFT.FFTResultLis
 
         isListening = false;
         isPlaying = false;
-        targetNote = new Note("C4");
         userNote = null;
         start = findViewById(R.id.pitchMatching_startBtn);
         stop = findViewById(R.id.pitchMatching_stopBtn);
@@ -42,12 +47,17 @@ public class PitchMatching extends AppCompatActivity implements FFT.FFTResultLis
         targetPitch = findViewById(R.id.pitchMatching_targetPitchText);
         userPitch = findViewById(R.id.pitchMatching_userPitchText);
         pitchDifference = findViewById(R.id.pitchMatching_pitchDifferenceText);
+        chooseNoteDialog = createNotePickerDialog();
 
-        targetPitch.setText(targetNote.getName());
+        setTargetPitch(new Note("C4"));
         start.setOnClickListener(v -> startListening());
         stop.setOnClickListener(v -> stopListening());
         playTargetPitch.setOnClickListener(v -> startTargetPitchPlayback());
         stopTargetPitch.setOnClickListener(v -> stopTargetPitchPlayback());
+        findViewById(R.id.pitchMatching_changeTargetPitchBtn).setOnClickListener(v -> {
+            stopTargetPitchPlayback();
+            chooseNoteDialog.show();
+        });
     }
 
     private void startListening() {
@@ -102,15 +112,26 @@ public class PitchMatching extends AppCompatActivity implements FFT.FFTResultLis
         onPlaybackDone();
     }
 
+    /**
+     * Callback for when the tone is finished playing back.
+     */
     private void onPlaybackDone() {
         stopTargetPitch.setVisibility(View.GONE);
         playTargetPitch.setVisibility(View.VISIBLE);
         isPlaying = false;
     }
 
+    /**
+     * Clear the user's pitch and the pitch difference text views.
+     */
     private void resetUI() {
         userPitch.setText("-");
         pitchDifference.setText("-");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 
     @Override
@@ -124,7 +145,7 @@ public class PitchMatching extends AppCompatActivity implements FFT.FFTResultLis
     @Override
     public void onFFTResult(double frequency, double amplitude, double averageFrequency,
                             double[] recentFrequencies) {
-        if (amplitude < PitchMatching.VOLUME_THRESHOLD) {
+        if (!isListening || amplitude < PitchMatching.VOLUME_THRESHOLD) {
             resetUI();
             return;
         }
@@ -137,5 +158,23 @@ public class PitchMatching extends AppCompatActivity implements FFT.FFTResultLis
         } catch (IllegalArgumentException e) {
             resetUI();
         }
+    }
+
+    private AlertDialog createNotePickerDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Note")
+                .setSingleChoiceItems(Note.NOTE_NAMES, Note.A4_INDEX,
+                        (dialog, which) -> choice = which)
+                .setPositiveButton("Ok", (dialog, id) -> setTargetPitch(new Note(Note.NOTE_NAMES[choice])))
+                .setNeutralButton("Choose For Me", (dialog, id) -> setTargetPitch(Note.getRandom()))
+                .setNegativeButton("Cancel", (dialog, id) -> choice = Note.A4_INDEX);
+
+        return builder.create();
+    }
+
+    private void setTargetPitch(Note note) {
+        targetNote = note;
+        targetPitch.setText(note.getName());
     }
 }

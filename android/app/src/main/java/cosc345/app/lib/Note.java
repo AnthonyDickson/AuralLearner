@@ -114,7 +114,9 @@ public class Note implements Comparable<Note> {
      * @return a note chosen at random.
      */
     public static Note getRandom() {
-        int i = Utilities.random.nextInt(Note.NOTE_NAMES.length);
+        double weighted_i = Utilities.random.nextGaussian() *
+                Note.NUM_HALF_STEPS + Note.NOTE_NAMES.length / 2;
+        int i = (int) Math.max(0, Math.min(weighted_i, Note.NOTE_NAMES.length));
         return new Note(Note.NOTE_NAMES[i]);
     }
 

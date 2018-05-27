@@ -17,7 +17,7 @@ import edu.cmu.pocketsphinx.Hypothesis;
 import edu.cmu.pocketsphinx.RecognitionListener;
 import edu.cmu.pocketsphinx.SpeechRecognizer;
 import edu.cmu.pocketsphinx.SpeechRecognizerSetup;
-
+/* TODO: Fix bug where the VoiceRecognitionManager is not closed if the user navigates away from the activity before it finishes initialising. */
 /**
  * Manages voice recognition and voice control.
  */
@@ -30,10 +30,10 @@ public class VoiceRecognitionManager implements RecognitionListener {
     /** Keyword we are looking for to activate recognition */
     private static final String KEYPHRASE = "menu";
     private static VoiceRecognitionManager instance;
+    private final ArrayList<MenuAction> actions = new ArrayList<>();
     private State state = State.NOT_READY;
     private SpeechRecognizer recogniser;
     private WeakReference<Context> parentContext;
-    private final ArrayList<MenuAction> actions = new ArrayList<>();
 
     private VoiceRecognitionManager() {}
 
