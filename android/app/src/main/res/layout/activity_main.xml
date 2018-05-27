@@ -26,8 +26,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/mainMenuText"
-            android:textSize="24sp" />
+            android:text="@string/mainMenuExercisesHeading"
+            android:textSize="@dimen/menuTitleTextSize" />
+
+        <Button
+            android:id="@+id/pitchMatchingMenuBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/pitchMatchingMenuBtnLabel" />
 
         <Button
             android:id="@+id/intervalsMenuBtn"
@@ -47,22 +53,18 @@
             android:layout_height="wrap_content"
             android:text="@string/rhythmsMenuBtn" />
 
-        <Button
-            android:id="@+id/fftTestBtn"
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="FFT Test" />
+            android:gravity="center"
+            android:text="@string/mainMenuMiscHeading"
+            android:textSize="24sp" />
 
         <Button
-            android:id="@+id/playNoteMenuBtn"
+            android:id="@+id/voiceControlHelpBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Note Player" />
+            android:text="@string/viewHelpBtnLabel" />
 
-        <Button
-            android:id="@+id/pitchMatchingMenuBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Pitch Matching" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

@@ -11,14 +11,14 @@ public class Note implements Comparable<Note> {
             "C3", "C#3", "D3", "D#3", "E3", "F3", "F#3", "G3", "G#3", "A3", "A#3", "B3",
             "C4", "C#4", "D4", "D#4", "E4", "F4", "F#4", "G4", "G#4", "A4", "A#4", "B4",
             "C5", "C#5", "D5", "D#5", "E5", "F5", "F#5", "G5", "G#5", "A5", "A#5", "B5",
-            "C6", "C#6", "D6", "D#6", "E6", "F6", "F#6", "G6", "G#6", "A6", "A#6", "B6"};
+            "C6"};
 
     public static final String[] NOTE_NAMES_FLATS = {
             "C2", "Db2", "D2", "Eb2", "E2", "F2", "Gb2", "G2", "Ab2", "A2", "Bb2", "B2",
             "C3", "Db3", "D3", "Eb3", "E3", "F3", "Gb3", "G3", "Ab3", "A3", "Bb3", "B3",
             "C4", "Db4", "D4", "Eb4", "E4", "F4", "Gb4", "G4", "Ab4", "A4", "Bb4", "B4",
             "C5", "Db5", "D5", "Eb5", "E5", "F5", "Gb5", "G5", "Ab5", "A5", "Bb5", "B5",
-            "C6", "Db6", "D6", "Eb6", "E6", "F6", "Gb6", "G6", "Ab6", "A6", "Bb6", "B6"};
+            "C6"};
 
     public static final int A4_INDEX = 33;
     public static final double A4_FREQUENCY = 440.0; // in Hertz
@@ -27,7 +27,7 @@ public class Note implements Comparable<Note> {
     private static final int HALF_STEPS_IN_OCTAVE_BELOW_A4 = 9; // before the octave changes.
     private static final int NUM_CENTS = Note.NUM_HALF_STEPS * 100; // per octave.
     private static final double MIN_FREQUENCY = 63.57; // C2 minus 49 cents
-    private static final double MAX_FREQUENCY = 2034.0; // B6 plus 50 cents
+    private static final double MAX_FREQUENCY = 1077.47; // C6 plus 50 cents
     private final int nameIndex;
     private final double frequency;
     private final int halfStepDistance;
@@ -46,13 +46,12 @@ public class Note implements Comparable<Note> {
 
         int hsDist = Note.halfStepDistance(frequency);
         double refFreq = Note.frequency(hsDist);
-        int centDist = (int) Math.round(Note.NUM_CENTS * Math.log(frequency / refFreq) / Math.log(2.0));
 
         nameIndex = Note.A4_INDEX + hsDist;
         this.frequency = frequency;
         halfStepDistance = hsDist;
         octave = Note.octave(hsDist);
-        cents = centDist % 100;
+        cents = Note.centDistanceClamped(frequency, refFreq);
     }
 
     /**
@@ -120,6 +119,66 @@ public class Note implements Comparable<Note> {
         return new Note(Note.NOTE_NAMES[i]);
     }
 
+
+    /**
+     * Calculate the distance between two notes in cents.
+     *
+     * @param frequency          the frequency of the measured note.
+     * @param referenceFrequency the frequency of the reference note.
+     * @return the distance between the two notes in cents.
+     */
+    public static int centDistance(double frequency, double referenceFrequency) {
+        int centDist = (int) Math.round(Note.NUM_CENTS *
+                Math.log(frequency / referenceFrequency) / Math.log(2.0));
+
+        return centDist;
+    }
+
+    /**
+     * Calculate the distance between two notes in cents.
+     *
+     * @param actual    the measured note.
+     * @param reference the reference note.
+     * @return the distance between the two notes in cents.
+     */
+    public static int centDistance(Note actual, Note reference) {
+        return Note.centDistance(actual.getFrequency(), reference.getFrequency());
+    }
+
+    /**
+     * Calculate the distance between two notes in cents.
+     *
+     * @param frequency          the frequency of the measured note.
+     * @param referenceFrequency the frequency of the reference note.
+     * @return the distance between the two notes in cents, clamped to a value between -50 and 50.
+     */
+    public static int centDistanceClamped(double frequency, double referenceFrequency) {
+        int dist = Note.centDistance(frequency, referenceFrequency);
+
+        if (Math.abs(dist) <= 50) {
+            return dist;
+        }
+
+        return (50 + dist) % 100 + 50;
+    }
+
+    /**
+     * Calculate the distance between two notes in cents.
+     *
+     * @param actual    the measured note.
+     * @param reference the reference note.
+     * @return the distance between the two notes in cents, clamped to a value between -50 and 50.
+     */
+    public static int centDistanceClamped(Note actual, Note reference) {
+        return Note.centDistanceClamped(actual.getFrequency(), reference.getFrequency());
+    }
+
+    /**
+     * Calculate the difference in half steps between this note and another.
+     *
+     * @param o the other note to compare with.
+     * @return the half step distance between this note and the other.
+     */
     @Override
     public int compareTo(@NonNull Note o) {
         return nameIndex - o.nameIndex;

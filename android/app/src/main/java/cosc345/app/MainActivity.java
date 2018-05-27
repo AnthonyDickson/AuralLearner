@@ -1,12 +1,14 @@
 package cosc345.app;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.widget.Button;
 
 import cosc345.app.lib.MenuAction;
@@ -17,14 +19,12 @@ import cosc345.app.view.MelodiesMenu;
 import cosc345.app.view.PitchMatching;
 import cosc345.app.view.RhythmsMenu;
 import cosc345.app.view.VoiceControlActivity;
-import cosc345.app.view.testing.PlayNote;
-import cosc345.app.view.testing.fftTest;
 
 /**
  * The main entry point for the application.
  */
 public class MainActivity extends VoiceControlActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
-
+    // TODO: add help screen/menu.
     public static final int PERMISSIONS_REQUEST_CODE = 101;
 
     @Override
@@ -42,13 +42,17 @@ public class MainActivity extends VoiceControlActivity implements ActivityCompat
             setupVoiceRecognition();
             setupTextToSpeech();
         } else {
-            String[] permissionsToRequest = {
-                    Manifest.permission.RECORD_AUDIO,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-            };
+            AlertDialog alertDialog = createPermissionsExplanationDialog(((dialog, which) -> {
+                String[] permissionsToRequest = {
+                        Manifest.permission.RECORD_AUDIO,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                };
 
-            ActivityCompat.requestPermissions(this, permissionsToRequest,
-                    MainActivity.PERMISSIONS_REQUEST_CODE);
+                ActivityCompat.requestPermissions(this, permissionsToRequest,
+                        MainActivity.PERMISSIONS_REQUEST_CODE);
+            }));
+
+            alertDialog.show();
         }
 
         setupMenuButtons();
@@ -64,26 +68,30 @@ public class MainActivity extends VoiceControlActivity implements ActivityCompat
     private void setupVoiceRecognition() {
         VoiceRecognitionManager voiceRecognitionManager = VoiceRecognitionManager.getInstance();
         voiceRecognitionManager.init(this);
+        voiceRecognitionManager.registerAction(new MenuAction("pitch matching", () -> startActivity(new Intent(MainActivity.this, PitchMatching.class))));
         voiceRecognitionManager.registerAction(new MenuAction("intervals", () -> startActivity(new Intent(MainActivity.this, IntervalsMenu.class))));
         voiceRecognitionManager.registerAction(new MenuAction("melodies", () -> startActivity(new Intent(MainActivity.this, MelodiesMenu.class))));
         voiceRecognitionManager.registerAction(new MenuAction("rhythms", () -> startActivity(new Intent(MainActivity.this, RhythmsMenu.class))));
-        voiceRecognitionManager.registerAction(new MenuAction("test", () -> startActivity(new Intent(MainActivity.this, fftTest.class))));
-        voiceRecognitionManager.registerAction(new MenuAction("note player", () -> startActivity(new Intent(MainActivity.this, PlayNote.class))));
-        voiceRecognitionManager.registerAction(new MenuAction("pitch matching", () -> startActivity(new Intent(MainActivity.this, PitchMatching.class))));
         voiceRecognitionManager.registerAction(new MenuAction("help", () -> {
-            String text = getResources().getString(R.string.menuHelpText);
+            String text = getResources().getString(R.string.voiceControlHelp);
             TextToSpeechManager.getInstance().speak(text);
         }));
         voiceRecognitionManager.registerAction(new MenuAction("cancel", null));
     }
 
     private void setupMenuButtons() {
-        setupMenuButton(cosc345.app.R.id.intervalsMenuBtn, IntervalsMenu.class);
-        setupMenuButton(cosc345.app.R.id.melodiesMenuBtn, MelodiesMenu.class);
-        setupMenuButton(cosc345.app.R.id.rhythmsMenuBtn, RhythmsMenu.class);
-        setupMenuButton(cosc345.app.R.id.fftTestBtn, fftTest.class);
-        setupMenuButton(R.id.playNoteMenuBtn, PlayNote.class);
         setupMenuButton(R.id.pitchMatchingMenuBtn, PitchMatching.class);
+        setupMenuButton(R.id.intervalsMenuBtn, IntervalsMenu.class);
+        setupMenuButton(R.id.melodiesMenuBtn, MelodiesMenu.class);
+        setupMenuButton(R.id.rhythmsMenuBtn, RhythmsMenu.class);
+        findViewById(R.id.voiceControlHelpBtn).setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.voiceControlHelpTitle)
+                    .setMessage(R.string.voiceControlHelp)
+                    .setPositiveButton(R.string.dialogOk, null);
+            builder.create()
+                    .show();
+        });
     }
 
     private void setupMenuButton(int btnResourceId, Class<?> activityToOpen) {
@@ -100,6 +108,14 @@ public class MainActivity extends VoiceControlActivity implements ActivityCompat
 
         VoiceRecognitionManager.getInstance().close();
         TextToSpeechManager.getInstance().close();
+    }
+
+    private AlertDialog createPermissionsExplanationDialog(DialogInterface.OnClickListener callback) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.permissionsExplanationTitle)
+                .setMessage(R.string.permissionsExplanation)
+                .setPositiveButton(R.string.dialogOk, callback);
+        return builder.create();
     }
 
     @Override

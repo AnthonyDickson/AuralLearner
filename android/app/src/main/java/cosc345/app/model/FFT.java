@@ -40,7 +40,7 @@ public class FFT implements Runnable {
     private final static int MIN_FREQUENCY = 50; // HZ
     private final static int MAX_FREQUENCY = 600; // HZ
     private final static int DRAW_FREQUENCY_STEP = 5;
-    private final static int MOVING_AVG_PERIOD = 4;
+    private final static int MOVING_AVG_PERIOD = 3;
     private static final String LOG_TAG = "FFT";
 
     private final android.os.Handler handler;

@@ -2,9 +2,7 @@
 
 grammar menu;
 
-public <menu> = test     |
-                note player|
-                pitch matching|
+public <menu> = pitch matching|
                 intervals|
                 rhythms  |
                 melodies |

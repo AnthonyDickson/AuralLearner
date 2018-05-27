@@ -1,5 +1,7 @@
 package cosc345.app.view;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -13,13 +15,16 @@ import cosc345.app.R;
 import cosc345.app.lib.Note;
 import cosc345.app.model.FFT;
 import cosc345.app.model.NotePlayer;
+import cosc345.app.model.VoiceRecognitionManager;
 /* TODO: Change so that the target pitch is played back after the user sings the note automatically, and repeat. */
+
 /**
  * Activity that allows the user to try to match a pitch.
  */
 public class PitchMatching extends AppCompatActivity implements FFT.FFTResultListener {
     private static final double VOLUME_THRESHOLD = 8e9;
     private static final int PLAYBACK_DURATION = 3; //  in seconds
+    private static final int MATCH_THRESHOLD_CENTS = 10;
     private boolean isListening, isPlaying;
     private NotePlayer notePlayer;
     private Thread fftThread, notePlayerThread;
@@ -28,8 +33,9 @@ public class PitchMatching extends AppCompatActivity implements FFT.FFTResultLis
     private Button stop;
     private Button playTargetPitch;
     private Button stopTargetPitch;
-    private TextView targetPitch, userPitch, pitchDifference;
+    private TextView targetPitchView, userPitchView, pitchDifferenceView;
     private AlertDialog chooseNoteDialog;
+    private ColorStateList defaultColours;
     private int choice;
 
     @Override
@@ -40,21 +46,25 @@ public class PitchMatching extends AppCompatActivity implements FFT.FFTResultLis
         isListening = false;
         isPlaying = false;
         userNote = null;
+
         start = findViewById(R.id.pitchMatching_startBtn);
         stop = findViewById(R.id.pitchMatching_stopBtn);
         playTargetPitch = findViewById(R.id.pitchMatching_playTargetPitchBtn);
         stopTargetPitch = findViewById(R.id.pitchMatching_stopTargetPitchBtn);
-        targetPitch = findViewById(R.id.pitchMatching_targetPitchText);
-        userPitch = findViewById(R.id.pitchMatching_userPitchText);
-        pitchDifference = findViewById(R.id.pitchMatching_pitchDifferenceText);
+        targetPitchView = findViewById(R.id.pitchMatching_targetPitchText);
+        userPitchView = findViewById(R.id.pitchMatching_userPitchText);
+        pitchDifferenceView = findViewById(R.id.pitchMatching_pitchDifferenceText);
+        defaultColours = pitchDifferenceView.getTextColors();
+
+        setTargetPitchView(new Note("C4"));
         chooseNoteDialog = createNotePickerDialog();
 
-        setTargetPitch(new Note("C4"));
         start.setOnClickListener(v -> startListening());
         stop.setOnClickListener(v -> stopListening());
         playTargetPitch.setOnClickListener(v -> startTargetPitchPlayback());
         stopTargetPitch.setOnClickListener(v -> stopTargetPitchPlayback());
         findViewById(R.id.pitchMatching_changeTargetPitchBtn).setOnClickListener(v -> {
+            stopListening();
             stopTargetPitchPlayback();
             chooseNoteDialog.show();
         });
@@ -65,6 +75,9 @@ public class PitchMatching extends AppCompatActivity implements FFT.FFTResultLis
             if (isPlaying) {
                 stopTargetPitchPlayback();
             }
+
+            // TODO: remove this line when bug with VoiceRecognitionManager is fixed.
+            VoiceRecognitionManager.getInstance().close();
 
             start.setVisibility(View.GONE);
             stop.setVisibility(View.VISIBLE);
@@ -125,8 +138,9 @@ public class PitchMatching extends AppCompatActivity implements FFT.FFTResultLis
      * Clear the user's pitch and the pitch difference text views.
      */
     private void resetUI() {
-        userPitch.setText("-");
-        pitchDifference.setText("-");
+        userPitchView.setText("-");
+        pitchDifferenceView.setText("-");
+        pitchDifferenceView.setTextColor(defaultColours);
     }
 
     @Override
@@ -151,10 +165,20 @@ public class PitchMatching extends AppCompatActivity implements FFT.FFTResultLis
         }
 
         try {
-            userNote = new Note(frequency);
-            userPitch.setText(userNote.getName());
-            int diff = userNote.compareTo(targetNote);
-            pitchDifference.setText(String.format(Locale.ENGLISH, "%d semitones", diff));
+            userNote = new Note(averageFrequency);
+            userPitchView.setText(userNote.getName());
+            int halfstepDiff = userNote.compareTo(targetNote);
+            int centDiff = Note.centDistance(userNote, targetNote) % 100;
+            pitchDifferenceView.setText(String.format(Locale.ENGLISH,
+                    "%d semitone(s) and %d cent(s)", halfstepDiff, centDiff));
+            
+            if (halfstepDiff == 0) {
+                if (Math.abs(userNote.getCents()) < PitchMatching.MATCH_THRESHOLD_CENTS) {
+                    pitchDifferenceView.setTextColor(Color.GREEN);
+                } else {
+                    pitchDifferenceView.setTextColor(defaultColours);
+                }
+            }
         } catch (IllegalArgumentException e) {
             resetUI();
         }
@@ -164,17 +188,17 @@ public class PitchMatching extends AppCompatActivity implements FFT.FFTResultLis
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setTitle("Note")
-                .setSingleChoiceItems(Note.NOTE_NAMES, Note.A4_INDEX,
+                .setSingleChoiceItems(Note.NOTE_NAMES, targetNote.getNameIndex(),
                         (dialog, which) -> choice = which)
-                .setPositiveButton("Ok", (dialog, id) -> setTargetPitch(new Note(Note.NOTE_NAMES[choice])))
-                .setNeutralButton("Choose For Me", (dialog, id) -> setTargetPitch(Note.getRandom()))
-                .setNegativeButton("Cancel", (dialog, id) -> choice = Note.A4_INDEX);
+                .setPositiveButton(R.string.dialogOk, (dialog, id) -> setTargetPitchView(new Note(Note.NOTE_NAMES[choice])))
+                .setNeutralButton("Choose For Me", (dialog, id) -> setTargetPitchView(Note.getRandom()))
+                .setNegativeButton(R.string.dialogCancel, (dialog, id) -> choice = Note.A4_INDEX);
 
         return builder.create();
     }
 
-    private void setTargetPitch(Note note) {
+    private void setTargetPitchView(Note note) {
         targetNote = note;
-        targetPitch.setText(note.getName());
+        targetPitchView.setText(note.getName());
     }
 }

@@ -1,8 +1,25 @@
 <resources>
     <string name="app_name">COSC345 App</string>
-    <string name="mainMenuText">Exercise Modes</string>
+    <string name="mainMenuExercisesHeading">Exercise Modes</string>
     <string name="intervalMenuBtn">intervals</string>
     <string name="melodiesMenuBtn">Melodies</string>
     <string name="rhythmsMenuBtn">Rhythms</string>
-    <string name="menuHelpText">This is the help section. To activate voice control, say \'menu\', followed by a command. Available commands at present are \'test\', \'intervals\', \'rhythms\', \'melodies\' and \'help\'. If you need this help section again at a later time, say \"menu\", followed by \"help\".</string>
+    <string name="voiceControlHelp">To use voice control, say \'menu\', followed by a command. Available commands at present are \'pitch matching\', \'intervals\', \'rhythms\', \'melodies\' and \'help\'. You can also say \'cancel\' to cancel voice control. Voice control is only available outside of exercises, if you need to quit an exercise use the back button on your device. If you need this help section again at a later time, say \"menu\", followed by \"help\".</string>
+    <string name="permissionsExplanation">This app needs to record audio for voice recognition and the music exercises to work, also this app needs to write to external storage to setup voice recognition.</string>
+    <string name="pitchMatching_targetPitchLabel">Target Pitch</string>
+    <string name="pitchMatching_titleLabel">Pitch Matching</string>
+    <string name="pitchMatching_pitchDifferenceLabel">Difference</string>
+    <string name="pitchMatching_startBtnLabel">Start</string>
+    <string name="pitchMatching_stopBtnLabel">Stop</string>
+    <string name="pitchMatching_playTargetPitchBtnLabel">Play Target Pitch</string>
+    <string name="pitchMatching_stopTargetPitchBtnLabel">Stop Playback</string>
+    <string name="pitchMatching_changeTargetPitchBtnLabel">Change Target Pitch</string>
+    <string name="pitchMatchingMenuBtnLabel">Pitch Matching</string>
+    <string name="viewHelpBtnLabel">Voice Control Help</string>
+    <string name="mainMenuMiscHeading">Other</string>
+    <string name="pitchMatching_shortDescription">Try match your pitch with the target pitch!</string>
+    <string name="permissionsExplanationTitle">Permissions This App Uses</string>
+    <string name="voiceControlHelpTitle">Voice Control Help</string>
+    <string name="dialogOk">ok</string>
+    <string name="dialogCancel">cancel</string>
 </resources>
