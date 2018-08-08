@@ -2,10 +2,26 @@ package cosc345.app.lib;
 
 import android.support.annotation.NonNull;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Represents a musical note.
  */
 public class Note implements Comparable<Note> {
+    public enum NoteLength {SEMIBREVE, MINIM, CROTCHET, QUAVER, SEMIQUAVER}
+
+    public static final Map<NoteLength, Integer> NoteLengthMap; // NoteLength to duration in ms.
+
+    static {
+        NoteLengthMap = new HashMap<>();
+        NoteLengthMap.put(NoteLength.SEMIBREVE, 2000);
+        NoteLengthMap.put(NoteLength.MINIM, 1000);
+        NoteLengthMap.put(NoteLength.CROTCHET, 500);
+        NoteLengthMap.put(NoteLength.QUAVER, 250);
+        NoteLengthMap.put(NoteLength.SEMIQUAVER, 125);
+    }
+
     public static final String[] NOTE_NAMES = {
             "C2", "C#2", "D2", "D#2", "E2", "F2", "F#2", "G2", "G#2", "A2", "A#2", "B2",
             "C3", "C#3", "D3", "D#3", "E3", "F3", "F#3", "G3", "G#3", "A3", "A#3", "B3",
@@ -28,18 +44,24 @@ public class Note implements Comparable<Note> {
     private static final int NUM_CENTS = Note.NUM_HALF_STEPS * 100; // per octave.
     private static final double MIN_FREQUENCY = 63.57; // C2 minus 49 cents
     private static final double MAX_FREQUENCY = 1077.47; // C6 plus 50 cents
+
     private final int nameIndex;
-    private final double frequency;
+    protected final double frequency;
     private final int halfStepDistance;
     private final int octave;
     private final int cents;
+    protected int duration; // in ms.
+
+    public Note(double frequency) {
+        this(frequency, NoteLength.CROTCHET, false);
+    }
 
     /**
      * Create a musical note based on a frequency.
      *
      * @param frequency the frequency (in Hertz) to use.
      */
-    public Note(double frequency) {
+    public Note(double frequency, NoteLength noteLength, boolean useDottedLength) {
         if (frequency < Note.MIN_FREQUENCY || frequency > Note.MAX_FREQUENCY) {
             throw new IllegalArgumentException();
         }
@@ -52,6 +74,20 @@ public class Note implements Comparable<Note> {
         halfStepDistance = hsDist;
         octave = Note.octave(hsDist);
         cents = Note.centDistanceClamped(frequency, refFreq);
+        duration = (int) (NoteLengthMap.get(noteLength) * (useDottedLength ? 1.5 : 1.0));
+    }
+
+    public Note(String name) {
+        this(name, NoteLength.CROTCHET, false);
+    }
+
+    public Note(Note note) {
+        this.cents = note.cents;
+        this.duration = note.duration;
+        this.frequency = note.frequency;
+        this.halfStepDistance = note.halfStepDistance;
+        this.nameIndex = note.nameIndex;
+        this.octave = note.octave;
     }
 
     /**
@@ -60,7 +96,7 @@ public class Note implements Comparable<Note> {
      * @param name the name of the note that follows the format (Note Letter)[#|b](Octave).
      *             For example a note name may look like: A#3 or Db4.
      */
-    public Note(String name) {
+    public Note(String name, NoteLength noteLength, boolean useDottedLength) {
         int noteIndex = Utilities.indexOf(name, Note.NOTE_NAMES);
 
         if (noteIndex < 0) {
@@ -76,6 +112,7 @@ public class Note implements Comparable<Note> {
         frequency = Note.frequency(halfStepDistance);
         octave = Note.octave(halfStepDistance);
         cents = 0;
+        duration = (int) (NoteLengthMap.get(noteLength) * (useDottedLength ? 1.5 : 1.0));
     }
 
     /**
@@ -116,7 +153,7 @@ public class Note implements Comparable<Note> {
         double weighted_i = Utilities.random.nextGaussian() *
                 Note.NUM_HALF_STEPS + Note.NOTE_NAMES.length / 2;
         int i = (int) Math.max(0, Math.min(weighted_i, Note.NOTE_NAMES.length));
-        return new Note(Note.NOTE_NAMES[i]);
+        return new Note(Note.NOTE_NAMES[i], NoteLength.CROTCHET, false);
     }
 
 
@@ -201,6 +238,10 @@ public class Note implements Comparable<Note> {
      */
     public int getCents() {
         return cents;
+    }
+
+    public void setDuration(NoteLength noteLength, boolean useDottedLength) {
+        duration = (int) (NoteLengthMap.get(noteLength) * (useDottedLength ? 1.5 : 1.0));
     }
 
     /**

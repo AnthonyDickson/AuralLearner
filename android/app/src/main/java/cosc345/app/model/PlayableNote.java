@@ -12,42 +12,39 @@ import cosc345.app.lib.Note;
 /**
  * Takes a note or frequency and plays it.
  */
-public class NotePlayer implements Runnable {
+public class PlayableNote extends Note implements Runnable {
     // Code adapted from http://marblemice.blogspot.com/2010/04/generate-and-play-tone-in-android.html
-    private static final String LOG_TAG = "NotePlayer";
-    private static final int SAMPLE_RATE = 8000;
-    private final int duration; // seconds
+    private static final String LOG_TAG = "PlayableNote";
+    private static final int SAMPLE_RATE = 8000; // per second.
     private final int numSamples;
     private final double sample[];
     private final byte generatedSnd[];
-    private final Callback callback;
-    private final double frequency;
     private final Handler handler = new Handler();
+    public Callback callback = null;
     private AudioTrack audioTrack;
 
-    /**
-     * Create a new note player.
-     *
-     * @param frequency the frequency of the tone to play.
-     * @param duration  how long to play the tone (in seconds).
-     */
-    public NotePlayer(double frequency, int duration, Callback callback) {
-        this.frequency = frequency;
-        this.duration = duration;
-        numSamples = NotePlayer.SAMPLE_RATE * duration;
+    public PlayableNote(double frequency, NoteLength noteLength, boolean useDottedLength) {
+        super(frequency, noteLength, useDottedLength);
+
+        numSamples = PlayableNote.SAMPLE_RATE * duration / 1000;
         sample = new double[numSamples];
         generatedSnd = new byte[2 * numSamples];
-        this.callback = callback;
     }
 
-    /**
-     * Create a new note player.
-     *
-     * @param note     the note to play.
-     * @param duration how long to play the note (in seconds).
-     */
-    public NotePlayer(Note note, int duration, Callback callback) {
-        this(note.getFrequency(), duration, callback);
+    public PlayableNote(String name, NoteLength noteLength, boolean useDottedLength) {
+        super(name, noteLength, useDottedLength);
+
+        numSamples = PlayableNote.SAMPLE_RATE * duration / 1000;
+        sample = new double[numSamples];
+        generatedSnd = new byte[2 * numSamples];
+    }
+
+    public PlayableNote(Note note) {
+        super(note);
+
+        numSamples = PlayableNote.SAMPLE_RATE * duration / 1000;
+        sample = new double[numSamples];
+        generatedSnd = new byte[2 * numSamples];
     }
 
     /**
@@ -63,9 +60,9 @@ public class NotePlayer implements Runnable {
      * Generate the tone to play.
      */
     private void genTone() {
-        Log.i(NotePlayer.LOG_TAG, "Generating tone.");
+        Log.i(PlayableNote.LOG_TAG, "Generating tone.");
         // fill out the array
-        double coefficient = 2 * Math.PI / (NotePlayer.SAMPLE_RATE / frequency);
+        double coefficient = 2 * Math.PI / (PlayableNote.SAMPLE_RATE / frequency);
 
         for (int i = 0; i < numSamples; ++i) {
             sample[i] = Math.sin(coefficient * i);
@@ -88,10 +85,10 @@ public class NotePlayer implements Runnable {
      * Play the tone.
      */
     private void play() {
-        Log.i(NotePlayer.LOG_TAG, String.format("Playing note with a frequency of %.2f for %d seconds",
+        Log.i(PlayableNote.LOG_TAG, String.format("Playing note with a frequency of %.2f for %d ms",
                 frequency, duration));
         audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC,
-                NotePlayer.SAMPLE_RATE, AudioFormat.CHANNEL_OUT_MONO,
+                PlayableNote.SAMPLE_RATE, AudioFormat.CHANNEL_OUT_MONO,
                 AudioFormat.ENCODING_PCM_16BIT, generatedSnd.length,
                 AudioTrack.MODE_STATIC);
         audioTrack.write(generatedSnd, 0, generatedSnd.length);
@@ -99,7 +96,7 @@ public class NotePlayer implements Runnable {
         audioTrack.setPlaybackPositionUpdateListener(new AudioTrack.OnPlaybackPositionUpdateListener() {
             @Override
             public void onMarkerReached(AudioTrack track) {
-                Log.i(NotePlayer.LOG_TAG, "Playback finished.");
+                Log.i(PlayableNote.LOG_TAG, "Playback finished.");
                 audioTrack.release();
                 if (callback != null) {
                     callback.execute();

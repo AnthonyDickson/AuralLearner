@@ -14,7 +14,7 @@ import java.util.Locale;
 import cosc345.app.R;
 import cosc345.app.lib.Note;
 import cosc345.app.model.FFT;
-import cosc345.app.model.NotePlayer;
+import cosc345.app.model.PlayableNote;
 import cosc345.app.model.VoiceRecognitionManager;
 /* TODO: Change so that the target pitch is played back after the user sings the note automatically, and repeat. */
 
@@ -23,10 +23,9 @@ import cosc345.app.model.VoiceRecognitionManager;
  */
 public class PitchMatching extends AppCompatActivity implements FFT.FFTResultListener {
     private static final double VOLUME_THRESHOLD = 8e9;
-    private static final int PLAYBACK_DURATION = 3; //  in seconds
     private static final int MATCH_THRESHOLD_CENTS = 10;
     private boolean isListening, isPlaying;
-    private NotePlayer notePlayer;
+    private PlayableNote playableNote;
     private Thread fftThread, notePlayerThread;
     private Note targetNote, userNote;
     private Button start;
@@ -109,8 +108,9 @@ public class PitchMatching extends AppCompatActivity implements FFT.FFTResultLis
         resetUI();
         playTargetPitch.setVisibility(View.GONE);
         stopTargetPitch.setVisibility(View.VISIBLE);
-        notePlayer = new NotePlayer(targetNote.getFrequency(), PitchMatching.PLAYBACK_DURATION, this::onPlaybackDone);
-        notePlayerThread = new Thread(notePlayer);
+        playableNote = new PlayableNote(targetNote);
+        playableNote.callback = this::onPlaybackDone;
+        notePlayerThread = new Thread(playableNote);
         notePlayerThread.start();
         isPlaying = true;
     }
@@ -120,7 +120,7 @@ public class PitchMatching extends AppCompatActivity implements FFT.FFTResultLis
             return;
         }
 
-        notePlayer.stop();
+        playableNote.stop();
         notePlayerThread.interrupt();
         onPlaybackDone();
     }
@@ -171,7 +171,7 @@ public class PitchMatching extends AppCompatActivity implements FFT.FFTResultLis
             int centDiff = Note.centDistance(userNote, targetNote) % 100;
             pitchDifferenceView.setText(String.format(Locale.ENGLISH,
                     "%d semitone(s) and %d cent(s)", halfstepDiff, centDiff));
-            
+
             if (halfstepDiff == 0) {
                 if (Math.abs(userNote.getCents()) < PitchMatching.MATCH_THRESHOLD_CENTS) {
                     pitchDifferenceView.setTextColor(Color.GREEN);
@@ -198,6 +198,7 @@ public class PitchMatching extends AppCompatActivity implements FFT.FFTResultLis
     }
 
     private void setTargetPitchView(Note note) {
+        note.setDuration(Note.NoteLength.SEMIBREVE, false);
         targetNote = note;
         targetPitchView.setText(note.getName());
     }

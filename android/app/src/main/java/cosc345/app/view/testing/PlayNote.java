@@ -10,7 +10,7 @@ import android.widget.Spinner;
 
 import cosc345.app.R;
 import cosc345.app.lib.Note;
-import cosc345.app.model.NotePlayer;
+import cosc345.app.model.PlayableNote;
 
 /**
  * An activity to test the functionality of <code>NotePlayer</code>.
@@ -18,7 +18,7 @@ import cosc345.app.model.NotePlayer;
 public class PlayNote extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     // originally from http://marblemice.blogspot.com/2010/04/generate-and-play-tone-in-android.html
     // and modified by Steve Pomeroy <steve@staticfree.info>
-    private NotePlayer notePlayer;
+    private PlayableNote notePlayer;
     private Thread notePlayerThread;
     private double freqOfTone;
     private boolean isPlaying;
@@ -50,7 +50,8 @@ public class PlayNote extends AppCompatActivity implements AdapterView.OnItemSel
             return;
         }
 
-        notePlayer = new NotePlayer(freqOfTone, 3, this::onPlayBackDone);
+        notePlayer = new PlayableNote(freqOfTone, Note.NoteLength.SEMIBREVE, false);
+        notePlayer.callback = this::onPlayBackDone;
         notePlayerThread = new Thread(notePlayer);
         notePlayerThread.start();
         play.setVisibility(View.GONE);
