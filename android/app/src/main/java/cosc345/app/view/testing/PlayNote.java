@@ -51,7 +51,7 @@ public class PlayNote extends AppCompatActivity implements AdapterView.OnItemSel
         }
 
         notePlayer = new PlayableNote(freqOfTone, Note.NoteLength.SEMIBREVE, false);
-        notePlayer.callback = this::onPlayBackDone;
+        notePlayer.setOnDoneListener(this::onPlayBackDone);
         notePlayerThread = new Thread(notePlayer);
         notePlayerThread.start();
         play.setVisibility(View.GONE);

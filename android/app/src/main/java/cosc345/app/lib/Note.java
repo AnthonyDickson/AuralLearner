@@ -59,7 +59,9 @@ public class Note implements Comparable<Note> {
     /**
      * Create a musical note based on a frequency.
      *
-     * @param frequency the frequency (in Hertz) to use.
+     * @param frequency       the frequency (in Hertz) to use.
+     * @param noteLength      the length of the note (e.g. crotchet).
+     * @param useDottedLength whether or not the note length is dotted or not.
      */
     public Note(double frequency, NoteLength noteLength, boolean useDottedLength) {
         if (frequency < Note.MIN_FREQUENCY || frequency > Note.MAX_FREQUENCY) {
@@ -77,17 +79,14 @@ public class Note implements Comparable<Note> {
         duration = (int) (NoteLengthMap.get(noteLength) * (useDottedLength ? 1.5 : 1.0));
     }
 
+    /**
+     * Create a crotchet length note from a note name.
+     *
+     * @param name the name of the note that follows the format (Note Letter)[#|b](Octave).
+     *             For example a note name may look like: A#3 or Db4.
+     */
     public Note(String name) {
         this(name, NoteLength.CROTCHET, false);
-    }
-
-    public Note(Note note) {
-        this.cents = note.cents;
-        this.duration = note.duration;
-        this.frequency = note.frequency;
-        this.halfStepDistance = note.halfStepDistance;
-        this.nameIndex = note.nameIndex;
-        this.octave = note.octave;
     }
 
     /**
@@ -95,6 +94,8 @@ public class Note implements Comparable<Note> {
      *
      * @param name the name of the note that follows the format (Note Letter)[#|b](Octave).
      *             For example a note name may look like: A#3 or Db4.
+     * @param noteLength      the length of the note (e.g. crotchet).
+     * @param useDottedLength whether or not the note length is dotted or not.
      */
     public Note(String name, NoteLength noteLength, boolean useDottedLength) {
         int noteIndex = Utilities.indexOf(name, Note.NOTE_NAMES);
@@ -113,6 +114,20 @@ public class Note implements Comparable<Note> {
         octave = Note.octave(halfStepDistance);
         cents = 0;
         duration = (int) (NoteLengthMap.get(noteLength) * (useDottedLength ? 1.5 : 1.0));
+    }
+
+    /**
+     * Create a note as a copy of another Note object.
+     *
+     * @param note the Note object to be copied.
+     */
+    public Note(Note note) {
+        this.cents = note.cents;
+        this.duration = note.duration;
+        this.frequency = note.frequency;
+        this.halfStepDistance = note.halfStepDistance;
+        this.nameIndex = note.nameIndex;
+        this.octave = note.octave;
     }
 
     /**

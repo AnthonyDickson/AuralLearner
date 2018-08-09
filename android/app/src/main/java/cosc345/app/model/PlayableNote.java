@@ -10,57 +10,67 @@ import cosc345.app.lib.Callback;
 import cosc345.app.lib.Note;
 
 /**
- * Takes a note or frequency and plays it.
+ * Extends the note class such that a note can be played back as audio.
  */
 public class PlayableNote extends Note implements Runnable {
-    // Code adapted from http://marblemice.blogspot.com/2010/04/generate-and-play-tone-in-android.html
     private static final String LOG_TAG = "PlayableNote";
     private static final int SAMPLE_RATE = 8000; // per second.
-    private final int numSamples;
-    private final double sample[];
-    private final byte generatedSnd[];
-    private final Handler handler = new Handler();
-    public Callback callback = null;
-    private AudioTrack audioTrack;
 
+    private final Handler handler = new Handler();
+    private AudioTrack audioTrack;
+    private byte generatedSnd[];
+    private Callback callback = null;
+    private int numSamples;
+
+    /**
+     * Create a musical note based on a frequency.
+     *
+     * @param frequency       the frequency (in Hertz) to use.
+     * @param noteLength      the length of the note (e.g. crotchet).
+     * @param useDottedLength whether or not the note length is dotted or not.
+     */
     public PlayableNote(double frequency, NoteLength noteLength, boolean useDottedLength) {
         super(frequency, noteLength, useDottedLength);
 
-        numSamples = PlayableNote.SAMPLE_RATE * duration / 1000;
-        sample = new double[numSamples];
-        generatedSnd = new byte[2 * numSamples];
+        init();
     }
 
+    /**
+     * Create a musical note from a string.
+     *
+     * @param name the name of the note that follows the format (Note Letter)[#|b](Octave).
+     *             For example a note name may look like: A#3 or Db4.
+     * @param noteLength      the length of the note (e.g. crotchet).
+     * @param useDottedLength whether or not the note length is dotted or not.
+     */
     public PlayableNote(String name, NoteLength noteLength, boolean useDottedLength) {
         super(name, noteLength, useDottedLength);
 
-        numSamples = PlayableNote.SAMPLE_RATE * duration / 1000;
-        sample = new double[numSamples];
-        generatedSnd = new byte[2 * numSamples];
+        init();
     }
 
+    /**
+     * Create a playable note where the note is copy of another Note object.
+     *
+     * @param note the Note object to be copied.
+     */
     public PlayableNote(Note note) {
         super(note);
 
+        init();
+    }
+
+    /**
+     * Generate the tone of
+     */
+    private void init() {
+        // Code adapted from http://marblemice.blogspot.com/2010/04/generate-and-play-tone-in-android.html
         numSamples = PlayableNote.SAMPLE_RATE * duration / 1000;
-        sample = new double[numSamples];
         generatedSnd = new byte[2 * numSamples];
-    }
 
-    /**
-     * Generate and play the tone.
-     */
-    @Override
-    public void run() {
-        genTone();
-        handler.post(this::play);
-    }
-
-    /**
-     * Generate the tone to play.
-     */
-    private void genTone() {
         Log.i(PlayableNote.LOG_TAG, "Generating tone.");
+        double[] sample = new double[numSamples];
+
         // fill out the array
         double coefficient = 2 * Math.PI / (PlayableNote.SAMPLE_RATE / frequency);
 
@@ -77,12 +87,30 @@ public class PlayableNote extends Note implements Runnable {
             // in 16 bit wav PCM, first byte is the low order byte
             generatedSnd[idx++] = (byte) (val & 0x00ff);
             generatedSnd[idx++] = (byte) ((val & 0xff00) >>> 8);
-
         }
     }
 
     /**
-     * Play the tone.
+     * Set the callback to be executed when the note either:
+     *  - finishes playback
+     *  - is stopped.
+     *
+     *  @param onDoneListener the callback to be executed.
+     */
+    public void setOnDoneListener(Callback onDoneListener) {
+        this.callback = onDoneListener;
+    }
+
+    /**
+     * Generate and play the tone.
+     */
+    @Override
+    public void run() {
+        handler.post(this::play);
+    }
+
+    /**
+     * Play the note and when the playback finishes call the assigned callback function..
      */
     private void play() {
         Log.i(PlayableNote.LOG_TAG, String.format("Playing note with a frequency of %.2f for %d ms",
@@ -111,12 +139,14 @@ public class PlayableNote extends Note implements Runnable {
         audioTrack.play();
     }
 
+    /**
+     * Stop the playback of the note and execute the assigned callback.
+     */
     public synchronized void stop() {
         if (audioTrack != null && audioTrack.getPlayState() == AudioTrack.PLAYSTATE_PLAYING) {
             audioTrack.pause();
             audioTrack.flush();
             audioTrack.release();
-
         }
 
         if (callback != null) {

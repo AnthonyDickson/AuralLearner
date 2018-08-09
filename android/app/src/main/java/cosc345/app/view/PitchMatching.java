@@ -16,7 +16,6 @@ import cosc345.app.lib.Note;
 import cosc345.app.model.FFT;
 import cosc345.app.model.PlayableNote;
 import cosc345.app.model.VoiceRecognitionManager;
-/* TODO: Change so that the target pitch is played back after the user sings the note automatically, and repeat. */
 
 /**
  * Activity that allows the user to try to match a pitch.
@@ -109,7 +108,7 @@ public class PitchMatching extends AppCompatActivity implements FFT.FFTResultLis
         playTargetPitch.setVisibility(View.GONE);
         stopTargetPitch.setVisibility(View.VISIBLE);
         playableNote = new PlayableNote(targetNote);
-        playableNote.callback = this::onPlaybackDone;
+        playableNote.setOnDoneListener(this::onPlaybackDone);
         notePlayerThread = new Thread(playableNote);
         notePlayerThread.start();
         isPlaying = true;
