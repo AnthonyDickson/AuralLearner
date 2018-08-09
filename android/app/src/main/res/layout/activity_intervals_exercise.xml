@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.PitchMatchingExercise">
+    tools:context=".view.IntervalsExercise">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -25,86 +25,67 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/pitchMatching_titleLabel"
+            android:text="@string/intervals_titleLabel"
             android:textAllCaps="false"
             android:textSize="@dimen/menuTitleTextSize" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:paddingBottom="8dp"
-            android:text="@string/pitchMatching_description" />
+            android:text="@string/intervals_description" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/pitchMatching_targetPitchLabel" />
+            android:text="@string/intervals_targetLabel" />
 
         <TextView
-            android:id="@+id/pitchMatching_targetPitchText"
+            android:id="@+id/intervals_targetName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="-" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/pitchMatching_currentPitchLabel" />
-
-        <TextView
-            android:id="@+id/pitchMatching_userPitchText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="-" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/pitchMatching_pitchDifferenceLabel" />
-
-        <TextView
-            android:id="@+id/pitchMatching_pitchDifferenceText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="-" />
+            android:text="" />
 
         <Button
-            android:id="@+id/pitchMatching_startBtn"
+            android:id="@+id/intervals_startBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/startBtnLabel" />
 
         <Button
-            android:id="@+id/pitchMatching_stopBtn"
+            android:id="@+id/intervals_stopBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/stopBtnLabel"
             android:visibility="gone" />
 
         <Button
-            android:id="@+id/pitchMatching_playTargetPitchBtn"
+            android:id="@+id/intervals_playTargetBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/pitchMatching_playTargetPitchBtnLabel" />
+            android:text="@string/intervals_playTargetIntervalBtnLabel" />
 
         <Button
-            android:id="@+id/pitchMatching_stopTargetPitchBtn"
+            android:id="@+id/intervals_stopTargetBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/pitchMatching_stopTargetPitchBtnLabel"
+            android:text="@string/intervals_stopTargetIntervalBtnLabel"
             android:visibility="gone" />
-
         <Button
-            android:id="@+id/pitchMatching_changeTargetPitchBtn"
+            android:id="@+id/intervals_changeTargetRootBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/pitchMatching_changeTargetPitchBtnLabel" />
+            android:text="@string/intervals_changeTargetRootBtnLabel" />
+
+        <Button
+            android:id="@+id/intervals_changeTargetIntervalBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/intervals_changeTargetIntervalBtnLabel" />
 
     </LinearLayout>
+
 </android.support.constraint.ConstraintLayout>

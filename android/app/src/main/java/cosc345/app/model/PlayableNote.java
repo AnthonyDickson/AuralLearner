@@ -8,11 +8,12 @@ import android.util.Log;
 
 import cosc345.app.lib.Callback;
 import cosc345.app.lib.Note;
+import cosc345.app.lib.Playable;
 
 /**
  * Extends the note class such that a note can be played back as audio.
  */
-public class PlayableNote extends Note implements Runnable {
+public class PlayableNote extends Note implements Runnable, Playable {
     private static final String LOG_TAG = "PlayableNote";
     private static final int SAMPLE_RATE = 8000; // per second.
 
@@ -90,29 +91,19 @@ public class PlayableNote extends Note implements Runnable {
         }
     }
 
-    /**
-     * Set the callback to be executed when the note either:
-     *  - finishes playback
-     *  - is stopped.
-     *
-     *  @param onDoneListener the callback to be executed.
-     */
-    public void setOnDoneListener(Callback onDoneListener) {
-        this.callback = onDoneListener;
+    @Override
+    public void setCallback(Callback callback) {
+        this.callback = callback;
     }
 
-    /**
-     * Generate and play the tone.
-     */
     @Override
     public void run() {
         handler.post(this::play);
     }
 
-    /**
-     * Play the note and when the playback finishes call the assigned callback function..
-     */
-    private void play() {
+
+    @Override
+    public void play() {
         Log.i(PlayableNote.LOG_TAG, String.format("Playing note with a frequency of %.2f for %d ms",
                 frequency, duration));
         audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC,
@@ -126,8 +117,11 @@ public class PlayableNote extends Note implements Runnable {
             public void onMarkerReached(AudioTrack track) {
                 Log.i(PlayableNote.LOG_TAG, "Playback finished.");
                 audioTrack.release();
+
                 if (callback != null) {
                     callback.execute();
+                } else {
+                    Log.i(LOG_TAG, "Callback is null!");
                 }
             }
 
@@ -139,10 +133,8 @@ public class PlayableNote extends Note implements Runnable {
         audioTrack.play();
     }
 
-    /**
-     * Stop the playback of the note and execute the assigned callback.
-     */
-    public synchronized void stop() {
+    @Override
+    public void stop() {
         if (audioTrack != null && audioTrack.getPlayState() == AudioTrack.PLAYSTATE_PLAYING) {
             audioTrack.pause();
             audioTrack.flush();

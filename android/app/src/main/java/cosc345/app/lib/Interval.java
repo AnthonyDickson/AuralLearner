@@ -27,10 +27,16 @@ public class Interval {
     }
 
     public final IntervalName name;
-    public final Note root;
-    public final Note other;
+    public Note root;
+    public Note other;
     public final int size;
 
+    /**
+     * Create an interval from a single note.
+     *
+     * @param root     the root note of the interval.
+     * @param interval the interval to create.
+     */
     public Interval(Note root, Intervals interval) {
         this(root, interval, false);
     }

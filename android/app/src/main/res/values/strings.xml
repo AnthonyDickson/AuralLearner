@@ -9,8 +9,8 @@
     <string name="pitchMatching_targetPitchLabel">Target Pitch</string>
     <string name="pitchMatching_titleLabel">Pitch Matching</string>
     <string name="pitchMatching_pitchDifferenceLabel">Difference</string>
-    <string name="pitchMatching_startBtnLabel">Start</string>
-    <string name="pitchMatching_stopBtnLabel">Stop</string>
+    <string name="startBtnLabel">Start</string>
+    <string name="stopBtnLabel">Stop</string>
     <string name="pitchMatching_playTargetPitchBtnLabel">Play Target Pitch</string>
     <string name="pitchMatching_stopTargetPitchBtnLabel">Stop Playback</string>
     <string name="pitchMatching_changeTargetPitchBtnLabel">Change Target Pitch</string>
@@ -22,4 +22,14 @@
     <string name="voiceControlHelpTitle">Voice Control Help</string>
     <string name="dialogOk">ok</string>
     <string name="dialogCancel">cancel</string>
+    <string name="title_activity_intervals_exercise">IntervalsExercise</string>
+    <string name="intervals_titleLabel">Intervals Exercise</string>
+    <string name="pitchMatching_description">Try match your pitch with the target pitch!</string>
+    <string name="pitchMatching_currentPitchLabel">Your Current Pitch</string>
+    <string name="intervals_description">Try sing an interval!</string>
+    <string name="intervals_targetLabel">Target Interval</string>
+    <string name="intervals_playTargetIntervalBtnLabel">Play Target Interval</string>
+    <string name="intervals_stopTargetIntervalBtnLabel">Stop Playback</string>
+    <string name="intervals_changeTargetIntervalBtnLabel">Change Target Interval</string>
+    <string name="intervals_changeTargetRootBtnLabel">Change Interval Root</string>
 </resources>

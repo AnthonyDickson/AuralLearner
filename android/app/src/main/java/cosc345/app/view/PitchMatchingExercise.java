@@ -20,7 +20,7 @@ import cosc345.app.model.VoiceRecognitionManager;
 /**
  * Activity that allows the user to try to match a pitch.
  */
-public class PitchMatching extends AppCompatActivity implements FFT.FFTResultListener {
+public class PitchMatchingExercise extends AppCompatActivity implements FFT.FFTResultListener {
     private static final double VOLUME_THRESHOLD = 8e9;
     private static final int MATCH_THRESHOLD_CENTS = 10;
     private boolean isListening, isPlaying;
@@ -108,7 +108,7 @@ public class PitchMatching extends AppCompatActivity implements FFT.FFTResultLis
         playTargetPitch.setVisibility(View.GONE);
         stopTargetPitch.setVisibility(View.VISIBLE);
         playableNote = new PlayableNote(targetNote);
-        playableNote.setOnDoneListener(this::onPlaybackDone);
+        playableNote.setCallback(this::onPlaybackDone);
         notePlayerThread = new Thread(playableNote);
         notePlayerThread.start();
         isPlaying = true;
@@ -158,7 +158,7 @@ public class PitchMatching extends AppCompatActivity implements FFT.FFTResultLis
     @Override
     public void onFFTResult(double frequency, double amplitude, double averageFrequency,
                             double[] recentFrequencies) {
-        if (!isListening || amplitude < PitchMatching.VOLUME_THRESHOLD) {
+        if (!isListening || amplitude < PitchMatchingExercise.VOLUME_THRESHOLD) {
             resetUI();
             return;
         }
@@ -172,7 +172,7 @@ public class PitchMatching extends AppCompatActivity implements FFT.FFTResultLis
                     "%d semitone(s) and %d cent(s)", halfstepDiff, centDiff));
 
             if (halfstepDiff == 0) {
-                if (Math.abs(userNote.getCents()) < PitchMatching.MATCH_THRESHOLD_CENTS) {
+                if (Math.abs(userNote.getCents()) < PitchMatchingExercise.MATCH_THRESHOLD_CENTS) {
                     pitchDifferenceView.setTextColor(Color.GREEN);
                 } else {
                     pitchDifferenceView.setTextColor(defaultColours);

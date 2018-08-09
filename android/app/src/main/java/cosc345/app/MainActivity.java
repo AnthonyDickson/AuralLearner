@@ -14,9 +14,10 @@ import android.widget.Button;
 import cosc345.app.lib.MenuAction;
 import cosc345.app.model.TextToSpeechManager;
 import cosc345.app.model.VoiceRecognitionManager;
+import cosc345.app.view.IntervalsExercise;
 import cosc345.app.view.IntervalsMenu;
 import cosc345.app.view.MelodiesMenu;
-import cosc345.app.view.PitchMatching;
+import cosc345.app.view.PitchMatchingExercise;
 import cosc345.app.view.RhythmsMenu;
 import cosc345.app.view.VoiceControlActivity;
 
@@ -68,8 +69,8 @@ public class MainActivity extends VoiceControlActivity implements ActivityCompat
     private void setupVoiceRecognition() {
         VoiceRecognitionManager voiceRecognitionManager = VoiceRecognitionManager.getInstance();
         voiceRecognitionManager.init(this);
-        voiceRecognitionManager.registerAction(new MenuAction("pitch matching", () -> startActivity(new Intent(MainActivity.this, PitchMatching.class))));
-        voiceRecognitionManager.registerAction(new MenuAction("intervals", () -> startActivity(new Intent(MainActivity.this, IntervalsMenu.class))));
+        voiceRecognitionManager.registerAction(new MenuAction("pitch matching", () -> startActivity(new Intent(MainActivity.this, PitchMatchingExercise.class))));
+        voiceRecognitionManager.registerAction(new MenuAction("intervals", () -> startActivity(new Intent(MainActivity.this, IntervalsExercise.class))));
         voiceRecognitionManager.registerAction(new MenuAction("melodies", () -> startActivity(new Intent(MainActivity.this, MelodiesMenu.class))));
         voiceRecognitionManager.registerAction(new MenuAction("rhythms", () -> startActivity(new Intent(MainActivity.this, RhythmsMenu.class))));
         voiceRecognitionManager.registerAction(new MenuAction("help", () -> {
@@ -80,8 +81,8 @@ public class MainActivity extends VoiceControlActivity implements ActivityCompat
     }
 
     private void setupMenuButtons() {
-        setupMenuButton(R.id.pitchMatchingMenuBtn, PitchMatching.class);
-        setupMenuButton(R.id.intervalsMenuBtn, IntervalsMenu.class);
+        setupMenuButton(R.id.pitchMatchingMenuBtn, PitchMatchingExercise.class);
+        setupMenuButton(R.id.intervalsMenuBtn, IntervalsExercise.class);
         setupMenuButton(R.id.melodiesMenuBtn, MelodiesMenu.class);
         setupMenuButton(R.id.rhythmsMenuBtn, RhythmsMenu.class);
         findViewById(R.id.voiceControlHelpBtn).setOnClickListener(v -> {
