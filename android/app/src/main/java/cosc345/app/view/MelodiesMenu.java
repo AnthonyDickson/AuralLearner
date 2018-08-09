@@ -11,7 +11,6 @@ import cosc345.app.R;
 
 public class MelodiesMenu extends VoiceControlActivity {
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_melodies_menu);

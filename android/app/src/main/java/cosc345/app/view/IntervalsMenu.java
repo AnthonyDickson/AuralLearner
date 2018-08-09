@@ -9,7 +9,6 @@ import java.util.Objects;
 import cosc345.app.R;
 
 public class IntervalsMenu extends VoiceControlActivity {
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intervals_menu);

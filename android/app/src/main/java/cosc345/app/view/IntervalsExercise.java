@@ -1,6 +1,7 @@
 package cosc345.app.view;
 
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -9,8 +10,10 @@ import android.widget.TextView;
 import cosc345.app.R;
 import cosc345.app.lib.Interval;
 import cosc345.app.lib.Note;
+import cosc345.app.lib.Utilities;
 import cosc345.app.model.FFT;
 import cosc345.app.model.PlayableInterval;
+import cosc345.app.model.PlayableNote;
 import cosc345.app.model.VoiceRecognitionManager;
 
 public class IntervalsExercise extends AppCompatActivity implements FFT.FFTResultListener {
@@ -24,6 +27,8 @@ public class IntervalsExercise extends AppCompatActivity implements FFT.FFTResul
     private Button playTargetBtn;
     private Button stopTargetBtn;
     private TextView targetIntervalView;
+    private int choice;
+    private int intervalChoice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +44,24 @@ public class IntervalsExercise extends AppCompatActivity implements FFT.FFTResul
         stopTargetBtn = findViewById(R.id.intervals_stopTargetBtn);
         targetIntervalView = findViewById(R.id.intervals_targetName);
 
-        setTargetIntervalView(new PlayableInterval(new Note("C4"), Interval.Intervals.P5));
+        setTargetInterval(new PlayableInterval(new Note("C4"), Interval.Intervals.P5));
+        AlertDialog chooseNoteDialog = createNotePickerDialog();
+        AlertDialog chooseIntervalDialog = createIntervalPickerDialog();
 
         startBtn.setOnClickListener(v -> startListening());
         stopBtn.setOnClickListener(v -> stopListening());
         playTargetBtn.setOnClickListener(v -> startTargetPlayback());
         stopTargetBtn.setOnClickListener(v -> stopTargetPlayback());
+        findViewById(R.id.intervals_changeTargetRootBtn).setOnClickListener(v -> {
+            stopListening();
+            stopTargetPlayback();
+            chooseNoteDialog.show();
+        });
+        findViewById(R.id.intervals_changeTargetIntervalBtn).setOnClickListener(v -> {
+            stopListening();
+            stopTargetPlayback();
+            chooseIntervalDialog.show();
+        });
     }
 
     private void startListening() {
@@ -107,11 +124,6 @@ public class IntervalsExercise extends AppCompatActivity implements FFT.FFTResul
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
     protected void onPause() {
         super.onPause();
 
@@ -127,9 +139,40 @@ public class IntervalsExercise extends AppCompatActivity implements FFT.FFTResul
         }
     }
 
-    private void setTargetIntervalView(PlayableInterval interval) {
-        interval.setCallback(this::onPlaybackDone);
+    private AlertDialog createNotePickerDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Note")
+                .setSingleChoiceItems(Note.NOTE_NAMES, targetInterval.root.getNameIndex(),
+                        (dialog, which) -> choice = which)
+                .setPositiveButton(R.string.dialogOk, (dialog, id) -> setTargetRoot(new Note(Note.NOTE_NAMES[choice])))
+                .setNeutralButton("Choose For Me", (dialog, id) -> setTargetRoot(Note.getRandom()))
+                .setNegativeButton(R.string.dialogCancel, (dialog, id) -> choice = Note.A4_INDEX);
+
+        return builder.create();
+    }
+
+    private AlertDialog createIntervalPickerDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Note")
+                .setSingleChoiceItems(Interval.getFullNames(), targetInterval.interval.ordinal(),
+                        (dialog, which) -> intervalChoice = which)
+                .setPositiveButton(R.string.dialogOk, (dialog, id) -> setTargetInterval(new PlayableInterval(targetInterval.root, Interval.Intervals.values()[intervalChoice])))
+                .setNeutralButton("Choose For Me", (dialog, id) -> setTargetInterval(new PlayableInterval(targetInterval.root, Interval.Intervals.values()[Utilities.random.nextInt(Interval.Intervals.values().length)])))
+                .setNegativeButton(R.string.dialogCancel, (dialog, id) -> intervalChoice = Interval.Intervals.P1.ordinal());
+
+        return builder.create();
+    }
+
+    private void setTargetRoot(Note note) {
+        PlayableNote playableNote = new PlayableNote(note);
+        setTargetInterval(new PlayableInterval(playableNote, targetInterval.interval));
+    }
+
+    private void setTargetInterval(PlayableInterval interval) {
         targetInterval = interval;
-        targetIntervalView.setText(interval.toString());
+        targetInterval.setCallback(this::onPlaybackDone);
+        targetIntervalView.setText(targetInterval.toString());
     }
 }

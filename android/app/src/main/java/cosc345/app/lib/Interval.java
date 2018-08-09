@@ -26,6 +26,7 @@ public class Interval {
         Interval.intervalNames.put(12, new IntervalName("Perfect octave", "P8"));
     }
 
+    public final Intervals interval;
     public final IntervalName name;
     public Note root;
     public Note other;
@@ -52,6 +53,7 @@ public class Interval {
         if (invert) {
             size = Math.abs(Note.NUM_HALF_STEPS - interval.ordinal());
             name = Interval.intervalNames.get(size);
+            this.interval = Intervals.values()[size % (Intervals.values().length - 1)];
             // What was the second note in the interval becomes the root.
             String newRootNodeName = Note.NOTE_NAMES[root.getNameIndex() + interval.ordinal()];
             this.root = new Note(newRootNodeName);
@@ -60,8 +62,15 @@ public class Interval {
             other = new Note(otherNodeName);
 
         } else {
-            size = interval.ordinal();
+            // prevent out of range intervals.
+            if (root.getNameIndex() + interval.ordinal() >= Note.NOTE_NAMES.length) {
+                size = (Note.NOTE_NAMES.length - 1) - root.getNameIndex();
+            } else {
+                size = interval.ordinal();
+            }
+
             name = Interval.intervalNames.get(size);
+            this.interval = Intervals.values()[size % (Intervals.values().length - 1)];
             this.root = root;
             String otherNoteName = Note.NOTE_NAMES[root.getNameIndex() + size];
             other = new Note(otherNoteName);
@@ -74,6 +83,7 @@ public class Interval {
     public Interval(Note root, Note other) {
         size = Math.abs(root.getNameIndex() - other.getNameIndex());
         name = Interval.intervalNames.get(size % Note.NUM_HALF_STEPS);
+        interval = Intervals.values()[size % (Intervals.values().length - 1)];
         this.root = root;
         this.other = other;
     }
@@ -90,6 +100,26 @@ public class Interval {
      */
     public enum Intervals {
         P1, m2, M2, m3, M3, P4, A4, P5, m6, M6, m7, M7, P8
+    }
+
+    public static String[] getShortNames() {
+        String[] names = new String[Interval.intervalNames.size()];
+
+        for (int i = 0; i < names.length; i++) {
+            names[i] = Interval.intervalNames.get(i).shortName;
+        }
+
+        return names;
+    }
+
+    public static String[] getFullNames() {
+        String[] names = new String[Interval.intervalNames.size()];
+
+        for (int i = 0; i < names.length; i++) {
+            names[i] = Interval.intervalNames.get(i).fullName;
+        }
+
+        return names;
     }
 
     /**

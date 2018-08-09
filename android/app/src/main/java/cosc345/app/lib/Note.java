@@ -76,7 +76,7 @@ public class Note implements Comparable<Note> {
         halfStepDistance = hsDist;
         octave = Note.octave(hsDist);
         cents = Note.centDistanceClamped(frequency, refFreq);
-        duration = (int) (NoteLengthMap.get(noteLength) * (useDottedLength ? 1.5 : 1.0));
+        duration = getDuration(noteLength, useDottedLength);
     }
 
     /**
@@ -113,7 +113,11 @@ public class Note implements Comparable<Note> {
         frequency = Note.frequency(halfStepDistance);
         octave = Note.octave(halfStepDistance);
         cents = 0;
-        duration = (int) (NoteLengthMap.get(noteLength) * (useDottedLength ? 1.5 : 1.0));
+        duration = getDuration(noteLength, useDottedLength);
+    }
+
+    public static int getDuration(NoteLength noteLength, boolean useDottedLength) {
+        return (int) (NoteLengthMap.get(noteLength) * (useDottedLength ? 1.5 : 1.0));
     }
 
     /**
@@ -180,10 +184,8 @@ public class Note implements Comparable<Note> {
      * @return the distance between the two notes in cents.
      */
     public static int centDistance(double frequency, double referenceFrequency) {
-        int centDist = (int) Math.round(Note.NUM_CENTS *
+        return (int) Math.round(Note.NUM_CENTS *
                 Math.log(frequency / referenceFrequency) / Math.log(2.0));
-
-        return centDist;
     }
 
     /**
@@ -256,7 +258,7 @@ public class Note implements Comparable<Note> {
     }
 
     public void setDuration(NoteLength noteLength, boolean useDottedLength) {
-        duration = (int) (NoteLengthMap.get(noteLength) * (useDottedLength ? 1.5 : 1.0));
+        duration = getDuration(noteLength, useDottedLength);
     }
 
     /**

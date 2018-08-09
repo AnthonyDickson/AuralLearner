@@ -17,12 +17,10 @@
     <string name="pitchMatchingMenuBtnLabel">Pitch Matching</string>
     <string name="viewHelpBtnLabel">Voice Control Help</string>
     <string name="mainMenuMiscHeading">Other</string>
-    <string name="pitchMatching_shortDescription">Try match your pitch with the target pitch!</string>
     <string name="permissionsExplanationTitle">Permissions This App Uses</string>
     <string name="voiceControlHelpTitle">Voice Control Help</string>
-    <string name="dialogOk">ok</string>
-    <string name="dialogCancel">cancel</string>
-    <string name="title_activity_intervals_exercise">IntervalsExercise</string>
+    <string name="dialogOk">OK</string>
+    <string name="dialogCancel">Cancel</string>
     <string name="intervals_titleLabel">Intervals Exercise</string>
     <string name="pitchMatching_description">Try match your pitch with the target pitch!</string>
     <string name="pitchMatching_currentPitchLabel">Your Current Pitch</string>

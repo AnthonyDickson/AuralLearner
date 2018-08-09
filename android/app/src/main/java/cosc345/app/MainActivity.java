@@ -15,7 +15,6 @@ import cosc345.app.lib.MenuAction;
 import cosc345.app.model.TextToSpeechManager;
 import cosc345.app.model.VoiceRecognitionManager;
 import cosc345.app.view.IntervalsExercise;
-import cosc345.app.view.IntervalsMenu;
 import cosc345.app.view.MelodiesMenu;
 import cosc345.app.view.PitchMatchingExercise;
 import cosc345.app.view.RhythmsMenu;
@@ -28,7 +27,6 @@ public class MainActivity extends VoiceControlActivity implements ActivityCompat
     // TODO: add help screen/menu.
     public static final int PERMISSIONS_REQUEST_CODE = 101;
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);

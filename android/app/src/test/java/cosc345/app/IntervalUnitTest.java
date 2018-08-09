@@ -14,6 +14,7 @@ public class IntervalUnitTest {
     @Test
     public void createFromInterval() {
         Interval p1 = new Interval(new Note("C4"), Interval.Intervals.P1);
+        assertEquals(Interval.Intervals.P1, p1.interval);
         assertEquals("Perfect unison (C4, C4)", p1.toString());
         assertEquals("Perfect unison", p1.name.toString());
         assertEquals("Perfect unison", p1.name.getFullName());
@@ -23,6 +24,7 @@ public class IntervalUnitTest {
         assertEquals(0, p1.size);
 
         Interval a4 = new Interval(new Note("C4"), Interval.Intervals.A4);
+        assertEquals(Interval.Intervals.A4, a4.interval);
         assertEquals("Augmented fourth", a4.name.toString());
         assertEquals("F#4", a4.other.getName());
         assertEquals(6, a4.size);
@@ -31,6 +33,7 @@ public class IntervalUnitTest {
     @Test
     public void createFromNotes() {
         Interval interval = new Interval(new Note("C4"), new Note("G4"));
+        assertEquals(Interval.Intervals.P5, interval.interval);
         assertEquals("Perfect fifth", interval.name.toString());
         assertEquals(7, interval.size);
     }
@@ -38,6 +41,7 @@ public class IntervalUnitTest {
     @Test
     public void createInversions() {
         Interval inverted = new Interval(new Note("C4"), Interval.Intervals.P5, true);
+        assertEquals(Interval.Intervals.P4, inverted.interval);
         assertEquals("Perfect fourth (G4, C5)", inverted.toString());
         assertEquals(5, inverted.size);
     }
@@ -45,9 +49,11 @@ public class IntervalUnitTest {
     @Test
     public void outOfRangeIntervals() {
         Interval interval = new Interval(new Note("C4"), new Note("G5"));
+        assertEquals(Interval.Intervals.P5, interval.interval);
         assertEquals("Perfect fifth", interval.name.toString());
 
         Interval interval2 = new Interval(new Note("G5"), new Note("C4"));
+        assertEquals(Interval.Intervals.P5, interval2.interval);
         assertEquals("Perfect fifth", interval2.name.toString());
     }
 }

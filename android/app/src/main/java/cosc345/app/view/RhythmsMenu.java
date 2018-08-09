@@ -10,7 +10,6 @@ import cosc345.app.R;
 
 public class RhythmsMenu extends VoiceControlActivity {
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rhythms_menu);

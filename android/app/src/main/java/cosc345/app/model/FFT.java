@@ -63,7 +63,7 @@ public class FFT implements Runnable {
      * Perform the FFT algorithm on the given audio input.
      *
      * @param data the byte buffer containing the audio input.
-     * @param nn
+     * @param nn no idea what this is supposed to be.
      */
     private static void DoFFT(double[] data, int nn) {
         long n;

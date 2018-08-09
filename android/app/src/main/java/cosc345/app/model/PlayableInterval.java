@@ -15,10 +15,11 @@ public class PlayableInterval extends Interval implements Playable {
     private static final String LOG_TAG = "PlayableInterval";
 
     private Thread noteThread;
-    private PlayableNote root;
-    private PlayableNote other;
     private State state;
     private Callback callback;
+
+    public final PlayableNote root;
+    public final PlayableNote other;
 
     /**
      * Create an interval from a single note.

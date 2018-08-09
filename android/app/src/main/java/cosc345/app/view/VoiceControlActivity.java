@@ -10,10 +10,6 @@ import cosc345.app.model.VoiceRecognitionManager;
  * An activity that uses and manages voice control and text-to-speech.
  */
 public class VoiceControlActivity extends AppCompatActivity {
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
 
     @Override
