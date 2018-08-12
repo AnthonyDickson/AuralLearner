@@ -166,12 +166,11 @@ public class PitchMatchingExercise extends AppCompatActivity implements FFT.FFTR
             pitchDifferenceView.setText(String.format(Locale.ENGLISH,
                     "%d semitone(s) and %d cent(s)", halfstepDiff, centDiff));
 
-            if (halfstepDiff == 0) {
-                if (Math.abs(userNote.getCents()) < PitchMatchingExercise.MATCH_THRESHOLD_CENTS) {
-                    pitchDifferenceView.setTextColor(Color.GREEN);
-                } else {
-                    pitchDifferenceView.setTextColor(defaultColours);
-                }
+            if (halfstepDiff == 0 &&
+                    Math.abs(userNote.getCents()) < PitchMatchingExercise.MATCH_THRESHOLD_CENTS) {
+                pitchDifferenceView.setTextColor(Color.GREEN);
+            } else {
+                pitchDifferenceView.setTextColor(defaultColours);
             }
         } catch (IllegalArgumentException e) {
             resetUI();
@@ -192,7 +191,7 @@ public class PitchMatchingExercise extends AppCompatActivity implements FFT.FFTR
     }
 
     private void setTargetPitchView(Note note) {
-        note.setDuration(Note.NoteLength.SEMIBREVE, false);
+        note.setNoteLength(Note.NoteLength.SEMIBREVE, false);
         targetNote = note;
         targetPitchView.setText(note.getName());
     }

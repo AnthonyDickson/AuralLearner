@@ -49,6 +49,19 @@
             android:gravity="center"
             android:text="" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/intervals_scoreLabel" />
+
+        <TextView
+            android:id="@+id/intervals_scoreText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="" />
+
         <Button
             android:id="@+id/intervals_startBtn"
             android:layout_width="match_parent"

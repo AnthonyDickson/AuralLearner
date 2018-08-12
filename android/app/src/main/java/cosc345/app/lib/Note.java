@@ -9,6 +9,10 @@ import java.util.Map;
  * Represents a musical note.
  */
 public class Note implements Comparable<Note> {
+    public NoteLength getNoteLength() {
+        return noteLength;
+    }
+
     public enum NoteLength {SEMIBREVE, MINIM, CROTCHET, QUAVER, SEMIQUAVER}
 
     public static final Map<NoteLength, Integer> NoteLengthMap; // NoteLength to duration in ms.
@@ -42,8 +46,8 @@ public class Note implements Comparable<Note> {
     private static final int A4_OCTAVE = 4;
     private static final int HALF_STEPS_IN_OCTAVE_BELOW_A4 = 9; // before the octave changes.
     private static final int NUM_CENTS = Note.NUM_HALF_STEPS * 100; // per octave.
-    private static final double MIN_FREQUENCY = 63.57; // C2 minus 49 cents
-    private static final double MAX_FREQUENCY = 1077.47; // C6 plus 50 cents
+    public static final double MIN_FREQUENCY = 63.57; // C2 minus 49 cents
+    public static final double MAX_FREQUENCY = 1077.47; // C6 plus 50 cents
 
     private final int nameIndex;
     protected final double frequency;
@@ -51,6 +55,7 @@ public class Note implements Comparable<Note> {
     private final int octave;
     private final int cents;
     protected int duration; // in ms.
+    NoteLength noteLength;
 
     public Note(double frequency) {
         this(frequency, NoteLength.CROTCHET, false);
@@ -76,7 +81,8 @@ public class Note implements Comparable<Note> {
         halfStepDistance = hsDist;
         octave = Note.octave(hsDist);
         cents = Note.centDistanceClamped(frequency, refFreq);
-        duration = getDuration(noteLength, useDottedLength);
+        duration = calculateDuration(noteLength, useDottedLength);
+        this.noteLength = noteLength;
     }
 
     /**
@@ -113,10 +119,11 @@ public class Note implements Comparable<Note> {
         frequency = Note.frequency(halfStepDistance);
         octave = Note.octave(halfStepDistance);
         cents = 0;
-        duration = getDuration(noteLength, useDottedLength);
+        duration = calculateDuration(noteLength, useDottedLength);
+        this.noteLength = noteLength;
     }
 
-    public static int getDuration(NoteLength noteLength, boolean useDottedLength) {
+    public static int calculateDuration(NoteLength noteLength, boolean useDottedLength) {
         return (int) (NoteLengthMap.get(noteLength) * (useDottedLength ? 1.5 : 1.0));
     }
 
@@ -128,6 +135,7 @@ public class Note implements Comparable<Note> {
     public Note(Note note) {
         this.cents = note.cents;
         this.duration = note.duration;
+        this.noteLength = note.noteLength;
         this.frequency = note.frequency;
         this.halfStepDistance = note.halfStepDistance;
         this.nameIndex = note.nameIndex;
@@ -257,8 +265,18 @@ public class Note implements Comparable<Note> {
         return cents;
     }
 
-    public void setDuration(NoteLength noteLength, boolean useDottedLength) {
-        duration = getDuration(noteLength, useDottedLength);
+
+    public void setNoteLength(NoteLength noteLength) {
+        setNoteLength(noteLength, false);
+    }
+
+    public void setNoteLength(NoteLength noteLength, boolean useDottedLength) {
+        duration = calculateDuration(noteLength, useDottedLength);
+        this.noteLength = noteLength;
+    }
+
+    public int getDuration() {
+        return duration;
     }
 
     /**

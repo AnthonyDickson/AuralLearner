@@ -73,6 +73,17 @@ public class NoteUnitTest {
         assertEquals(fSharp5.getName(), gFlat5.getName());
     }
 
+    @Test
+    public void noteSetDuration() {
+        Note note = new Note("C4");
+        assertEquals(Note.NoteLength.CROTCHET, note.getNoteLength());
+        assertEquals(500, note.getDuration());
+
+        note.setNoteLength(Note.NoteLength.MINIM);
+        assertEquals(Note.NoteLength.MINIM, note.getNoteLength());
+        assertEquals(1000, note.getDuration());
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void testBadStringInput() {
         new Note("A@OY*");

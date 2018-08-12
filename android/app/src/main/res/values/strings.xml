@@ -30,4 +30,5 @@
     <string name="intervals_stopTargetIntervalBtnLabel">Stop Playback</string>
     <string name="intervals_changeTargetIntervalBtnLabel">Change Target Interval</string>
     <string name="intervals_changeTargetRootBtnLabel">Change Interval Root</string>
+    <string name="intervals_scoreLabel">Your Score</string>
 </resources>

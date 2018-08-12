@@ -33,7 +33,11 @@ public class PlayableNote extends Note implements Runnable, Playable {
     public PlayableNote(double frequency, NoteLength noteLength, boolean useDottedLength) {
         super(frequency, noteLength, useDottedLength);
 
-        init();
+        generateTone();
+    }
+
+    public PlayableNote(String name) {
+        this(name, NoteLength.CROTCHET, false);
     }
 
     /**
@@ -47,7 +51,7 @@ public class PlayableNote extends Note implements Runnable, Playable {
     public PlayableNote(String name, NoteLength noteLength, boolean useDottedLength) {
         super(name, noteLength, useDottedLength);
 
-        init();
+        generateTone();
     }
 
     /**
@@ -58,13 +62,13 @@ public class PlayableNote extends Note implements Runnable, Playable {
     public PlayableNote(Note note) {
         super(note);
 
-        init();
+        generateTone();
     }
 
     /**
      * Generate the tone of
      */
-    private void init() {
+    private void generateTone() {
         // Code adapted from http://marblemice.blogspot.com/2010/04/generate-and-play-tone-in-android.html
         numSamples = PlayableNote.SAMPLE_RATE * duration / 1000;
         generatedSnd = new byte[2 * numSamples];
@@ -89,6 +93,18 @@ public class PlayableNote extends Note implements Runnable, Playable {
             generatedSnd[idx++] = (byte) (val & 0x00ff);
             generatedSnd[idx++] = (byte) ((val & 0xff00) >>> 8);
         }
+    }
+
+    @Override
+    public void setNoteLength(NoteLength noteLength) {
+        this.setNoteLength(noteLength, false);
+    }
+
+    @Override
+    public void setNoteLength(NoteLength noteLength, boolean useDottedLength) {
+        super.setNoteLength(noteLength, useDottedLength);
+
+        generateTone();
     }
 
     @Override

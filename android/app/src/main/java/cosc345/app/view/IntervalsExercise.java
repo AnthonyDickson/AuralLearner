@@ -3,15 +3,19 @@ package cosc345.app.view;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import java.util.Locale;
 
 import cosc345.app.R;
 import cosc345.app.lib.Interval;
 import cosc345.app.lib.Note;
 import cosc345.app.lib.Utilities;
 import cosc345.app.model.FFT;
+import cosc345.app.model.Grader;
 import cosc345.app.model.PlayableInterval;
 import cosc345.app.model.PlayableNote;
 import cosc345.app.model.VoiceRecognitionManager;
@@ -19,7 +23,6 @@ import cosc345.app.model.VoiceRecognitionManager;
 public class IntervalsExercise extends AppCompatActivity implements FFT.FFTResultListener {
     private static final double VOLUME_THRESHOLD = 8e9;
     private boolean isListening, isPlaying;
-    private Thread fftThread;
     private PlayableInterval targetInterval;
     private Interval userInterval;
     private Button startBtn;
@@ -29,6 +32,8 @@ public class IntervalsExercise extends AppCompatActivity implements FFT.FFTResul
     private TextView targetIntervalView;
     private int choice;
     private int intervalChoice;
+    private Grader grader;
+    private TextView scoreView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +48,9 @@ public class IntervalsExercise extends AppCompatActivity implements FFT.FFTResul
         playTargetBtn = findViewById(R.id.intervals_playTargetBtn);
         stopTargetBtn = findViewById(R.id.intervals_stopTargetBtn);
         targetIntervalView = findViewById(R.id.intervals_targetName);
+        scoreView = findViewById(R.id.intervals_scoreText);
 
-        setTargetInterval(new PlayableInterval(new Note("C4"), Interval.Intervals.P5));
+        setTargetInterval(new PlayableInterval(new PlayableNote("C4"), Interval.Intervals.P5));
         AlertDialog chooseNoteDialog = createNotePickerDialog();
         AlertDialog chooseIntervalDialog = createIntervalPickerDialog();
 
@@ -75,8 +81,7 @@ public class IntervalsExercise extends AppCompatActivity implements FFT.FFTResul
 
             startBtn.setVisibility(View.GONE);
             stopBtn.setVisibility(View.VISIBLE);
-            fftThread = new Thread(new FFT(this));
-            fftThread.start();
+            grader.start();
             isListening = true;
         }
     }
@@ -85,8 +90,7 @@ public class IntervalsExercise extends AppCompatActivity implements FFT.FFTResul
         if (isListening) {
             stopBtn.setVisibility(View.GONE);
             startBtn.setVisibility(View.VISIBLE);
-            fftThread.interrupt();
-            fftThread = null;
+            grader.stop();
             isListening = false;
         }
     }
@@ -172,7 +176,22 @@ public class IntervalsExercise extends AppCompatActivity implements FFT.FFTResul
 
     private void setTargetInterval(PlayableInterval interval) {
         targetInterval = interval;
+        targetInterval.root.setNoteLength(Note.NoteLength.MINIM);
+        targetInterval.other.setNoteLength(Note.NoteLength.MINIM);
         targetInterval.setCallback(this::onPlaybackDone);
         targetIntervalView.setText(targetInterval.toString());
+
+        for (Note note: targetInterval.getNotes()) {
+            Log.d("Intervals Exercise", String.format("Note with frequency %f with a duration of %d ms.", note.getFrequency(), note.getDuration()));
+        }
+        grader = new Grader(targetInterval.getNotes());
+        grader.setCallback(this::onGradingDone);
+    }
+
+    private void onGradingDone() {
+        scoreView.setText(String.format(Locale.ENGLISH, "%.2f", grader.getScore() * 100));
+        stopBtn.setVisibility(View.GONE);
+        startBtn.setVisibility(View.VISIBLE);
+        isListening = false;
     }
 }
