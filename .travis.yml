@@ -20,7 +20,6 @@ before_script:
   - adb shell input keyevent 82 &
 
 before_install:
-  - cd android
   - yes | sdkmanager "platforms;android-27" "build-tools;27.0.3"
 
 before_cache:
