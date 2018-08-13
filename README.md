@@ -66,11 +66,4 @@ this time the user needs to sing a musical interval. The user is graded based
 on how accurately they sing both of the notes in the interval. The setup is 
 similar to the setup of the pitch matching exercise however the user can
 change both the root note of the interval and the type of interval. 
-Unfortunately this exercise is still buggy and not working 100% correctly.
-
-### Other Exercises
-
-We also plan to implement two other types of exercises, melody and rhythm 
-exercises. These will be largely the same as the above except the former will 
-have the user singing a melody and the latter will have the user clapping a
-rhythm.
+Unfortunately this exercise is still buggy and not working correctly.
