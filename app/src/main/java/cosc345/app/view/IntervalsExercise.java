@@ -20,11 +20,9 @@ import cosc345.app.model.PlayableInterval;
 import cosc345.app.model.PlayableNote;
 import cosc345.app.model.VoiceRecognitionManager;
 
-public class IntervalsExercise extends AppCompatActivity implements FFT.FFTResultListener {
-    private static final double VOLUME_THRESHOLD = 8e9;
+public class IntervalsExercise extends AppCompatActivity{
     private boolean isListening, isPlaying;
     private PlayableInterval targetInterval;
-    private Interval userInterval;
     private Button startBtn;
     private Button stopBtn;
     private Button playTargetBtn;
@@ -133,14 +131,6 @@ public class IntervalsExercise extends AppCompatActivity implements FFT.FFTResul
 
         stopListening();
         stopTargetPlayback();
-    }
-
-    @Override
-    public void onFFTResult(double frequency, double amplitude, double averageFrequency,
-                            double[] recentFrequencies) {
-        if (!isListening || amplitude < IntervalsExercise.VOLUME_THRESHOLD) {
-            return;
-        }
     }
 
     private AlertDialog createNotePickerDialog() {
