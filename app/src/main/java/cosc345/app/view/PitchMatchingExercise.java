@@ -5,27 +5,36 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.Locale;
 
+import be.tarsos.dsp.AudioDispatcher;
+import be.tarsos.dsp.AudioEvent;
+import be.tarsos.dsp.AudioProcessor;
+import be.tarsos.dsp.io.android.AudioDispatcherFactory;
+import be.tarsos.dsp.pitch.PitchDetectionHandler;
+import be.tarsos.dsp.pitch.PitchDetectionResult;
+import be.tarsos.dsp.pitch.PitchProcessor;
 import cosc345.app.R;
 import cosc345.app.lib.Note;
 import cosc345.app.model.FFT;
+import cosc345.app.model.PitchDetector;
 import cosc345.app.model.PlayableNote;
 import cosc345.app.model.VoiceRecognitionManager;
 
 /**
  * Activity that allows the user to try to match a pitch.
  */
-public class PitchMatchingExercise extends AppCompatActivity implements FFT.FFTResultListener {
+public class PitchMatchingExercise extends AppCompatActivity implements PitchDetectionHandler {
     private static final double VOLUME_THRESHOLD = 8e9;
     private static final int MATCH_THRESHOLD_CENTS = 10;
     private boolean isListening, isPlaying;
     private PlayableNote playableNote;
-    private Thread fftThread, notePlayerThread;
+    private Thread audioThread;
     private Note targetNote, userNote;
     private Button start;
     private Button stop;
@@ -35,6 +44,8 @@ public class PitchMatchingExercise extends AppCompatActivity implements FFT.FFTR
     private AlertDialog chooseNoteDialog;
     private ColorStateList defaultColours;
     private int choice;
+    private AudioDispatcher dispatcher;
+    private PitchDetector pitchDetector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +77,8 @@ public class PitchMatchingExercise extends AppCompatActivity implements FFT.FFTR
             stopTargetPitchPlayback();
             chooseNoteDialog.show();
         });
+
+        pitchDetector = new PitchDetector(this);
     }
 
     private void startListening() {
@@ -79,8 +92,8 @@ public class PitchMatchingExercise extends AppCompatActivity implements FFT.FFTR
 
             start.setVisibility(View.GONE);
             stop.setVisibility(View.VISIBLE);
-            fftThread = new Thread(new FFT(this));
-            fftThread.start();
+            pitchDetector.start();
+
             isListening = true;
         }
     }
@@ -90,8 +103,7 @@ public class PitchMatchingExercise extends AppCompatActivity implements FFT.FFTR
             resetUI();
             stop.setVisibility(View.GONE);
             start.setVisibility(View.VISIBLE);
-            fftThread.interrupt();
-            fftThread = null;
+            pitchDetector.stop();
             isListening = false;
         }
     }
@@ -109,8 +121,7 @@ public class PitchMatchingExercise extends AppCompatActivity implements FFT.FFTR
         stopTargetPitch.setVisibility(View.VISIBLE);
         playableNote = new PlayableNote(targetNote);
         playableNote.setCallback(this::onPlaybackDone);
-        notePlayerThread = new Thread(playableNote);
-        notePlayerThread.start();
+        playableNote.play();
         isPlaying = true;
     }
 
@@ -120,7 +131,6 @@ public class PitchMatchingExercise extends AppCompatActivity implements FFT.FFTR
         }
 
         playableNote.stop();
-        notePlayerThread.interrupt();
         onPlaybackDone();
     }
 
@@ -150,33 +160,6 @@ public class PitchMatchingExercise extends AppCompatActivity implements FFT.FFTR
         stopTargetPitchPlayback();
     }
 
-    @Override
-    public void onFFTResult(double frequency, double amplitude, double averageFrequency,
-                            double[] recentFrequencies) {
-        if (!isListening || amplitude < PitchMatchingExercise.VOLUME_THRESHOLD) {
-            resetUI();
-            return;
-        }
-
-        try {
-            userNote = new Note(averageFrequency);
-            userPitchView.setText(userNote.getName());
-            int halfstepDiff = userNote.compareTo(targetNote);
-            int centDiff = Note.centDistance(userNote, targetNote) % 100;
-            pitchDifferenceView.setText(String.format(Locale.ENGLISH,
-                    "%d semitone(s) and %d cent(s)", halfstepDiff, centDiff));
-
-            if (halfstepDiff == 0 &&
-                    Math.abs(userNote.getCents()) < PitchMatchingExercise.MATCH_THRESHOLD_CENTS) {
-                pitchDifferenceView.setTextColor(Color.GREEN);
-            } else {
-                pitchDifferenceView.setTextColor(defaultColours);
-            }
-        } catch (IllegalArgumentException e) {
-            resetUI();
-        }
-    }
-
     private AlertDialog createNotePickerDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
@@ -194,5 +177,32 @@ public class PitchMatchingExercise extends AppCompatActivity implements FFT.FFTR
         note.setNoteLength(Note.NoteLength.SEMIBREVE, false);
         targetNote = note;
         targetPitchView.setText(note.getName());
+    }
+
+    @Override
+    public void handlePitch(PitchDetectionResult res, AudioEvent evt){
+        final float pitchInHz = res.getPitch();
+
+        Log.i("Pitch Detection", String.format("Pitch (Hz): %f", pitchInHz));
+
+        runOnUiThread(() -> {
+            try {
+                userNote = new Note(pitchInHz);
+                userPitchView.setText(userNote.getName());
+                int halfstepDiff = userNote.compareTo(targetNote);
+                int centDiff = Note.centDistance(userNote, targetNote) % 100;
+                pitchDifferenceView.setText(String.format(Locale.ENGLISH,
+                        "%d semitone(s) and %d cent(s)", halfstepDiff, centDiff));
+
+                if (halfstepDiff == 0 &&
+                        Math.abs(userNote.getCents()) < PitchMatchingExercise.MATCH_THRESHOLD_CENTS) {
+                    pitchDifferenceView.setTextColor(Color.GREEN);
+                } else {
+                    pitchDifferenceView.setTextColor(defaultColours);
+                }
+            } catch (IllegalArgumentException e) {
+                resetUI();
+            }
+        });
     }
 }

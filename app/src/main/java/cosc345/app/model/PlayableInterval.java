@@ -14,7 +14,6 @@ import cosc345.app.lib.State;
 public class PlayableInterval extends Interval implements Playable {
     private static final String LOG_TAG = "PlayableInterval";
 
-    private Thread noteThread;
     private State state;
     private Callback callback;
 
@@ -69,8 +68,7 @@ public class PlayableInterval extends Interval implements Playable {
         Log.i(LOG_TAG, "Playing interval.");
         root.setCallback(this::playNext);
         other.setCallback(this::onDone);
-        noteThread = new Thread(root);
-        noteThread.start();
+        root.play();
         state = State.BUSY;
     }
 
@@ -83,10 +81,6 @@ public class PlayableInterval extends Interval implements Playable {
         root.stop();
         other.stop();
 
-        if (noteThread != null && !noteThread.isInterrupted()) {
-            noteThread.interrupt();
-        }
-
         onDone();
     }
 
@@ -97,8 +91,7 @@ public class PlayableInterval extends Interval implements Playable {
         if (state != State.BUSY) return;
 
         Log.i(LOG_TAG, "Playing next note.");
-        noteThread = new Thread(other);
-        noteThread.start();
+        other.play();
     }
 
     /**
@@ -106,7 +99,6 @@ public class PlayableInterval extends Interval implements Playable {
      */
     private void onDone() {
         state = State.READY;
-        noteThread = null;
         Log.i(LOG_TAG, "Interval playback finished.");
 
         if (callback != null) {

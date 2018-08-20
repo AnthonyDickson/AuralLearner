@@ -28,15 +28,16 @@ public class FFT implements Runnable {
     private final static int RATE = 8000;
     private final static int CHANNEL_MODE = AudioFormat.CHANNEL_CONFIGURATION_MONO;
     private final static int ENCODING = AudioFormat.ENCODING_PCM_16BIT;
-    private final static int BUFFER_SIZE_IN_MS = 3000;
+    private final static int BUFFER_SIZE_IN_MS = 125;
     private final static int CHUNK_SIZE_IN_SAMPLES = 4096; // = 2 ^
     // CHUNK_SIZE_IN_SAMPLES_POW2
-    private final static int CHUNK_SIZE_IN_MS = 1000 * FFT.CHUNK_SIZE_IN_SAMPLES
-            / FFT.RATE;
-    private final static int BUFFER_SIZE_IN_BYTES = FFT.RATE * FFT.BUFFER_SIZE_IN_MS
-            / 1000 * 2;
-    private final static int CHUNK_SIZE_IN_BYTES = FFT.RATE * FFT.CHUNK_SIZE_IN_MS
-            / 1000 * 2;
+    private final static int READ_LENGTH_MS = 125;
+    private final static int CHUNK_SIZE_IN_MS = (int) ((float) READ_LENGTH_MS * FFT.CHUNK_SIZE_IN_SAMPLES
+            / FFT.RATE);
+    private final static int BUFFER_SIZE_IN_BYTES = (int) ((float) FFT.RATE * FFT.BUFFER_SIZE_IN_MS
+            / READ_LENGTH_MS * 2);
+    private final static int CHUNK_SIZE_IN_BYTES = (int) ((float) FFT.RATE * FFT.CHUNK_SIZE_IN_MS
+            / READ_LENGTH_MS * 2);
     private final static int MIN_FREQUENCY = 50; // HZ
     private final static int MAX_FREQUENCY = 600; // HZ
     private final static int DRAW_FREQUENCY_STEP = 5;
@@ -134,8 +135,11 @@ public class FFT implements Runnable {
     public void run() {
         android.os.Process
                 .setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_AUDIO);
+        int bufferSize = AudioRecord.getMinBufferSize(FFT.RATE,
+                AudioFormat.CHANNEL_IN_MONO,
+                AudioFormat.ENCODING_PCM_16BIT);
         AudioRecord recorder = new AudioRecord(MediaRecorder.AudioSource.MIC, FFT.RATE, FFT.CHANNEL_MODE,
-                FFT.ENCODING, 6144);
+                FFT.ENCODING, bufferSize);
 
         if (recorder.getState() != AudioRecord.STATE_INITIALIZED) {
             Log.e(FFT.LOG_TAG, "Can't initialize AudioRecord");
