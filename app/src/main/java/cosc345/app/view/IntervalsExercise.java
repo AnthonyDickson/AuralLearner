@@ -14,7 +14,6 @@ import cosc345.app.R;
 import cosc345.app.lib.Interval;
 import cosc345.app.lib.Note;
 import cosc345.app.lib.Utilities;
-import cosc345.app.model.FFT;
 import cosc345.app.model.Grader;
 import cosc345.app.model.PlayableInterval;
 import cosc345.app.model.PlayableNote;
@@ -48,7 +47,7 @@ public class IntervalsExercise extends AppCompatActivity{
         targetIntervalView = findViewById(R.id.intervals_targetName);
         scoreView = findViewById(R.id.intervals_scoreText);
 
-        setTargetInterval(new PlayableInterval(new PlayableNote("C4", Note.NoteLength.MINIM, false), Interval.Intervals.P5));
+        setTargetInterval(new PlayableInterval(new PlayableNote("C4", Note.NoteLength.MINIM), Interval.Intervals.P5));
         AlertDialog chooseNoteDialog = createNotePickerDialog();
         AlertDialog chooseIntervalDialog = createIntervalPickerDialog();
 

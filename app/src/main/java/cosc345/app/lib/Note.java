@@ -13,17 +13,30 @@ public class Note implements Comparable<Note> {
         return noteLength;
     }
 
-    public enum NoteLength {SEMIBREVE, MINIM, CROTCHET, QUAVER, SEMIQUAVER}
+    public enum NoteLength {
+        SEMIBREVE, DOTTED_SEMIBREVE, MINIM, DOTTED_MINIM, CROTCHET,
+        DOTTED_CROTCHET, QUAVER, DOTTED_QUAVER, SEMIQUAVER, DOTTED_SEMIQUAVER
+    }
 
     public static final Map<NoteLength, Integer> NoteLengthMap; // NoteLength to duration in ms.
 
     static {
         NoteLengthMap = new HashMap<>();
         NoteLengthMap.put(NoteLength.SEMIBREVE, 2000);
+        NoteLengthMap.put(NoteLength.DOTTED_SEMIBREVE,
+                (int)(NoteLengthMap.get(NoteLength.SEMIBREVE) * 1.5));
         NoteLengthMap.put(NoteLength.MINIM, 1000);
+        NoteLengthMap.put(NoteLength.DOTTED_MINIM,
+                (int)(NoteLengthMap.get(NoteLength.MINIM) * 1.5));
         NoteLengthMap.put(NoteLength.CROTCHET, 500);
+        NoteLengthMap.put(NoteLength.DOTTED_CROTCHET,
+                (int)(NoteLengthMap.get(NoteLength.CROTCHET) * 1.5));
         NoteLengthMap.put(NoteLength.QUAVER, 250);
+        NoteLengthMap.put(NoteLength.DOTTED_QUAVER,
+                (int)(NoteLengthMap.get(NoteLength.QUAVER) * 1.5));
         NoteLengthMap.put(NoteLength.SEMIQUAVER, 125);
+        NoteLengthMap.put(NoteLength.DOTTED_SEMIQUAVER,
+                (int)(NoteLengthMap.get(NoteLength.SEMIBREVE) * 1.5));
     }
 
     public static final String[] NOTE_NAMES = {
@@ -58,17 +71,15 @@ public class Note implements Comparable<Note> {
     NoteLength noteLength;
 
     public Note(double frequency) {
-        this(frequency, NoteLength.CROTCHET, false);
+        this(frequency, NoteLength.CROTCHET);
     }
 
     /**
      * Create a musical note based on a frequency.
-     *
-     * @param frequency       the frequency (in Hertz) to use.
+     *  @param frequency       the frequency (in Hertz) to use.
      * @param noteLength      the length of the note (e.g. crotchet).
-     * @param useDottedLength whether or not the note length is dotted or not.
      */
-    public Note(double frequency, NoteLength noteLength, boolean useDottedLength) {
+    public Note(double frequency, NoteLength noteLength) {
         if (frequency < Note.MIN_FREQUENCY || frequency > Note.MAX_FREQUENCY) {
             throw new IllegalArgumentException();
         }
@@ -81,7 +92,7 @@ public class Note implements Comparable<Note> {
         halfStepDistance = hsDist;
         octave = Note.octave(hsDist);
         cents = Note.centDistanceClamped(frequency, refFreq);
-        duration = calculateDuration(noteLength, useDottedLength);
+        duration = NoteLengthMap.get(noteLength);
         this.noteLength = noteLength;
     }
 
@@ -92,18 +103,16 @@ public class Note implements Comparable<Note> {
      *             For example a note name may look like: A#3 or Db4.
      */
     public Note(String name) {
-        this(name, NoteLength.CROTCHET, false);
+        this(name, NoteLength.CROTCHET);
     }
 
     /**
      * Create a musical note from a string.
-     *
-     * @param name the name of the note that follows the format (Note Letter)[#|b](Octave).
-     *             For example a note name may look like: A#3 or Db4.
+     *  @param name            the name of the note that follows the format (Note Letter)[#|b](Octave).
+     *                        For example a note name may look like: A#3 or Db4.
      * @param noteLength      the length of the note (e.g. crotchet).
-     * @param useDottedLength whether or not the note length is dotted or not.
      */
-    public Note(String name, NoteLength noteLength, boolean useDottedLength) {
+    public Note(String name, NoteLength noteLength) {
         int noteIndex = Utilities.indexOf(name, Note.NOTE_NAMES);
 
         if (noteIndex < 0) {
@@ -119,12 +128,8 @@ public class Note implements Comparable<Note> {
         frequency = Note.frequency(halfStepDistance);
         octave = Note.octave(halfStepDistance);
         cents = 0;
-        duration = calculateDuration(noteLength, useDottedLength);
+        duration = NoteLengthMap.get(noteLength);
         this.noteLength = noteLength;
-    }
-
-    public static int calculateDuration(NoteLength noteLength, boolean useDottedLength) {
-        return (int) (NoteLengthMap.get(noteLength) * (useDottedLength ? 1.5 : 1.0));
     }
 
     /**
@@ -180,7 +185,7 @@ public class Note implements Comparable<Note> {
         double weighted_i = Utilities.random.nextGaussian() *
                 Note.NUM_HALF_STEPS + Note.NOTE_NAMES.length / 2;
         int i = (int) Math.max(0, Math.min(weighted_i, Note.NOTE_NAMES.length));
-        return new Note(Note.NOTE_NAMES[i], NoteLength.CROTCHET, false);
+        return new Note(Note.NOTE_NAMES[i], NoteLength.CROTCHET);
     }
 
 
@@ -265,13 +270,8 @@ public class Note implements Comparable<Note> {
         return cents;
     }
 
-
     public void setNoteLength(NoteLength noteLength) {
-        setNoteLength(noteLength, false);
-    }
-
-    public void setNoteLength(NoteLength noteLength, boolean useDottedLength) {
-        duration = calculateDuration(noteLength, useDottedLength);
+        duration = NoteLengthMap.get(noteLength);
         this.noteLength = noteLength;
     }
 

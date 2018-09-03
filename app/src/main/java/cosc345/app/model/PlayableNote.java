@@ -3,7 +3,6 @@ package cosc345.app.model;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
-import android.os.Handler;
 import android.util.Log;
 
 import cosc345.app.lib.Callback;
@@ -25,31 +24,27 @@ public class PlayableNote extends Note implements Playable, AudioTrack.OnPlaybac
 
     /**
      * Create a musical note based on a frequency.
-     *
-     * @param frequency       the frequency (in Hertz) to use.
+     *  @param frequency       the frequency (in Hertz) to use.
      * @param noteLength      the length of the note (e.g. crotchet).
-     * @param useDottedLength whether or not the note length is dotted or not.
      */
-    public PlayableNote(double frequency, NoteLength noteLength, boolean useDottedLength) {
-        super(frequency, noteLength, useDottedLength);
+    public PlayableNote(double frequency, NoteLength noteLength) {
+        super(frequency, noteLength);
 
         generateTone();
     }
 
     public PlayableNote(String name) {
-        this(name, NoteLength.CROTCHET, false);
+        this(name, NoteLength.CROTCHET);
     }
 
     /**
      * Create a musical note from a string.
-     *
-     * @param name the name of the note that follows the format (Note Letter)[#|b](Octave).
+     *  @param name the name of the note that follows the format (Note Letter)[#|b](Octave).
      *             For example a note name may look like: A#3 or Db4.
      * @param noteLength      the length of the note (e.g. crotchet).
-     * @param useDottedLength whether or not the note length is dotted or not.
      */
-    public PlayableNote(String name, NoteLength noteLength, boolean useDottedLength) {
-        super(name, noteLength, useDottedLength);
+    public PlayableNote(String name, NoteLength noteLength) {
+        super(name, noteLength);
 
         generateTone();
     }
@@ -97,12 +92,7 @@ public class PlayableNote extends Note implements Playable, AudioTrack.OnPlaybac
 
     @Override
     public void setNoteLength(NoteLength noteLength) {
-        this.setNoteLength(noteLength, false);
-    }
-
-    @Override
-    public void setNoteLength(NoteLength noteLength, boolean useDottedLength) {
-        super.setNoteLength(noteLength, useDottedLength);
+        super.setNoteLength(noteLength);
 
         generateTone();
     }

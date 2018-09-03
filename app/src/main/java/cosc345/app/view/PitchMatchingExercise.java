@@ -174,7 +174,7 @@ public class PitchMatchingExercise extends AppCompatActivity implements PitchDet
     }
 
     private void setTargetPitchView(Note note) {
-        note.setNoteLength(Note.NoteLength.SEMIBREVE, false);
+        note.setNoteLength(Note.NoteLength.SEMIBREVE);
         targetNote = note;
         targetPitchView.setText(note.getName());
     }
