@@ -2,11 +2,11 @@ package cosc345.app.model;
 
 import android.util.Log;
 
-import cosc345.app.lib.Callback;
-import cosc345.app.lib.Interval;
-import cosc345.app.lib.Note;
-import cosc345.app.lib.Playable;
-import cosc345.app.lib.State;
+import cosc345.app.model.Callback;
+import cosc345.app.model.Interval;
+import cosc345.app.model.Note;
+import cosc345.app.model.Playable;
+import cosc345.app.model.State;
 
 /**
  * Extends the interval class such that a interval can be played back as audio.

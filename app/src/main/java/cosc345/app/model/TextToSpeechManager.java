@@ -9,8 +9,8 @@ import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Locale;
 
-import cosc345.app.lib.Callback;
-import cosc345.app.lib.State;
+import cosc345.app.model.Callback;
+import cosc345.app.model.State;
 
 /**
  * Encapsulate and manage text-to-speech.

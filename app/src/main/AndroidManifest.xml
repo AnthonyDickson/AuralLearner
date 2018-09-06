@@ -19,38 +19,38 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.VoiceControlActivity"></activity>
-        <activity android:name=".view.IntervalsMenu">
+        <activity android:name=".controller.VoiceControlActivity"></activity>
+        <activity android:name=".controller.IntervalsMenu">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="cosc345.app.MainActivity" />
         </activity>
-        <activity android:name=".view.MelodiesMenu">
+        <activity android:name=".controller.MelodiesMenu">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="cosc345.app.MainActivity" />
         </activity>
-        <activity android:name=".view.RhythmsMenu">
+        <activity android:name=".controller.RhythmsMenu">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="cosc345.app.MainActivity" />
         </activity>
-        <activity android:name=".view.PitchMatchingExercise">
+        <activity android:name=".controller.PitchMatchingExercise">
             <meta-data
             android:name="android.support.PARENT_ACTIVITY"
             android:value="cosc345.app.MainActivity" />
         </activity>
-        <activity android:name=".view.IntervalsExercise">
+        <activity android:name=".controller.IntervalsExercise">
             <meta-data
             android:name="android.support.PARENT_ACTIVITY"
             android:value="cosc345.app.MainActivity" />
         </activity>
-        <activity android:name=".view.testing.fftTest">
+        <activity android:name=".controller.testing.fftTest">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="cosc345.app.MainActivity" />
         </activity>
-        <activity android:name=".view.testing.PlayNote">
+        <activity android:name=".controller.testing.PlayNote">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="cosc345.app.MainActivity" />

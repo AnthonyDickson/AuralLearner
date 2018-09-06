@@ -11,14 +11,14 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.widget.Button;
 
-import cosc345.app.lib.MenuAction;
+import cosc345.app.model.MenuAction;
 import cosc345.app.model.TextToSpeechManager;
 import cosc345.app.model.VoiceRecognitionManager;
-import cosc345.app.view.IntervalsExercise;
-import cosc345.app.view.MelodiesMenu;
-import cosc345.app.view.PitchMatchingExercise;
-import cosc345.app.view.RhythmsMenu;
-import cosc345.app.view.VoiceControlActivity;
+import cosc345.app.controller.IntervalsExercise;
+import cosc345.app.controller.MelodiesMenu;
+import cosc345.app.controller.PitchMatchingExercise;
+import cosc345.app.controller.RhythmsMenu;
+import cosc345.app.controller.VoiceControlActivity;
 
 /**
  * The main entry point for the application.

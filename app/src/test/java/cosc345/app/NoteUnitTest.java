@@ -2,7 +2,7 @@ package cosc345.app;
 
 import org.junit.Test;
 
-import cosc345.app.lib.Note;
+import cosc345.app.model.Note;
 
 import static org.junit.Assert.assertEquals;
 

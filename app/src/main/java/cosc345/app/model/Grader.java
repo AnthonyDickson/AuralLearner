@@ -1,13 +1,12 @@
 package cosc345.app.model;
 
 import android.os.Handler;
-import android.telecom.Call;
 import android.util.Log;
 
 import java.util.ArrayList;
 
-import cosc345.app.lib.Callback;
-import cosc345.app.lib.Note;
+import cosc345.app.model.Callback;
+import cosc345.app.model.Note;
 
 /**
  * The Grader class takes a sequence of notes, gets the user to sing those notes, and gives a grade

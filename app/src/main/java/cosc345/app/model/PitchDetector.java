@@ -5,7 +5,7 @@ import be.tarsos.dsp.AudioProcessor;
 import be.tarsos.dsp.io.android.AudioDispatcherFactory;
 import be.tarsos.dsp.pitch.PitchDetectionHandler;
 import be.tarsos.dsp.pitch.PitchProcessor;
-import cosc345.app.lib.State;
+import cosc345.app.model.State;
 
 /**
  * Listens to microphone input and detects the pitch of the audio.

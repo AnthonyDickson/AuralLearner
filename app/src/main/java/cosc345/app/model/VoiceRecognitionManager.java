@@ -10,8 +10,8 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-import cosc345.app.lib.MenuAction;
-import cosc345.app.lib.State;
+import cosc345.app.model.MenuAction;
+import cosc345.app.model.State;
 import edu.cmu.pocketsphinx.Assets;
 import edu.cmu.pocketsphinx.Hypothesis;
 import edu.cmu.pocketsphinx.RecognitionListener;

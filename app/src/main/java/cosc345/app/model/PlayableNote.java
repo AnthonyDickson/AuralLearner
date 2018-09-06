@@ -5,9 +5,9 @@ import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.util.Log;
 
-import cosc345.app.lib.Callback;
-import cosc345.app.lib.Note;
-import cosc345.app.lib.Playable;
+import cosc345.app.model.Callback;
+import cosc345.app.model.Note;
+import cosc345.app.model.Playable;
 
 /**
  * Extends the note class such that a note can be played back as audio.

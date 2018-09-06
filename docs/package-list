@@ -1,4 +1,3 @@
 cosc345.app
-cosc345.app.lib
+cosc345.app.controller
 cosc345.app.model
-cosc345.app.view
