@@ -3,24 +3,69 @@ package cosc345.app.model;
 /**
  * Defines the common methods available to an object that is playable, e.g. a
  * note, an interval, a melody etc.
+ *
+ * Objects interested in when a Playable object starts or finishes playback
+ * should implement the PlayableDelegate interface.
+ *
+ * @see PlayableDelegate
  */
-public interface Playable {
+public abstract class Playable {
+    protected PlayableDelegate delegate;
+    protected boolean isPlaying;
+
+    public Playable() {
+        this.isPlaying = false;
+    }
+
     /**
-     * Set the callback to be executed when the item either:
-     *  - finishes playback
-     *  - is stopped.
+     * Set the PlayableDelegate for the Playable object.
      *
-     *  @param callback the callback to be executed.
+     * @see PlayableDelegate
+     * @param delegate the delegate to be used.
      */
-    void setCallback(Callback callback);
+    public void setDelegate(PlayableDelegate delegate) {
+        this.delegate = delegate;
+    }
 
     /**
-     * Play the item and when the playback finishes call the assigned callback function.
+     * Play the Playable object and notify the delegate that playback has started.
      */
-    void play();
+    public void play() {
+        isPlaying = true;
+
+        if (delegate != null) {
+            delegate.onPlaybackStarted();
+        }
+    }
 
     /**
-     * Stop the playback of the item and execute the assigned callback.
+     * Stop the playback of the Playable object and call onDone().
      */
-    void stop();
+    public void stop() {
+        onDone();
+    }
+
+    /**
+     * Handle any cleanup that needs to be done after playback is finished and notify the delegate
+     * that playback has finished.
+     *
+     * This should be called when the Playable object has finished playback or the Playable object
+     * was stopped.
+     */
+    protected void onDone() {
+        isPlaying = false;
+
+        if (delegate != null) {
+            delegate.onPlaybackFinished();
+        }
+    }
+
+    /**
+     * PlayableDelegate provides an interface for objects playing a playable to control what happens
+     * when a playable starts & finishes playback.
+     */
+    public interface PlayableDelegate {
+        void onPlaybackStarted();
+        void onPlaybackFinished();
+    }
 }

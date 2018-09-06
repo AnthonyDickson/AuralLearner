@@ -13,6 +13,7 @@ import java.util.Locale;
 import cosc345.app.R;
 import cosc345.app.model.Interval;
 import cosc345.app.model.Note;
+import cosc345.app.model.Playable;
 import cosc345.app.model.Utilities;
 import cosc345.app.model.Grader;
 
@@ -24,7 +25,7 @@ import static cosc345.app.model.Note.NoteLength;
 import static cosc345.app.model.Note.NoteLength.MINIM;
 import static cosc345.app.model.Utilities.random;
 
-public class IntervalsExercise extends AppCompatActivity {
+public class IntervalsExercise extends AppCompatActivity implements Playable.PlayableDelegate {
     private boolean isListening, isPlaying;
     private Interval targetInterval;
     private Button startBtn;
@@ -72,6 +73,14 @@ public class IntervalsExercise extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        stopListening();
+        stopTargetPlayback();
+    }
+
     private void startListening() {
         if (!isListening) {
             if (isPlaying) {
@@ -117,24 +126,16 @@ public class IntervalsExercise extends AppCompatActivity {
         }
 
         targetInterval.stop();
-        onPlaybackDone();
-    }
-
-    /**
-     * Callback for when the tone is finished playing back.
-     */
-    private void onPlaybackDone() {
-        stopTargetBtn.setVisibility(View.GONE);
-        playTargetBtn.setVisibility(View.VISIBLE);
-        isPlaying = false;
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    public void onPlaybackStarted() {}
 
-        stopListening();
-        stopTargetPlayback();
+    @Override
+    public void onPlaybackFinished() {
+        stopTargetBtn.setVisibility(View.GONE);
+        playTargetBtn.setVisibility(View.VISIBLE);
+        isPlaying = false;
     }
 
     private AlertDialog createNotePickerDialog() {
@@ -173,7 +174,7 @@ public class IntervalsExercise extends AppCompatActivity {
         targetInterval = interval;
         targetInterval.root.setNoteLength(Note.NoteLength.MINIM);
         targetInterval.other.setNoteLength(Note.NoteLength.MINIM);
-        targetInterval.setCallback(this::onPlaybackDone);
+        targetInterval.setDelegate(this);
         targetIntervalView.setText(targetInterval.toString());
 
         for (Note note : targetInterval.getNotes()) {

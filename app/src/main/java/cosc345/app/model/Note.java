@@ -1,9 +1,11 @@
 package cosc345.app.model;
 
+import android.media.AudioAttributes;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.support.annotation.NonNull;
+import android.support.v4.media.AudioAttributesCompat;
 import android.util.Log;
 
 import java.util.HashMap;
@@ -12,10 +14,11 @@ import java.util.Map;
 /**
  * Represents a musical note.
  */
-public class Note implements Comparable<Note>, Playable, AudioTrack.OnPlaybackPositionUpdateListener {
+public class Note extends Playable implements Comparable<Note>,
+        AudioTrack.OnPlaybackPositionUpdateListener {
     public enum NoteLength {
         SEMIBREVE, DOTTED_SEMIBREVE, MINIM, DOTTED_MINIM, CROTCHET,
-        DOTTED_CROTCHET, QUAVER, DOTTED_QUAVER, SEMIQUAVER, DOTTED_SEMIQUAVER;
+        DOTTED_CROTCHET, QUAVER, DOTTED_QUAVER, SEMIQUAVER, DOTTED_SEMIQUAVER
 
     }
 
@@ -71,14 +74,12 @@ public class Note implements Comparable<Note>, Playable, AudioTrack.OnPlaybackPo
     private final int cents;
     protected int duration; // in ms.
     NoteLength noteLength;
-    //// Audio playback related fields. ////
 
+    //// Audio playback related fields. ////
     private static final String LOG_TAG = "Note";
     private static final int SAMPLE_RATE = 8000; // per second.
     private AudioTrack audioTrack;
-
     private byte generatedSnd[];
-    private Callback callback = null;
     private int numSamples;
     private Thread thread;
 
@@ -366,12 +367,11 @@ public class Note implements Comparable<Note>, Playable, AudioTrack.OnPlaybackPo
 
     //// Note Playback Stuff ////
     @Override
-    public void setCallback(Callback callback) {
-        this.callback = callback;
-    }
-
-    @Override
     public void play() {
+        if (isPlaying) return;
+
+        super.play();
+
         thread = new Thread(() -> {
             Log.i(Note.LOG_TAG, String.format("Playing note with a frequency of %.2f for %d ms",
                     frequency, duration));
@@ -390,26 +390,19 @@ public class Note implements Comparable<Note>, Playable, AudioTrack.OnPlaybackPo
 
     @Override
     public void onMarkerReached(AudioTrack track) {
-        Log.i(Note.LOG_TAG, "Playback finished.");
-        audioTrack.release();
-
-        if (callback != null) {
-            callback.execute();
-        } else {
-            Log.i(LOG_TAG, "Callback is null!");
-        }
+        onDone();
     }
 
     @Override
-    public void onPeriodicNotification(AudioTrack track) {
-    }
+    public void onPeriodicNotification(AudioTrack track) {}
 
     @Override
     public void stop() {
+        if (!isPlaying) return;
+
         if (audioTrack != null && audioTrack.getPlayState() == AudioTrack.PLAYSTATE_PLAYING) {
             audioTrack.pause();
             audioTrack.flush();
-            audioTrack.release();
         }
 
         if (thread != null) {
@@ -417,8 +410,17 @@ public class Note implements Comparable<Note>, Playable, AudioTrack.OnPlaybackPo
             thread = null;
         }
 
-        if (callback != null) {
-            callback.execute();
+        onDone();
+    }
+
+    @Override
+    protected void onDone() {
+        super.onDone();
+
+        if (audioTrack != null) {
+            audioTrack.release();
         }
+
+        Log.i(Note.LOG_TAG, "Playback finished.");
     }
 }

@@ -9,7 +9,8 @@ import java.util.Map;
 /**
  * Represents a musical interval.
  */
-public class Interval implements Playable {
+public class Interval extends Playable {
+    private static final String LOG_TAG = "Interval";
     private static final Map<Integer, IntervalName> intervalNames;
 
     static {
@@ -34,12 +35,6 @@ public class Interval implements Playable {
     public Note root;
     public Note other;
     public final int size;
-
-    //// Playback related fields ////
-    private static final String LOG_TAG = "Interval";
-
-    private State state;
-    private Callback callback;
 
     /**
      * Create an interval from a single note.
@@ -85,7 +80,7 @@ public class Interval implements Playable {
         }
 
         other.setNoteLength(root.noteLength);
-        this.state = State.READY;
+        setNoteDelegates();
     }
 
     /**
@@ -97,7 +92,30 @@ public class Interval implements Playable {
         interval = Intervals.values()[size % (Intervals.values().length - 1)];
         this.root = root;
         this.other = other;
-        this.state = State.READY;
+
+        setNoteDelegates();
+    }
+
+    private void setNoteDelegates() {
+        root.setDelegate(new PlayableDelegate() {
+            @Override
+            public void onPlaybackStarted() {}
+
+            @Override
+            public void onPlaybackFinished() {
+                playNext();
+            }
+        });
+
+        other.setDelegate(new PlayableDelegate() {
+            @Override
+            public void onPlaybackStarted() {}
+
+            @Override
+            public void onPlaybackFinished() {
+                onDone();
+            }
+        });
     }
 
     public ArrayList<Note> getNotes() {
@@ -144,30 +162,22 @@ public class Interval implements Playable {
 
     //// Playback related stuff ////
     @Override
-    public void setCallback(Callback callback) {
-        this.callback = callback;
-    }
-
-    @Override
     public void play() {
-        if (state != State.READY) return;
+        if (isPlaying) return;
 
+        super.play();
         Log.i(LOG_TAG, "Playing interval.");
-        root.setCallback(this::playNext);
-        other.setCallback(this::onDone);
         root.play();
-        state = State.BUSY;
     }
 
     @Override
     public void stop() {
-        if (state != State.BUSY) return;
+        if (!isPlaying) return;
 
         Log.i(LOG_TAG, "Stopping interval playback.");
-        state = State.PAUSED;
+        isPlaying = false;
         root.stop();
         other.stop();
-
         onDone();
     }
 
@@ -175,22 +185,16 @@ public class Interval implements Playable {
      * Play the next note in the interval.
      */
     private void playNext() {
-        if (state != State.BUSY) return;
+        if (!isPlaying) return;
 
         Log.i(LOG_TAG, "Playing next note.");
         other.play();
     }
 
-    /**
-     * Handle the playback finishing.
-     */
-    private void onDone() {
-        state = State.READY;
+    @Override
+    protected void onDone() {
+        super.onDone();
         Log.i(LOG_TAG, "Interval playback finished.");
-
-        if (callback != null) {
-            callback.execute();
-        }
     }
 
     /**

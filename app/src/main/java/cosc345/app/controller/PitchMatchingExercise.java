@@ -19,17 +19,17 @@ import be.tarsos.dsp.pitch.PitchDetectionResult;
 import cosc345.app.R;
 import cosc345.app.model.Note;
 import cosc345.app.model.PitchDetector;
+import cosc345.app.model.Playable;
 import cosc345.app.model.VoiceRecognitionManager;
 
 /**
  * Activity that allows the user to try to match a pitch.
  */
-public class PitchMatchingExercise extends AppCompatActivity implements PitchDetectionHandler {
-    private static final double VOLUME_THRESHOLD = 8e9;
+public class PitchMatchingExercise extends AppCompatActivity
+        implements PitchDetectionHandler, Playable.PlayableDelegate {
     private static final int MATCH_THRESHOLD_CENTS = 10;
     private boolean isListening, isPlaying;
     private Note playableNote;
-    private Thread audioThread;
     private Note targetNote, userNote;
     private Button start;
     private Button stop;
@@ -39,7 +39,6 @@ public class PitchMatchingExercise extends AppCompatActivity implements PitchDet
     private AlertDialog chooseNoteDialog;
     private ColorStateList defaultColours;
     private int choice;
-    private AudioDispatcher dispatcher;
     private PitchDetector pitchDetector;
 
     @Override
@@ -115,7 +114,7 @@ public class PitchMatchingExercise extends AppCompatActivity implements PitchDet
         playTargetPitch.setVisibility(View.GONE);
         stopTargetPitch.setVisibility(View.VISIBLE);
         playableNote = new Note(targetNote);
-        playableNote.setCallback(this::onPlaybackDone);
+        playableNote.setDelegate(this);
         playableNote.play();
         isPlaying = true;
     }
@@ -126,13 +125,13 @@ public class PitchMatchingExercise extends AppCompatActivity implements PitchDet
         }
 
         playableNote.stop();
-        onPlaybackDone();
     }
 
-    /**
-     * Callback for when the tone is finished playing back.
-     */
-    private void onPlaybackDone() {
+    @Override
+    public void onPlaybackStarted() {}
+
+    @Override
+    public void onPlaybackFinished() {
         stopTargetPitch.setVisibility(View.GONE);
         playTargetPitch.setVisibility(View.VISIBLE);
         isPlaying = false;
