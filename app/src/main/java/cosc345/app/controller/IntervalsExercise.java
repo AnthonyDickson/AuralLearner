@@ -16,10 +16,12 @@ import cosc345.app.model.Note;
 import cosc345.app.model.Utilities;
 import cosc345.app.model.Grader;
 import cosc345.app.model.PlayableInterval;
-import cosc345.app.model.PlayableNote;
+
 import cosc345.app.model.VoiceRecognitionManager;
 
-public class IntervalsExercise extends AppCompatActivity{
+import static cosc345.app.model.Note.NoteLength;
+
+public class IntervalsExercise extends AppCompatActivity {
     private boolean isListening, isPlaying;
     private PlayableInterval targetInterval;
     private Button startBtn;
@@ -47,7 +49,7 @@ public class IntervalsExercise extends AppCompatActivity{
         targetIntervalView = findViewById(R.id.intervals_targetName);
         scoreView = findViewById(R.id.intervals_scoreText);
 
-        setTargetInterval(new PlayableInterval(new PlayableNote("C4", Note.NoteLength.MINIM), Interval.Intervals.P5));
+        setTargetInterval(new PlayableInterval(new Note("C4", NoteLength.MINIM), Interval.Intervals.P5));
         AlertDialog chooseNoteDialog = createNotePickerDialog();
         AlertDialog chooseIntervalDialog = createIntervalPickerDialog();
 
@@ -152,19 +154,16 @@ public class IntervalsExercise extends AppCompatActivity{
                 .setSingleChoiceItems(Interval.getFullNames(), targetInterval.interval.ordinal(),
                         (dialog, which) -> intervalChoice = which)
                 .setPositiveButton(R.string.dialogOk, (dialog, id) -> setTargetInterval(new PlayableInterval(targetInterval.root, Interval.Intervals.values()[intervalChoice])))
-                .setNeutralButton("Choose For Me", (dialog, id) -> {
-                    setTargetInterval(new PlayableInterval(targetInterval.root,
-                            // TODO: Refactor the below into the method Interval.getRandom().
-                            Interval.Intervals.values()[Utilities.random.nextInt(Interval.Intervals.values().length)]));
-                })
+                .setNeutralButton("Choose For Me", (dialog, id) -> setTargetInterval(new PlayableInterval(targetInterval.root,
+                        // TODO: Refactor the below into the method Interval.getRandom().
+                        Interval.Intervals.values()[Utilities.random.nextInt(Interval.Intervals.values().length)])))
                 .setNegativeButton(R.string.dialogCancel, (dialog, id) -> intervalChoice = Interval.Intervals.P1.ordinal());
 
         return builder.create();
     }
 
     private void setTargetRoot(Note note) {
-        PlayableNote playableNote = new PlayableNote(note);
-        setTargetInterval(new PlayableInterval(playableNote, targetInterval.interval));
+        setTargetInterval(new PlayableInterval(note, targetInterval.interval));
     }
 
     private void setTargetInterval(PlayableInterval interval) {
@@ -174,7 +173,7 @@ public class IntervalsExercise extends AppCompatActivity{
         targetInterval.setCallback(this::onPlaybackDone);
         targetIntervalView.setText(targetInterval.toString());
 
-        for (Note note: targetInterval.getNotes()) {
+        for (Note note : targetInterval.getNotes()) {
             Log.d("Intervals Exercise", String.format("Note with frequency %f with a duration of %d ms.", note.getFrequency(), note.getDuration()));
         }
         grader = new Grader(targetInterval.getNotes());

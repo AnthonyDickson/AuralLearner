@@ -17,9 +17,6 @@ public class PlayableInterval extends Interval implements Playable {
     private State state;
     private Callback callback;
 
-    public final PlayableNote root;
-    public final PlayableNote other;
-
     /**
      * Create an interval from a single note.
      *
@@ -40,8 +37,6 @@ public class PlayableInterval extends Interval implements Playable {
     public PlayableInterval(Note root, Intervals interval, boolean invert) {
         super(root, interval, invert);
 
-        this.root = new PlayableNote(super.root);
-        this.other = new PlayableNote(super.other);
         this.state = State.READY;
     }
 
@@ -51,8 +46,6 @@ public class PlayableInterval extends Interval implements Playable {
     public PlayableInterval(Note root, Note other) {
         super(root, other);
 
-        this.root = new PlayableNote(super.root);
-        this.other = new PlayableNote(super.other);
         this.state = State.READY;
     }
 

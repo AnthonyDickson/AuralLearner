@@ -1,6 +1,10 @@
 package cosc345.app.model;
 
+import android.media.AudioFormat;
+import android.media.AudioManager;
+import android.media.AudioTrack;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,14 +12,11 @@ import java.util.Map;
 /**
  * Represents a musical note.
  */
-public class Note implements Comparable<Note> {
-    public NoteLength getNoteLength() {
-        return noteLength;
-    }
-
+public class Note implements Comparable<Note>, Playable, AudioTrack.OnPlaybackPositionUpdateListener {
     public enum NoteLength {
         SEMIBREVE, DOTTED_SEMIBREVE, MINIM, DOTTED_MINIM, CROTCHET,
-        DOTTED_CROTCHET, QUAVER, DOTTED_QUAVER, SEMIQUAVER, DOTTED_SEMIQUAVER
+        DOTTED_CROTCHET, QUAVER, DOTTED_QUAVER, SEMIQUAVER, DOTTED_SEMIQUAVER;
+
     }
 
     public static final Map<NoteLength, Integer> NoteLengthMap; // NoteLength to duration in ms.
@@ -24,19 +25,19 @@ public class Note implements Comparable<Note> {
         NoteLengthMap = new HashMap<>();
         NoteLengthMap.put(NoteLength.SEMIBREVE, 2000);
         NoteLengthMap.put(NoteLength.DOTTED_SEMIBREVE,
-                (int)(NoteLengthMap.get(NoteLength.SEMIBREVE) * 1.5));
+                (int) (NoteLengthMap.get(NoteLength.SEMIBREVE) * 1.5));
         NoteLengthMap.put(NoteLength.MINIM, 1000);
         NoteLengthMap.put(NoteLength.DOTTED_MINIM,
-                (int)(NoteLengthMap.get(NoteLength.MINIM) * 1.5));
+                (int) (NoteLengthMap.get(NoteLength.MINIM) * 1.5));
         NoteLengthMap.put(NoteLength.CROTCHET, 500);
         NoteLengthMap.put(NoteLength.DOTTED_CROTCHET,
-                (int)(NoteLengthMap.get(NoteLength.CROTCHET) * 1.5));
+                (int) (NoteLengthMap.get(NoteLength.CROTCHET) * 1.5));
         NoteLengthMap.put(NoteLength.QUAVER, 250);
         NoteLengthMap.put(NoteLength.DOTTED_QUAVER,
-                (int)(NoteLengthMap.get(NoteLength.QUAVER) * 1.5));
+                (int) (NoteLengthMap.get(NoteLength.QUAVER) * 1.5));
         NoteLengthMap.put(NoteLength.SEMIQUAVER, 125);
         NoteLengthMap.put(NoteLength.DOTTED_SEMIQUAVER,
-                (int)(NoteLengthMap.get(NoteLength.SEMIBREVE) * 1.5));
+                (int) (NoteLengthMap.get(NoteLength.SEMIBREVE) * 1.5));
     }
 
     public static final String[] NOTE_NAMES = {
@@ -54,6 +55,7 @@ public class Note implements Comparable<Note> {
             "C6"};
 
     public static final int A4_INDEX = 33;
+
     public static final double A4_FREQUENCY = 440.0; // in Hertz
     public static final int NUM_HALF_STEPS = 12; // per octave.
     private static final int A4_OCTAVE = 4;
@@ -61,14 +63,24 @@ public class Note implements Comparable<Note> {
     private static final int NUM_CENTS = Note.NUM_HALF_STEPS * 100; // per octave.
     public static final double MIN_FREQUENCY = 63.57; // C2 minus 49 cents
     public static final double MAX_FREQUENCY = 1077.47; // C6 plus 50 cents
-
     private final int nameIndex;
+
     protected final double frequency;
     private final int halfStepDistance;
     private final int octave;
     private final int cents;
     protected int duration; // in ms.
     NoteLength noteLength;
+    //// Audio playback related fields. ////
+
+    private static final String LOG_TAG = "Note";
+    private static final int SAMPLE_RATE = 8000; // per second.
+    private AudioTrack audioTrack;
+
+    private byte generatedSnd[];
+    private Callback callback = null;
+    private int numSamples;
+    private Thread thread;
 
     public Note(double frequency) {
         this(frequency, NoteLength.CROTCHET);
@@ -76,8 +88,9 @@ public class Note implements Comparable<Note> {
 
     /**
      * Create a musical note based on a frequency.
-     *  @param frequency       the frequency (in Hertz) to use.
-     * @param noteLength      the length of the note (e.g. crotchet).
+     *
+     * @param frequency  the frequency (in Hertz) to use.
+     * @param noteLength the length of the note (e.g. crotchet).
      */
     public Note(double frequency, NoteLength noteLength) {
         if (frequency < Note.MIN_FREQUENCY || frequency > Note.MAX_FREQUENCY) {
@@ -94,6 +107,8 @@ public class Note implements Comparable<Note> {
         cents = Note.centDistanceClamped(frequency, refFreq);
         duration = NoteLengthMap.get(noteLength);
         this.noteLength = noteLength;
+
+        generateTone();
     }
 
     /**
@@ -108,9 +123,10 @@ public class Note implements Comparable<Note> {
 
     /**
      * Create a musical note from a string.
-     *  @param name            the name of the note that follows the format (Note Letter)[#|b](Octave).
-     *                        For example a note name may look like: A#3 or Db4.
-     * @param noteLength      the length of the note (e.g. crotchet).
+     *
+     * @param name       the name of the note that follows the format (Note Letter)[#|b](Octave).
+     *                   For example a note name may look like: A#3 or Db4.
+     * @param noteLength the length of the note (e.g. crotchet).
      */
     public Note(String name, NoteLength noteLength) {
         int noteIndex = Utilities.indexOf(name, Note.NOTE_NAMES);
@@ -130,6 +146,8 @@ public class Note implements Comparable<Note> {
         cents = 0;
         duration = NoteLengthMap.get(noteLength);
         this.noteLength = noteLength;
+
+        generateTone();
     }
 
     /**
@@ -145,6 +163,43 @@ public class Note implements Comparable<Note> {
         this.halfStepDistance = note.halfStepDistance;
         this.nameIndex = note.nameIndex;
         this.octave = note.octave;
+
+        generateTone();
+    }
+
+
+    /**
+     * Generate the tone of the note.
+     */
+    private void generateTone() {
+        // Code adapted from http://marblemice.blogspot.com/2010/04/generate-and-play-tone-in-android.html
+        numSamples = Note.SAMPLE_RATE * duration / 1000;
+        generatedSnd = new byte[2 * numSamples];
+
+        Log.i(Note.LOG_TAG, "Generating tone.");
+        double[] sample = new double[numSamples];
+
+        // fill out the array
+        double coefficient = 2 * Math.PI / (Note.SAMPLE_RATE / frequency);
+
+        for (int i = 0; i < numSamples; ++i) {
+            sample[i] = Math.sin(coefficient * i);
+        }
+
+        // convert to 16 bit pcm sound array
+        // assumes the sample buffer is normalised.
+        int idx = 0;
+        for (double dVal : sample) {
+            // scale to maximum amplitude
+            short val = (short) ((dVal * 32767));
+            // in 16 bit wav PCM, first byte is the low order byte
+            generatedSnd[idx++] = (byte) (val & 0x00ff);
+            generatedSnd[idx++] = (byte) ((val & 0xff00) >>> 8);
+        }
+    }
+
+    public NoteLength getNoteLength() {
+        return noteLength;
     }
 
     /**
@@ -273,6 +328,8 @@ public class Note implements Comparable<Note> {
     public void setNoteLength(NoteLength noteLength) {
         duration = NoteLengthMap.get(noteLength);
         this.noteLength = noteLength;
+
+        generateTone();
     }
 
     public int getDuration() {
@@ -305,5 +362,63 @@ public class Note implements Comparable<Note> {
     @Override
     public String toString() {
         return getName();
+    }
+
+    //// Note Playback Stuff ////
+    @Override
+    public void setCallback(Callback callback) {
+        this.callback = callback;
+    }
+
+    @Override
+    public void play() {
+        thread = new Thread(() -> {
+            Log.i(Note.LOG_TAG, String.format("Playing note with a frequency of %.2f for %d ms",
+                    frequency, duration));
+            audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC,
+                    Note.SAMPLE_RATE, AudioFormat.CHANNEL_OUT_MONO,
+                    AudioFormat.ENCODING_PCM_16BIT, generatedSnd.length,
+                    AudioTrack.MODE_STATIC);
+            audioTrack.write(generatedSnd, 0, generatedSnd.length);
+            audioTrack.setNotificationMarkerPosition(numSamples);
+            audioTrack.setPlaybackPositionUpdateListener(this);
+            audioTrack.play();
+        });
+
+        thread.start();
+    }
+
+    @Override
+    public void onMarkerReached(AudioTrack track) {
+        Log.i(Note.LOG_TAG, "Playback finished.");
+        audioTrack.release();
+
+        if (callback != null) {
+            callback.execute();
+        } else {
+            Log.i(LOG_TAG, "Callback is null!");
+        }
+    }
+
+    @Override
+    public void onPeriodicNotification(AudioTrack track) {
+    }
+
+    @Override
+    public void stop() {
+        if (audioTrack != null && audioTrack.getPlayState() == AudioTrack.PLAYSTATE_PLAYING) {
+            audioTrack.pause();
+            audioTrack.flush();
+            audioTrack.release();
+        }
+
+        if (thread != null) {
+            thread.interrupt();
+            thread = null;
+        }
+
+        if (callback != null) {
+            callback.execute();
+        }
     }
 }

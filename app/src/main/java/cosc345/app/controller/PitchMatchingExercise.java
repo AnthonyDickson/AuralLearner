@@ -19,7 +19,6 @@ import be.tarsos.dsp.pitch.PitchDetectionResult;
 import cosc345.app.R;
 import cosc345.app.model.Note;
 import cosc345.app.model.PitchDetector;
-import cosc345.app.model.PlayableNote;
 import cosc345.app.model.VoiceRecognitionManager;
 
 /**
@@ -29,7 +28,7 @@ public class PitchMatchingExercise extends AppCompatActivity implements PitchDet
     private static final double VOLUME_THRESHOLD = 8e9;
     private static final int MATCH_THRESHOLD_CENTS = 10;
     private boolean isListening, isPlaying;
-    private PlayableNote playableNote;
+    private Note playableNote;
     private Thread audioThread;
     private Note targetNote, userNote;
     private Button start;
@@ -115,7 +114,7 @@ public class PitchMatchingExercise extends AppCompatActivity implements PitchDet
         resetUI();
         playTargetPitch.setVisibility(View.GONE);
         stopTargetPitch.setVisibility(View.VISIBLE);
-        playableNote = new PlayableNote(targetNote);
+        playableNote = new Note(targetNote);
         playableNote.setCallback(this::onPlaybackDone);
         playableNote.play();
         isPlaying = true;
@@ -176,7 +175,7 @@ public class PitchMatchingExercise extends AppCompatActivity implements PitchDet
     }
 
     @Override
-    public void handlePitch(PitchDetectionResult res, AudioEvent evt){
+    public void handlePitch(PitchDetectionResult res, AudioEvent evt) {
         final float pitchInHz = res.getPitch();
 
         Log.i("Pitch Detection", String.format("Pitch (Hz): %f", pitchInHz));
