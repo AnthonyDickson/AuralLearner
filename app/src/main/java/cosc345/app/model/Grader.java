@@ -24,6 +24,10 @@ public class Grader implements FFT.FFTResultListener {
     Callback callback = null;
     final Handler handler = new Handler();
 
+    public Grader(){
+        reset();
+    }
+
     public Grader(ArrayList<Note> notes) {
         this.notes = notes;
         reset();

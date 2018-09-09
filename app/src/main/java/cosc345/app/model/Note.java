@@ -129,6 +129,7 @@ public class Note extends Playable implements Comparable<Note>,
      *                   For example a note name may look like: A#3 or Db4.
      * @param noteLength the length of the note (e.g. crotchet).
      */
+
     public Note(String name, NoteLength noteLength) {
         int noteIndex = Utilities.indexOf(name, Note.NOTE_NAMES);
 
