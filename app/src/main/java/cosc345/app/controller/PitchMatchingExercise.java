@@ -176,15 +176,20 @@ public class PitchMatchingExercise extends AppCompatActivity
     @Override
     public void handlePitch(PitchDetectionResult res, AudioEvent evt) {
         final float pitchInHz = res.getPitch();
-
         Log.i("Pitch Detection", String.format("Pitch (Hz): %f", pitchInHz));
 
+        try {
+            userNote = new Note(pitchInHz);
+        } catch (IllegalArgumentException e) {
+            resetUI();
+            return;
+        }
+
+        int halfstepDiff = userNote.compareTo(targetNote);
+        int centDiff = Note.centDistance(userNote, targetNote) % 100;
+
         runOnUiThread(() -> {
-            try {
-                userNote = new Note(pitchInHz);
                 userPitchView.setText(userNote.getName());
-                int halfstepDiff = userNote.compareTo(targetNote);
-                int centDiff = Note.centDistance(userNote, targetNote) % 100;
                 pitchDifferenceView.setText(String.format(Locale.ENGLISH,
                         "%d semitone(s) and %d cent(s)", halfstepDiff, centDiff));
 
@@ -194,9 +199,6 @@ public class PitchMatchingExercise extends AppCompatActivity
                 } else {
                     pitchDifferenceView.setTextColor(defaultColours);
                 }
-            } catch (IllegalArgumentException e) {
-                resetUI();
-            }
         });
     }
 }
