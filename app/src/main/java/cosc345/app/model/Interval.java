@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static cosc345.app.model.Utilities.random;
+
 /**
  * Represents a musical interval.
  */
@@ -94,6 +96,26 @@ public class Interval extends Playable {
         this.other = other;
 
         setNoteDelegates();
+    }
+
+    /**
+     * Generate a random interval, with a random root note.
+     *
+     * @return a new Interval object with the root note and interval type chosen randomly.
+     */
+    public static Interval randomInterval() {
+        return randomInterval(Note.getRandom());
+    }
+
+    /**
+     * Generate a random interval, with a given root note.
+     *
+     * @param root the root note of the interval to create.
+     * @return a new Interval object with the interval type chosen randomly.
+     */
+    public static Interval randomInterval(Note root) {
+        Intervals intervalSize = Intervals.values()[random.nextInt(Intervals.values().length)];
+        return new Interval(root, intervalSize);
     }
 
     private void setNoteDelegates() {

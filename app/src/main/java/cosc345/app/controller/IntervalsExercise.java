@@ -158,9 +158,7 @@ public class IntervalsExercise extends AppCompatActivity implements Playable.Pla
                 .setSingleChoiceItems(Interval.getFullNames(), targetInterval.interval.ordinal(),
                         (dialog, which) -> intervalChoice = which)
                 .setPositiveButton(R.string.dialogOk, (dialog, id) -> setTargetInterval(new Interval(targetInterval.root, Intervals.values()[intervalChoice])))
-                .setNeutralButton("Choose For Me", (dialog, id) -> setTargetInterval(new Interval(targetInterval.root,
-                        // TODO: Refactor the below into the method Interval.getRandom().
-                        Intervals.values()[random.nextInt(Intervals.values().length)])))
+                .setNeutralButton("Choose For Me", (dialog, id) -> setTargetInterval(Interval.randomInterval(targetInterval.root)))
                 .setNegativeButton(R.string.dialogCancel, (dialog, id) -> intervalChoice = Interval.Intervals.P1.ordinal());
 
         return builder.create();
