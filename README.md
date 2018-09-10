@@ -32,7 +32,7 @@ The first two steps are the same as the steps for building the app. However
 when you get to step three you need to select from the menu 
 `Run -> Run 'app'`. If this option does appear or you get an error saying 
 something like 'select the Android APK' try selecting from the menu 
-`File -> Sync` Project With Gradle Files.
+`File -> Sync Project With Gradle Files`.
 
 ## Using the Application
 
