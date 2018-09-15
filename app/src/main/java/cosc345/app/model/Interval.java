@@ -119,7 +119,7 @@ public class Interval extends Playable {
     }
 
     private void setNoteDelegates() {
-        root.setDelegate(new PlayableDelegate() {
+        root.setDelegate(new Delegate() {
             @Override
             public void onPlaybackStarted() {}
 
@@ -129,7 +129,7 @@ public class Interval extends Playable {
             }
         });
 
-        other.setDelegate(new PlayableDelegate() {
+        other.setDelegate(new Delegate() {
             @Override
             public void onPlaybackStarted() {}
 

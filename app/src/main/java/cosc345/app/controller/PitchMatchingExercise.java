@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import java.util.Locale;
 
-import be.tarsos.dsp.AudioDispatcher;
 import be.tarsos.dsp.AudioEvent;
 import be.tarsos.dsp.pitch.PitchDetectionHandler;
 import be.tarsos.dsp.pitch.PitchDetectionResult;
@@ -26,7 +25,7 @@ import cosc345.app.model.VoiceRecognitionManager;
  * Activity that allows the user to try to match a pitch.
  */
 public class PitchMatchingExercise extends AppCompatActivity
-        implements PitchDetectionHandler, Playable.PlayableDelegate {
+        implements PitchDetectionHandler, Playable.Delegate {
     private static final int MATCH_THRESHOLD_CENTS = 10;
     private boolean isListening, isPlaying;
     private Note playableNote;

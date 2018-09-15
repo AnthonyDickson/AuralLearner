@@ -5,12 +5,12 @@ package cosc345.app.model;
  * note, an interval, a melody etc.
  *
  * Objects interested in when a Playable object starts or finishes playback
- * should implement the PlayableDelegate interface.
+ * should implement the Delegate interface.
  *
- * @see PlayableDelegate
+ * @see Delegate
  */
 public abstract class Playable {
-    protected PlayableDelegate delegate;
+    protected Delegate delegate;
     protected boolean isPlaying;
 
     public Playable() {
@@ -18,12 +18,12 @@ public abstract class Playable {
     }
 
     /**
-     * Set the PlayableDelegate for the Playable object.
+     * Set the Delegate for the Playable object.
      *
-     * @see PlayableDelegate
+     * @see Delegate
      * @param delegate the delegate to be used.
      */
-    public void setDelegate(PlayableDelegate delegate) {
+    public void setDelegate(Delegate delegate) {
         this.delegate = delegate;
     }
 
@@ -61,10 +61,10 @@ public abstract class Playable {
     }
 
     /**
-     * PlayableDelegate provides an interface for objects playing a playable to control what happens
+     * Delegate provides an interface for objects playing a playable to control what happens
      * when a playable starts & finishes playback.
      */
-    public interface PlayableDelegate {
+    public interface Delegate {
         void onPlaybackStarted();
         void onPlaybackFinished();
     }

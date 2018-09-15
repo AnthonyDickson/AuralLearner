@@ -14,18 +14,15 @@ import cosc345.app.R;
 import cosc345.app.model.Interval;
 import cosc345.app.model.Note;
 import cosc345.app.model.Playable;
-import cosc345.app.model.Utilities;
 import cosc345.app.model.Grader;
 
 import cosc345.app.model.VoiceRecognitionManager;
 
 import static cosc345.app.model.Interval.Intervals;
 import static cosc345.app.model.Interval.Intervals.P5;
-import static cosc345.app.model.Note.NoteLength;
 import static cosc345.app.model.Note.NoteLength.MINIM;
-import static cosc345.app.model.Utilities.random;
 
-public class IntervalsExercise extends AppCompatActivity implements Playable.PlayableDelegate {
+public class IntervalsExercise extends AppCompatActivity implements Playable.Delegate {
     private boolean isListening, isPlaying;
     private Interval targetInterval;
     private Button startBtn;
