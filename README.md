@@ -1,6 +1,6 @@
 # COSC345 Project
 
-[![Build Status](https://travis-ci.org/icantthinkofacreativeusername/ourcontributiontoblindmusicians.svg?branch=master)](https://travis-ci.org/icantthinkofacreativeusername/ourcontributiontoblindmusicians)
+[![Build Status](https://travis-ci.org/eight0153/ourcontributiontoblindmusicians.svg?branch=master)](https://travis-ci.org/eight0153/ourcontributiontoblindmusicians)
 
 For our project we aim to make an Android app that teaches some of the basic
 parts of aural music theory through exercises that aim to improve the users'
