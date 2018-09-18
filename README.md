@@ -13,7 +13,7 @@ All of the reports for the project can be found under the directory 'reports'.
 
 ## Javadocs Documentation
 The javadocs for this project are hosted on GitHub pages and can be found
-[here](https://eight0153.github.io/ourcontributiontomusicians).
+[here](https://eight0153.github.io/ourcontributiontoblindmusicians/).
 
 ## How to Build
 
