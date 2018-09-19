@@ -21,18 +21,18 @@ public class MelodyExerciseCreator extends Grader{
         //will need to build intervals
         //first will be generated like previous
         //next will specify a starting note and an interval
+        //
+        //choose a random note to start
+        //generate a major scale
+        //treat array like a scale and manipulate it like scale
+        //degrees 1-8, just take of -1 for each array access
+        //
+        //melody should start and end on root, but hard may start on another scale degree
+        //there should be a melody threshold which it cannot go over
 
         Intervals[] exerciseConstraints;
         double invertProbability;
         int melodyRange;
-
-        Intervals[] exerciseConstraintsEasy = {Intervals.P1,Intervals.P4, Intervals.P5, Intervals.P8};
-
-        Intervals[] exerciseConstraintsMedium = {Intervals.P1,Intervals.P4, Intervals.P5, Intervals.P8,
-                Intervals.M2, Intervals.m3, Intervals.m6, Intervals.M6};
-        Intervals[] exerciseConstraintsHard = {Intervals.P1,Intervals.P4, Intervals.P5, Intervals.P8,
-                Intervals.M2, Intervals.m3, Intervals.m6, Intervals.M6, Intervals.m2, Intervals.A4,
-                Intervals.m7, Intervals.M7};
 
         if (difficulty == Difficulty.EASY){
 
@@ -52,7 +52,7 @@ public class MelodyExerciseCreator extends Grader{
 
             exerciseConstraints = exerciseConstraintsHard;
             invertProbability = 0.5;
-            melodyRange =
+            melodyRange = 9;
 
         }
         ArrayList<Note> exercise = new ArrayList<>();
