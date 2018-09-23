@@ -180,7 +180,7 @@ public class IntervalsExercise extends AppCompatActivity implements Playable.Del
     }
 
     private void onGradingDone() {
-        scoreView.setText(String.format(Locale.ENGLISH, "%.2f", grader.getScore() * 100));
+        scoreView.setText(String.format(Locale.ENGLISH, "%.2f", grader.getScore()));
         stopBtn.setVisibility(View.GONE);
         startBtn.setVisibility(View.VISIBLE);
         isListening = false;

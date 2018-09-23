@@ -140,9 +140,11 @@ public class PitchMatchingExercise extends AppCompatActivity
      * Clear the user's pitch and the pitch difference text views.
      */
     private void resetUI() {
-        userPitchView.setText("-");
-        pitchDifferenceView.setText("-");
-        pitchDifferenceView.setTextColor(defaultColours);
+        runOnUiThread(() -> {
+            userPitchView.setText("-");
+            pitchDifferenceView.setText("-");
+            pitchDifferenceView.setTextColor(defaultColours);
+        });
     }
 
     @Override

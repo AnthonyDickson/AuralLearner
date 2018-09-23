@@ -28,7 +28,6 @@ public class Grader implements PitchDetectionHandler {
 
     public Grader(ArrayList<Note> notes) {
         this.notes = notes;
-        this.notesIterator = notes.iterator();
         this.pitchDetector = new PitchDetector(this);
 
         reset();
@@ -85,6 +84,7 @@ public class Grader implements PitchDetectionHandler {
         reset();
 
         Log.i(LOG_TAG, "Starting grading.");
+        notesIterator = notes.iterator();
         pitchDetector.start();
         playNextNote();
     }
@@ -108,11 +108,19 @@ public class Grader implements PitchDetectionHandler {
     private void onNoteDone() {
         double avgFrequency = 0.0;
 
+        if (frequencyReadings.size() == 0) {
+            // TODO: Need to show a message to the user explaining what happened.
+            Log.d(LOG_TAG, "Failed to get any readings, terminating grading session.");
+            stop();
+            return;
+        }
+
         for (double reading : frequencyReadings) {
             avgFrequency += reading;
         }
 
         avgFrequency /= frequencyReadings.size();
+        Log.d(LOG_TAG, String.format("Average frequency: %s.", avgFrequency));
         frequencyReadings.clear();
         Note userNote;
 
@@ -145,11 +153,15 @@ public class Grader implements PitchDetectionHandler {
         double avgCentDist = 0.0;
 
         for (int i = 0; i < notes.size(); i++) {
-            double centDist = Note.centDistance(userNotes.get(i), notes.get(i));
+            Note userNote = userNotes.get(i);
+            Note referenceNote = notes.get(i);
+
+            double centDist = Note.centDistance(userNote, referenceNote);
             Log.d(LOG_TAG, String.format("Reference Pitch: %f Hz; User's Pitch: %f Hz; Distance in Cents: %f",
-                    userNotes.get(i).getFrequency(),
-                    notes.get(i).getFrequency(),
+                    userNote.getFrequency(),
+                    referenceNote.getFrequency(),
                     centDist));
+
             avgCentDist += centDist;
         }
 
@@ -158,7 +170,7 @@ public class Grader implements PitchDetectionHandler {
         if (Math.abs(avgCentDist) > 50) {
             return 0.0;
         } else {
-            return 100 * (100 - Math.abs(avgCentDist) / 50);
+            return 100 - 100 * Math.abs(avgCentDist) / 50.0;
         }
     }
 
