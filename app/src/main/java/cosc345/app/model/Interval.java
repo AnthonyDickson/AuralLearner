@@ -87,6 +87,9 @@ public class Interval extends Playable {
 
     /**
      * Create an interval from two notes.
+     *
+     * @param root  The first, or root, note in the interval.
+     * @param other The second note in the interval.
      */
     public Interval(Note root, Note other) {
         size = Math.abs(root.getNameIndex() - other.getNameIndex());
@@ -121,7 +124,8 @@ public class Interval extends Playable {
     private void setNoteDelegates() {
         root.setDelegate(new Delegate() {
             @Override
-            public void onPlaybackStarted() {}
+            public void onPlaybackStarted() {
+            }
 
             @Override
             public void onPlaybackFinished() {
@@ -131,7 +135,8 @@ public class Interval extends Playable {
 
         other.setDelegate(new Delegate() {
             @Override
-            public void onPlaybackStarted() {}
+            public void onPlaybackStarted() {
+            }
 
             @Override
             public void onPlaybackFinished() {

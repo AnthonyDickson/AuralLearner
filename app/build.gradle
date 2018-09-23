@@ -41,14 +41,16 @@ preBuild.dependsOn(list, checksum)
 clean.dependsOn(clean_assets)
 
 task javadoc(type: Javadoc) {
-    options.memberLevel = JavadocMemberLevel.PRIVATE
     source = android.sourceSets.main.java.srcDirs
-    ext.androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    classpath += configurations.compile
-    classpath += files(ext.androidJar)
+    options.memberLevel = JavadocMemberLevel.PRIVATE
     destinationDir = file("../docs/")
-    failOnError false
 }
 
-preBuild.dependsOn javadoc
+afterEvaluate {
+    javadoc.classpath += files(android.applicationVariants.collect { variant ->
+        variant.getJavaCompiler().classpath.files
+    })
+}
+
+preBuild.finalizedBy javadoc

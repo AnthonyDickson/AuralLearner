@@ -5,7 +5,6 @@ import be.tarsos.dsp.AudioProcessor;
 import be.tarsos.dsp.io.android.AudioDispatcherFactory;
 import be.tarsos.dsp.pitch.PitchDetectionHandler;
 import be.tarsos.dsp.pitch.PitchProcessor;
-import cosc345.app.model.State;
 
 /**
  * Listens to microphone input and detects the pitch of the audio.
@@ -21,6 +20,7 @@ public class PitchDetector {
 
     /**
      * Convenience constructor.
+     *
      * @param handler An object that implements PitchDetectionHandler.
      */
     public PitchDetector(PitchDetectionHandler handler) {
@@ -28,10 +28,14 @@ public class PitchDetector {
     }
 
     /**
-     * See the following page for information on the arguments: https://0110.be/releases/TarsosDSP/TarsosDSP-latest/TarsosDSP-latest-Documentation/be/tarsos/dsp/io/jvm/AudioDispatcherFactory.html#fromDefaultMicrophone-int-int-int-
+     * @param sampleRate    The requested sample rate must be supported by the capture device. Nonstandard sample rates can be problematic!
+     * @param bufferSize    The size of the buffer defines how much samples are processed in one step. Common values are 1024,2048.
+     * @param bufferOverlap How much consecutive buffers overlap (in samples). Half of the AudioBufferSize is common.
+     * @param handler       The object that will receive and handle pitch detection results.
+     * Information on the parameters retrieved from: https://0110.be/releases/TarsosDSP/TarsosDSP-latest/TarsosDSP-latest-Documentation/be/tarsos/dsp/io/jvm/AudioDispatcherFactory.html#fromDefaultMicrophone-int-int-int-
      */
     public PitchDetector(int sampleRate, int bufferSize, int bufferOverlap, PitchDetectionHandler handler) {
-        dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(sampleRate,bufferSize,bufferOverlap);
+        dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(sampleRate, bufferSize, bufferOverlap);
         AudioProcessor pitchProcessor = new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.FFT_YIN, sampleRate, bufferSize, handler);
         dispatcher.addAudioProcessor(pitchProcessor);
         state = State.READY;

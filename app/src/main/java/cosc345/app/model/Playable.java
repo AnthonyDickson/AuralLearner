@@ -62,7 +62,7 @@ public abstract class Playable {
 
     /**
      * Delegate provides an interface for objects playing a playable to control what happens
-     * when a playable starts & finishes playback.
+     * when a playable starts and finishes playback.
      */
     public interface Delegate {
         void onPlaybackStarted();
