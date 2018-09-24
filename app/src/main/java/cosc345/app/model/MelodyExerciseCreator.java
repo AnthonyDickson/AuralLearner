@@ -42,9 +42,9 @@ public class MelodyExerciseCreator extends Grader{
         int melodyRange;
         int exerciseLength;
         int[] scaleSteps;
-        int[] scaleStepsEasy = {2};
-        int[] scaleStepsMedium = {2, 2, 2, 3};
-        int[] scaleStepsHard = {2, 2, 2, 2, 2, 3, 3, 4};
+        int[] scaleStepsEasy = {1};
+        int[] scaleStepsMedium = {1, 1, 1, 2};
+        int[] scaleStepsHard = {1, 1, 1, 1, 1, 2, 2, 3};
 
         if (difficulty == Difficulty.EASY){
 
@@ -56,7 +56,7 @@ public class MelodyExerciseCreator extends Grader{
 
         } else if(difficulty == Difficulty.MEDIUM){
 
-            melodyRange = 6;
+            melodyRange = random.nextInt(3) +3;;
             invertProbability = 0.2;
             scaleSteps = scaleStepsMedium;
             exerciseLength = 8;
@@ -64,7 +64,7 @@ public class MelodyExerciseCreator extends Grader{
 
         } else{
 
-            melodyRange = 8;
+            melodyRange = random.nextInt(3) +5;
             invertProbability = 0.3;
             scaleSteps = scaleStepsHard;
             exerciseLength = 8;
@@ -76,7 +76,68 @@ public class MelodyExerciseCreator extends Grader{
             startingNote = Note.getRandom();
         }
         ArrayList<Note> exercise = new ArrayList<>();
-        boolean pastHalfway = false; //only change if middle note has been reached
+        scale = scaleGenerator(startingNote);
+        boolean pastHalfWay = false; //only change if middle note has been reached
+        //use past Halfway to decide the end of the scale
+        int scalePointer = 1;
+        exercise.add(scale[0]);
+        for (int i = 1; i < exerciseLength-1; i++){
+            //adds mostly higher notes
+            if (pastHalfWay == false ){
+                if (i == exerciseLength-1){//final two scale notes
+                    exercise.add(scale[7]);
+                    exercise.add(scale[8]);
+
+                } else {
+                    int step = scaleSteps[random.nextInt(scaleSteps.length)];
+                    if (random.nextDouble() > invertProbability || i == 1){
+                        scalePointer += step;
+                        exercise.add(scale[scalePointer]);
+
+                        if (scalePointer >melodyRange ){
+                            pastHalfWay = true;
+                            scalePointer = melodyRange;
+                        }
+                        exercise.add(scale[scalePointer]);
+
+                    } else {
+                        scalePointer -=step;
+                        if (scalePointer > 0){
+                            scalePointer = 0;
+                        }
+                        exercise.add(scale[scalePointer]);
+                    }
+                }
+
+
+            } else if (pastHalfWay == true){ //adds mostly down
+                if (i == exerciseLength-1){//final two scale notes
+                    exercise.add(scale[2]);
+                    exercise.add(scale[1]);
+
+                } else {
+                    int step = scaleSteps[random.nextInt(scaleSteps.length)];
+                    if (random.nextDouble() > invertProbability || i == 1){
+                        scalePointer -= step;
+                        if (scalePointer > 0){
+                            scalePointer = 0;
+                        }
+                        exercise.add(scale[scalePointer]);
+
+                    } else {
+                        scalePointer +=step;
+                        if (scalePointer >melodyRange ){
+                            scalePointer = melodyRange;
+                        }
+                        exercise.add(scale[scalePointer]);
+                    }
+                }
+
+
+            }
+
+
+        }
 
         return exercise;
 
@@ -89,15 +150,29 @@ public class MelodyExerciseCreator extends Grader{
 
         int[] majorScaleSemitoneLeaps = { 2, 2, 1, 2, 2, 1};// steps to take when adding next note
 
-        Note[] scale = new Note[7];
+        Note[] scale = new Note[8];
         String startNoteName = startingNote.getName();
         int notePosition = startingNote.getNameIndex();
 
         // 'b' denotes flat
+        scale[0] = startingNote;
         if (startNoteName.charAt(1) == 'b'){
+            for (int i = 1; i < scale.length; i++){
+                notePosition += majorScaleSemitoneLeaps[i-1];
+                String nextNote = Note.NOTE_NAMES_FLATS[notePosition];
+                scale[i] = new Note(nextNote);
+
+
+            }
 
 
         } else {
+            for (int i = 1; i < scale.length; i++){
+                notePosition += majorScaleSemitoneLeaps[i-1];
+                String nextNote = Note.NOTE_NAMES[notePosition];
+                scale[i] = new Note(nextNote);
+
+            }
 
         }
 
