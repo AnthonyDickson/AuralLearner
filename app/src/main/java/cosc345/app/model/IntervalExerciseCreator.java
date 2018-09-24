@@ -20,6 +20,11 @@ public class IntervalExerciseCreator extends Grader{
 
         Intervals[] exerciseConstraints;
         double invertProbability;
+        //insures the range
+        Note startingNote = Note.getRandom();
+        while (startingNote.getName().charAt(-1) != (3 | 4)){
+            startingNote = Note.getRandom();
+        }
 
         Intervals[] exerciseConstraintsEasy = {Intervals.P1,Intervals.P4, Intervals.P5, Intervals.P8};
 
@@ -55,7 +60,7 @@ public class IntervalExerciseCreator extends Grader{
         } else {
             invert = false;
         }
-        this.interval = new Interval(Note.getRandom(), intervalPick, invert); //need to add notes
+        this.interval = new Interval(startingNote, intervalPick, invert); //need to add notes
         exercise.add(this.interval.root);
         exercise.add(this.interval.other);
         return exercise;

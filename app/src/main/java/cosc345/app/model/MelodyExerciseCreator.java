@@ -30,43 +30,77 @@ public class MelodyExerciseCreator extends Grader{
         //melody should start and end on root, but hard may start on another scale degree
         //there should be a melody threshold which it cannot go over
 
-        Intervals[] exerciseConstraints;
+
+        /* the probability that when picking a note, decides whether the next note
+         * will be higher or lower
+         */
         double invertProbability;
+        /* the notes used for the exercise, should be in a key */
+        Note[] scale;
+        Note startingNote =  Note.getRandom();
+
         int melodyRange;
+        int exerciseLength;
+        int[] scaleSteps;
+        int[] scaleStepsEasy = {2};
+        int[] scaleStepsMedium = {2, 2, 2, 3};
+        int[] scaleStepsHard = {2, 2, 2, 2, 2, 3, 3, 4};
 
         if (difficulty == Difficulty.EASY){
 
-            exerciseConstraints = exerciseConstraintsEasy;
-            melodyRange = 5;
-            invertProbability = 0.1;
+            melodyRange = 3;
+            invertProbability = 0;
+            scaleSteps = scaleStepsEasy;
+            exerciseLength = 4;
 
 
         } else if(difficulty == Difficulty.MEDIUM){
 
-            exerciseConstraints = exerciseConstraintsMedium;
-            invertProbability = 0.25;
-            melodyRange = 7;
+            melodyRange = 6;
+            invertProbability = 0.2;
+            scaleSteps = scaleStepsMedium;
+            exerciseLength = 8;
 
 
         } else{
 
-            exerciseConstraints = exerciseConstraintsHard;
-            invertProbability = 0.5;
-            melodyRange = 9;
+            melodyRange = 8;
+            invertProbability = 0.3;
+            scaleSteps = scaleStepsHard;
+            exerciseLength = 8;
 
+
+        }
+        //insures the range
+        while (startingNote.getName().charAt(-1) != (3 | 4)){
+            startingNote = Note.getRandom();
         }
         ArrayList<Note> exercise = new ArrayList<>();
-        Boolean invert;
-        Intervals intervalPick = exerciseConstraints[random.nextInt(exerciseConstraints.length)];
-        if (random.nextDouble() < invertProbability){
-            invert = true;
-        } else {
-            invert = false;
-        }
-        this.interval = new Interval(Note.getRandom(), intervalPick, invert); //need to add notes
-        exercise.add(this.interval.root);
-        exercise.add(this.interval.other);
+        boolean pastHalfway = false; //only change if middle note has been reached
+
         return exercise;
 
+    }
+    public Note[] scaleGenerator(Note startingNote){
+        //use note from string constructor
+        //find that note, then look for the higher one which should be an arrayindex
+        //from the first one
+        //needs to use note class to generate scale
+
+        int[] majorScaleSemitoneLeaps = { 2, 2, 1, 2, 2, 1};// steps to take when adding next note
+
+        Note[] scale = new Note[7];
+        String startNoteName = startingNote.getName();
+        int notePosition = startingNote.getNameIndex();
+
+        // 'b' denotes flat
+        if (startNoteName.charAt(1) == 'b'){
+
+
+        } else {
+
+        }
+
+        return scale;
     }
 }
