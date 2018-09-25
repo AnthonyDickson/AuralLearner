@@ -16,6 +16,7 @@ import be.tarsos.dsp.pitch.PitchDetectionResult;
  */
 public class Grader implements PitchDetectionHandler {
     private static final String LOG_TAG = "Grader";
+    private static Grader instance = null;
 
     private double score;
     private ArrayList<Double> frequencyReadings;
@@ -27,10 +28,15 @@ public class Grader implements PitchDetectionHandler {
     private final Handler handler = new Handler();
 
     public Grader(ArrayList<Note> notes) {
+        if (Grader.instance != null) {
+            Grader.instance.stop();
+        }
+
         this.notes = notes;
         this.pitchDetector = new PitchDetector(this);
 
         reset();
+        instance = this;
     }
 
     /**
