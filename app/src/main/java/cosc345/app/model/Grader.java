@@ -26,6 +26,10 @@ public class Grader implements PitchDetectionHandler {
     private Callback callback = null;
     private final Handler handler = new Handler();
 
+    public Grader(){
+        reset();
+    }
+
     public Grader(ArrayList<Note> notes) {
         this.notes = notes;
         this.pitchDetector = new PitchDetector(this);
