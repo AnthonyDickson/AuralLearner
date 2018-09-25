@@ -19,7 +19,7 @@ public class Grader implements PitchDetectionHandler {
 
     private double score;
     private ArrayList<Double> frequencyReadings;
-    private ArrayList<Note> notes;
+    public ArrayList<Note> notes;
     private Iterator<Note> notesIterator;
     private ArrayList<Note> userNotes;
     private PitchDetector pitchDetector;
