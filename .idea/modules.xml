@@ -2,16 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/345.iml" filepath="$PROJECT_DIR$/345.iml" />
-      <module fileurl="file://$PROJECT_DIR$/aars/aars.iml" filepath="$PROJECT_DIR$/aars/aars.iml" />
       <module fileurl="file://$PROJECT_DIR$/aars/aars.iml" filepath="$PROJECT_DIR$/aars/aars.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-<<<<<<< HEAD
-      <module fileurl="file://$PROJECT_DIR$/ourcontributiontoblindmusicians.iml" filepath="$PROJECT_DIR$/ourcontributiontoblindmusicians.iml" />
-=======
       <module fileurl="file://$PROJECT_DIR$/.idea/ourcontributiontoblindmusicians.iml" filepath="$PROJECT_DIR$/.idea/ourcontributiontoblindmusicians.iml" />
->>>>>>> origin/IntervalExercise_in_progress
     </modules>
   </component>
 </project>

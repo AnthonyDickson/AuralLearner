@@ -15,19 +15,12 @@ import cosc345.app.model.Grader;
 import cosc345.app.model.Interval;
 import cosc345.app.model.Note;
 import cosc345.app.model.Playable;
-<<<<<<< HEAD
-import cosc345.app.model.Grader;
 
-import cosc345.app.model.VoiceRecognitionManager;
-
-import static cosc345.app.model.Interval.Intervals;
-import static cosc345.app.model.Interval.Intervals.P5;
-=======
 import cosc345.app.model.VoiceRecognitionManager;
 
 import cosc345.app.model.Intervals;
 import static cosc345.app.model.Intervals.P5;
->>>>>>> origin/IntervalExercise_in_progress
+
 import static cosc345.app.model.Note.NoteLength.MINIM;
 
 public class IntervalsExercise extends AppCompatActivity implements Playable.Delegate {
@@ -163,15 +156,10 @@ public class IntervalsExercise extends AppCompatActivity implements Playable.Del
                 .setSingleChoiceItems(Interval.getFullNames(), targetInterval.interval.ordinal(),
                         (dialog, which) -> intervalChoice = which)
                 .setPositiveButton(R.string.dialogOk, (dialog, id) -> setTargetInterval(new Interval(targetInterval.root, Intervals.values()[intervalChoice])))
-<<<<<<< HEAD
+
                 .setNeutralButton("Choose For Me", (dialog, id) -> setTargetInterval(Interval.randomInterval(targetInterval.root)))
-                .setNegativeButton(R.string.dialogCancel, (dialog, id) -> intervalChoice = Interval.Intervals.P1.ordinal());
-=======
-                .setNeutralButton("Choose For Me", (dialog, id) -> setTargetInterval(new Interval(targetInterval.root,
-                        // TODO: Refactor the below into the method Interval.getRandom().
-                        Intervals.values()[random.nextInt(Intervals.values().length)])))
                 .setNegativeButton(R.string.dialogCancel, (dialog, id) -> intervalChoice = Intervals.P1.ordinal());
->>>>>>> origin/IntervalExercise_in_progress
+
 
         return builder.create();
     }
