@@ -20,12 +20,16 @@ public class Grader implements PitchDetectionHandler {
 
     private double score;
     private ArrayList<Double> frequencyReadings;
-    private ArrayList<Note> notes;
+    public ArrayList<Note> notes;
     private Iterator<Note> notesIterator;
     private ArrayList<Note> userNotes;
     private PitchDetector pitchDetector;
     private Callback callback = null;
     private final Handler handler = new Handler();
+
+    public Grader(){
+        reset();
+    }
 
     public Grader(ArrayList<Note> notes) {
         if (Grader.instance != null) {

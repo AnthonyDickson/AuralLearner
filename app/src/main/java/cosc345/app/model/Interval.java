@@ -160,12 +160,7 @@ public class Interval extends Playable {
                 String.format("(%s, %s)", root.getName(), other.getName());
     }
 
-    /**
-     * Captures short names of musical intervals.
-     */
-    public enum Intervals {
-        P1, m2, M2, m3, M3, P4, A4, P5, m6, M6, m7, M7, P8
-    }
+
 
     public static String[] getShortNames() {
         String[] names = new String[Interval.intervalNames.size()];

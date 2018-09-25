@@ -11,15 +11,16 @@ import android.widget.TextView;
 import java.util.Locale;
 
 import cosc345.app.R;
+import cosc345.app.model.Grader;
 import cosc345.app.model.Interval;
 import cosc345.app.model.Note;
 import cosc345.app.model.Playable;
-import cosc345.app.model.Grader;
 
 import cosc345.app.model.VoiceRecognitionManager;
 
-import static cosc345.app.model.Interval.Intervals;
-import static cosc345.app.model.Interval.Intervals.P5;
+import cosc345.app.model.Intervals;
+import static cosc345.app.model.Intervals.P5;
+
 import static cosc345.app.model.Note.NoteLength.MINIM;
 
 public class IntervalsExercise extends AppCompatActivity implements Playable.Delegate {
@@ -155,8 +156,10 @@ public class IntervalsExercise extends AppCompatActivity implements Playable.Del
                 .setSingleChoiceItems(Interval.getFullNames(), targetInterval.interval.ordinal(),
                         (dialog, which) -> intervalChoice = which)
                 .setPositiveButton(R.string.dialogOk, (dialog, id) -> setTargetInterval(new Interval(targetInterval.root, Intervals.values()[intervalChoice])))
+
                 .setNeutralButton("Choose For Me", (dialog, id) -> setTargetInterval(Interval.randomInterval(targetInterval.root)))
-                .setNegativeButton(R.string.dialogCancel, (dialog, id) -> intervalChoice = Interval.Intervals.P1.ordinal());
+                .setNegativeButton(R.string.dialogCancel, (dialog, id) -> intervalChoice = Intervals.P1.ordinal());
+
 
         return builder.create();
     }
