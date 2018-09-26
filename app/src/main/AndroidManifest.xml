@@ -55,6 +55,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="cosc345.app.MainActivity" />
         </activity>
+        <activity android:name=".controller.IntervalExercise">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="cosc345.app.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
