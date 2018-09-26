@@ -42,16 +42,19 @@ public class IntervalsMenu extends VoiceControlActivity {
     public void exerciseEasy(android.view.View view){
         Intent intent = new Intent(IntervalsMenu.this, IntervalExercise.class);
         intent.putExtra("EXTRA_DIFFICULTY", "Easy");
+        startActivity(intent);
 
     }
     public void exerciseMedium(android.view.View view){
         Intent intent = new Intent(IntervalsMenu.this, IntervalExercise.class);
         intent.putExtra("EXTRA_DIFFICULTY", "Medium");
+        startActivity(intent);
 
     }
     public void exerciseHard(android.view.View view){
         Intent intent = new Intent(IntervalsMenu.this, IntervalExercise.class);
         intent.putExtra("EXTRA_DIFFICULTY", "Hard");
+        startActivity(intent);
 
     }
 }
