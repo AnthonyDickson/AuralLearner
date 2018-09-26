@@ -26,7 +26,7 @@ import static cosc345.app.model.Intervals.P5;
 import static cosc345.app.model.Note.NoteLength.MINIM;
 import static cosc345.app.model.Utilities.random;
 
-public class IntervalExercise extends AppCompatActivity implements Playable.PlayableDelegate {
+public class IntervalExercise extends AppCompatActivity implements Playable.Delegate {
     private boolean isListening, isPlaying;
     private Button startBtn;
     private Button stopBtn;
