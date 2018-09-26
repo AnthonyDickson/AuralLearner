@@ -57,4 +57,6 @@ public class IntervalsMenu extends VoiceControlActivity {
         startActivity(intent);
 
     }
+    //this needs voice recognition
+    //this needs to be tested
 }

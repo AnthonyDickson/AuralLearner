@@ -33,6 +33,8 @@ public class IntervalExercise extends AppCompatActivity implements Playable.Play
     private Button playTargetBtn;
     private Button stopTargetBtn;
     Interval targetInterval;
+    //this class still needs to be able to stop exercise
+    //also tested
 
     private IntervalExerciseCreator intervalExerciseCreator;
     private TextView scoreView;
