@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static cosc345.app.model.Utilities.random;
+
 /**
  * Represents a musical interval.
  */
@@ -85,6 +87,9 @@ public class Interval extends Playable {
 
     /**
      * Create an interval from two notes.
+     *
+     * @param root  The first, or root, note in the interval.
+     * @param other The second note in the interval.
      */
     public Interval(Note root, Note other) {
         size = Math.abs(root.getNameIndex() - other.getNameIndex());
@@ -96,10 +101,31 @@ public class Interval extends Playable {
         setNoteDelegates();
     }
 
+    /**
+     * Generate a random interval, with a random root note.
+     *
+     * @return a new Interval object with the root note and interval type chosen randomly.
+     */
+    public static Interval randomInterval() {
+        return randomInterval(Note.getRandom());
+    }
+
+    /**
+     * Generate a random interval, with a given root note.
+     *
+     * @param root the root note of the interval to create.
+     * @return a new Interval object with the interval type chosen randomly.
+     */
+    public static Interval randomInterval(Note root) {
+        Intervals intervalSize = Intervals.values()[random.nextInt(Intervals.values().length)];
+        return new Interval(root, intervalSize);
+    }
+
     private void setNoteDelegates() {
-        root.setDelegate(new PlayableDelegate() {
+        root.setDelegate(new Delegate() {
             @Override
-            public void onPlaybackStarted() {}
+            public void onPlaybackStarted() {
+            }
 
             @Override
             public void onPlaybackFinished() {
@@ -107,9 +133,10 @@ public class Interval extends Playable {
             }
         });
 
-        other.setDelegate(new PlayableDelegate() {
+        other.setDelegate(new Delegate() {
             @Override
-            public void onPlaybackStarted() {}
+            public void onPlaybackStarted() {
+            }
 
             @Override
             public void onPlaybackFinished() {

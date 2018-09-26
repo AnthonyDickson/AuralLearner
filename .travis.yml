@@ -21,6 +21,7 @@ before_script:
 
 before_install:
   - chmod +x gradlew
+  - chmod +x publish-javadocs.sh
   - yes | sdkmanager "platforms;android-27" "build-tools;27.0.3"
 
 before_cache:
@@ -33,6 +34,9 @@ cache:
     - $HOME/.gradle/wrapper/
     - $HOME/.android/build-cache
 
+after_success:
+    - ./publish-javadocs.sh
+      
 branches:
   only:
   - master

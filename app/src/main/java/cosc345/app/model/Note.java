@@ -308,6 +308,23 @@ public class Note extends Playable implements Comparable<Note>,
         return nameIndex - o.nameIndex;
     }
 
+    /**
+     * Check if one note is the same as the other.
+     * Note that this only checks if the two notes have the same musical notation (e.g. both are A4),
+     * but the difference in things like frequency are not taken into account.
+     *
+     * @param obj the other Note object to compare with.
+     * @return true if the two notes are equivalent, false otherwise.
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Note)) {
+            return false;
+        }
+
+        return compareTo((Note) obj) == 0;
+    }
+
     public int getNameIndex() {
         return nameIndex;
     }

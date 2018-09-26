@@ -1,6 +1,6 @@
 # COSC345 Project
 
-[![Build Status](https://travis-ci.org/icantthinkofacreativeusername/ourcontributiontoblindmusicians.svg?branch=master)](https://travis-ci.org/icantthinkofacreativeusername/ourcontributiontoblindmusicians)
+[![Build Status](https://travis-ci.org/eight0153/ourcontributiontoblindmusicians.svg?branch=master)](https://travis-ci.org/eight0153/ourcontributiontoblindmusicians)
 
 For our project we aim to make an Android app that teaches some of the basic
 parts of aural music theory through exercises that aim to improve the users'
@@ -10,6 +10,10 @@ impaired and have trouble reading.
 
 ## Reports
 All of the reports for the project can be found under the directory 'reports'.
+
+## Javadocs Documentation
+The javadocs for this project are hosted on GitHub pages and can be found
+[here](https://eight0153.github.io/ourcontributiontoblindmusicians/).
 
 ## How to Build
 
@@ -32,7 +36,7 @@ The first two steps are the same as the steps for building the app. However
 when you get to step three you need to select from the menu 
 `Run -> Run 'app'`. If this option does appear or you get an error saying 
 something like 'select the Android APK' try selecting from the menu 
-`File -> Sync` Project With Gradle Files.
+`File -> Sync Project With Gradle Files`.
 
 ## Using the Application
 

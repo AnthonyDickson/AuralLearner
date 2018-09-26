@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import java.util.Locale;
 
-import be.tarsos.dsp.AudioDispatcher;
 import be.tarsos.dsp.AudioEvent;
 import be.tarsos.dsp.pitch.PitchDetectionHandler;
 import be.tarsos.dsp.pitch.PitchDetectionResult;
@@ -26,7 +25,7 @@ import cosc345.app.model.VoiceRecognitionManager;
  * Activity that allows the user to try to match a pitch.
  */
 public class PitchMatchingExercise extends AppCompatActivity
-        implements PitchDetectionHandler, Playable.PlayableDelegate {
+        implements PitchDetectionHandler, Playable.Delegate {
     private static final int MATCH_THRESHOLD_CENTS = 10;
     private boolean isListening, isPlaying;
     private Note playableNote;
@@ -141,9 +140,11 @@ public class PitchMatchingExercise extends AppCompatActivity
      * Clear the user's pitch and the pitch difference text views.
      */
     private void resetUI() {
-        userPitchView.setText("-");
-        pitchDifferenceView.setText("-");
-        pitchDifferenceView.setTextColor(defaultColours);
+        runOnUiThread(() -> {
+            userPitchView.setText("-");
+            pitchDifferenceView.setText("-");
+            pitchDifferenceView.setTextColor(defaultColours);
+        });
     }
 
     @Override
@@ -176,15 +177,20 @@ public class PitchMatchingExercise extends AppCompatActivity
     @Override
     public void handlePitch(PitchDetectionResult res, AudioEvent evt) {
         final float pitchInHz = res.getPitch();
-
         Log.i("Pitch Detection", String.format("Pitch (Hz): %f", pitchInHz));
 
+        try {
+            userNote = new Note(pitchInHz);
+        } catch (IllegalArgumentException e) {
+            resetUI();
+            return;
+        }
+
+        int halfstepDiff = userNote.compareTo(targetNote);
+        int centDiff = Note.centDistance(userNote, targetNote) % 100;
+
         runOnUiThread(() -> {
-            try {
-                userNote = new Note(pitchInHz);
                 userPitchView.setText(userNote.getName());
-                int halfstepDiff = userNote.compareTo(targetNote);
-                int centDiff = Note.centDistance(userNote, targetNote) % 100;
                 pitchDifferenceView.setText(String.format(Locale.ENGLISH,
                         "%d semitone(s) and %d cent(s)", halfstepDiff, centDiff));
 
@@ -194,9 +200,6 @@ public class PitchMatchingExercise extends AppCompatActivity
                 } else {
                     pitchDifferenceView.setTextColor(defaultColours);
                 }
-            } catch (IllegalArgumentException e) {
-                resetUI();
-            }
         });
     }
 }

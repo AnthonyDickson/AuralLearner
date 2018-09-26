@@ -16,7 +16,7 @@
     <string name="pitchMatching_changeTargetPitchBtnLabel">Change Target Pitch</string>
     <string name="pitchMatchingMenuBtnLabel">Pitch Matching</string>
     <string name="viewHelpBtnLabel">Voice Control Help</string>
-    <string name="mainMenuMiscHeading">Other</string>
+    <string name="mainMenuMiscHeading">Help</string>
     <string name="permissionsExplanationTitle">Permissions This App Uses</string>
     <string name="voiceControlHelpTitle">Voice Control Help</string>
     <string name="dialogOk">OK</string>
