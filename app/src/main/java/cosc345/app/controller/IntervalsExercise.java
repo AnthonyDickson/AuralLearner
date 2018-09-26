@@ -15,14 +15,15 @@ import cosc345.app.model.Grader;
 import cosc345.app.model.Interval;
 import cosc345.app.model.Note;
 import cosc345.app.model.Playable;
+
 import cosc345.app.model.VoiceRecognitionManager;
 
 import cosc345.app.model.Intervals;
 import static cosc345.app.model.Intervals.P5;
-import static cosc345.app.model.Note.NoteLength.MINIM;
-import static cosc345.app.model.Utilities.random;
 
-public class IntervalsExercise extends AppCompatActivity implements Playable.PlayableDelegate {
+import static cosc345.app.model.Note.NoteLength.MINIM;
+
+public class IntervalsExercise extends AppCompatActivity implements Playable.Delegate {
     private boolean isListening, isPlaying;
     private Interval targetInterval;
     private Button startBtn;
@@ -155,10 +156,10 @@ public class IntervalsExercise extends AppCompatActivity implements Playable.Pla
                 .setSingleChoiceItems(Interval.getFullNames(), targetInterval.interval.ordinal(),
                         (dialog, which) -> intervalChoice = which)
                 .setPositiveButton(R.string.dialogOk, (dialog, id) -> setTargetInterval(new Interval(targetInterval.root, Intervals.values()[intervalChoice])))
-                .setNeutralButton("Choose For Me", (dialog, id) -> setTargetInterval(new Interval(targetInterval.root,
-                        // TODO: Refactor the below into the method Interval.getRandom().
-                        Intervals.values()[random.nextInt(Intervals.values().length)])))
+
+                .setNeutralButton("Choose For Me", (dialog, id) -> setTargetInterval(Interval.randomInterval(targetInterval.root)))
                 .setNegativeButton(R.string.dialogCancel, (dialog, id) -> intervalChoice = Intervals.P1.ordinal());
+
 
         return builder.create();
     }
@@ -182,7 +183,7 @@ public class IntervalsExercise extends AppCompatActivity implements Playable.Pla
     }
 
     private void onGradingDone() {
-        scoreView.setText(String.format(Locale.ENGLISH, "%.2f", grader.getScore() * 100));
+        scoreView.setText(String.format(Locale.ENGLISH, "%.2f", grader.getScore()));
         stopBtn.setVisibility(View.GONE);
         startBtn.setVisibility(View.VISIBLE);
         isListening = false;

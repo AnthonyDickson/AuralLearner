@@ -158,7 +158,7 @@ public class VoiceRecognitionManager implements RecognitionListener {
         } else {
             if (searchName.equals(VoiceRecognitionManager.MENU_SEARCH)) {
                 Log.i(VoiceRecognitionManager.LOG_TAG, "Started listening.");
-                Toast.makeText(parentContext.get(), "Im listening...", Toast.LENGTH_SHORT).show();
+                Toast.makeText(parentContext.get(), "I'm listening...", Toast.LENGTH_SHORT).show();
                 state = State.BUSY;
             }
 

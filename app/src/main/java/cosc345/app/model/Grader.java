@@ -4,85 +4,134 @@ import android.os.Handler;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
-import cosc345.app.model.Callback;
-import cosc345.app.model.Note;
+import be.tarsos.dsp.AudioEvent;
+import be.tarsos.dsp.pitch.PitchDetectionHandler;
+import be.tarsos.dsp.pitch.PitchDetectionResult;
 
 /**
  * The Grader class takes a sequence of notes, gets the user to sing those notes, and gives a grade
  * based on how close what the user's singing was compared to the original sequence of notes.
  */
-public class Grader implements FFT.FFTResultListener {
-    static final String LOG_TAG = "Grader";
+public class Grader implements PitchDetectionHandler {
+    private static final String LOG_TAG = "Grader";
+    private static Grader instance = null;
 
-    int currNoteIndex;
-    double score;
-    ArrayList<Double> frequencyReadings;
-    ArrayList<Note> notes;
-    ArrayList<Note> userNotes;
-    Thread fftThread = null;
-    Callback callback = null;
-    final Handler handler = new Handler();
+    private double score;
+    private ArrayList<Double> frequencyReadings;
+    public ArrayList<Note> notes;
+    private Iterator<Note> notesIterator;
+    private ArrayList<Note> userNotes;
+    private PitchDetector pitchDetector;
+    private Callback callback = null;
+    private final Handler handler = new Handler();
 
     public Grader(){
         reset();
     }
 
     public Grader(ArrayList<Note> notes) {
+        if (Grader.instance != null) {
+            Grader.instance.stop();
+        }
+
         this.notes = notes;
+        this.pitchDetector = new PitchDetector(this);
+
         reset();
+        instance = this;
     }
 
+    /**
+     * Reset the state of the grader.
+     */
     private void reset() {
-        currNoteIndex = 0;
         score = 0.0;
         frequencyReadings = new ArrayList<>();
         userNotes = new ArrayList<>();
     }
 
-    public void start() {
-        reset();
-
-        Log.i(LOG_TAG, "Starting grading.");
-        fftThread = new Thread(new FFT(this));
-        fftThread.start();
-
-        Log.i(LOG_TAG, String.format("Recording singing for note %s with a duration of %d ms.", notes.get(currNoteIndex), notes.get(currNoteIndex).getDuration()));
-        handler.postDelayed(this::onNoteDone, notes.get(currNoteIndex).getDuration());
+    /**
+     * Get the user's score for the previously graded session.
+     * This should be called after the grader has finished grading for best results.
+     *
+     * @return a double in the range [0.0, 100.0] that represents the user's score.
+     */
+    public double getScore() {
+        return score;
     }
 
-    public void stop() {
-        Log.i(LOG_TAG, "Stopping grading.");
-        handler.removeCallbacksAndMessages(null);
-
-        if (fftThread != null) {
-            fftThread.interrupt();
-            fftThread = null;
-        }
-
-        if (callback != null) {
-            callback.execute();
-        }
-    }
-
+    /**
+     * Set the callback to be called once grading is finished.
+     *
+     * @param callback the callback to be called after grading is finished.
+     */
     public void setCallback(Callback callback) {
         this.callback = callback;
     }
 
+    /**
+     * Record the user's pitch.
+     */
     @Override
-    public void onFFTResult(double frequency, double amplitude, double averageFrequency, double[] recentFrequencies) {
-        frequencyReadings.add(frequency);
+    public void handlePitch(PitchDetectionResult pitchDetectionResult, AudioEvent audioEvent) {
+        float frequency = pitchDetectionResult.getPitch();
+
+        if (frequency == -1) {
+            Log.d(LOG_TAG, "Pitch Detection gave a reading of -1 for frequency during grading, " +
+                    "skipping this reading.");
+            return;
+        }
+
+        frequencyReadings.add((double) frequency);
     }
 
+    /**
+     * Start grading the user's singing.
+     */
+    public void start() {
+        reset();
+
+        Log.i(LOG_TAG, "Starting grading.");
+        notesIterator = notes.iterator();
+        pitchDetector.start();
+        playNextNote();
+    }
+
+    /**
+     * Play each note in the grader's sequence of notes, and record the average frequency that the
+     * user sang. When the end of the sequence is reached, finish grading.
+     */
+    private void playNextNote() {
+        if (notesIterator.hasNext()) {
+            Note nextNote = notesIterator.next();
+            handler.postDelayed(this::onNoteDone, nextNote.getDuration());
+        } else {
+            onSequenceDone();
+        }
+    }
+
+    /**
+     * Calculate the average frequency the user sang for the last note, and then start
+     */
     private void onNoteDone() {
         double avgFrequency = 0.0;
+
+        if (frequencyReadings.size() == 0) {
+            // TODO: Need to show a message to the user explaining what happened.
+            Log.d(LOG_TAG, "Failed to get any readings, terminating grading session.");
+            stop();
+            return;
+        }
 
         for (double reading : frequencyReadings) {
             avgFrequency += reading;
         }
 
         avgFrequency /= frequencyReadings.size();
-        frequencyReadings = new ArrayList<>();
+        Log.d(LOG_TAG, String.format("Average frequency: %s.", avgFrequency));
+        frequencyReadings.clear();
         Note userNote;
 
         try {
@@ -93,14 +142,8 @@ public class Grader implements FFT.FFTResultListener {
 
         Log.i(LOG_TAG, String.format("User sung: %s.", userNote));
         userNotes.add(userNote);
-        currNoteIndex++;
 
-        if (currNoteIndex == notes.size()) {
-            onSequenceDone();
-        } else {
-            Log.i(LOG_TAG, String.format("Recording singing for note %s with a duration of %d ms.", notes.get(currNoteIndex), notes.get(currNoteIndex).getDuration()));
-            handler.postDelayed(this::onNoteDone, notes.get(currNoteIndex).getDuration());
-        }
+        playNextNote();
     }
 
     private void onSequenceDone() {
@@ -111,11 +154,25 @@ public class Grader implements FFT.FFTResultListener {
         stop();
     }
 
+    /**
+     * Calculate the user's score by comparing the distance of each note the user sang against the
+     * grader's sequence of notes.
+     * @return the user's score as a number in the range [0.0, 100.0]
+     */
     private double calculateScore() {
         double avgCentDist = 0.0;
 
         for (int i = 0; i < notes.size(); i++) {
-            avgCentDist += Note.centDistance(userNotes.get(i), notes.get(i));
+            Note userNote = userNotes.get(i);
+            Note referenceNote = notes.get(i);
+
+            double centDist = Note.centDistance(userNote, referenceNote);
+            Log.d(LOG_TAG, String.format("Reference Pitch: %f Hz; User's Pitch: %f Hz; Distance in Cents: %f",
+                    userNote.getFrequency(),
+                    referenceNote.getFrequency(),
+                    centDist));
+
+            avgCentDist += centDist;
         }
 
         avgCentDist /= notes.size();
@@ -123,11 +180,20 @@ public class Grader implements FFT.FFTResultListener {
         if (Math.abs(avgCentDist) > 50) {
             return 0.0;
         } else {
-            return 100 * (100 - Math.abs(avgCentDist) / 50);
+            return 100 - 100 * Math.abs(avgCentDist) / 50.0;
         }
     }
 
-    public double getScore() {
-        return score;
+    /**
+     * Stop grading.
+     */
+    public void stop() {
+        Log.i(LOG_TAG, "Stopping grading.");
+        handler.removeCallbacksAndMessages(null);
+        pitchDetector.stop();
+
+        if (callback != null) {
+            callback.execute();
+        }
     }
 }
