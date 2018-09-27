@@ -7,15 +7,15 @@ import cosc345.app.model.Interval;
 import cosc345.app.model.Difficulty;
 import java.util.Random;
 
-public class MelodyExerciseCreator extends Grader{
+public class MelodyExerciseGrader extends Grader{
 
     private Random random = new Random();
     public ArrayList<Note> melody = new ArrayList<>();
 
-    public MelodyExerciseCreator(Difficulty difficulty){
+    public MelodyExerciseGrader(Difficulty difficulty){
         super.notes = pickMelody(difficulty);
     }
-    /* Similiar to IntervalExerciseCreator for melodies */
+    /* Similiar to IntervalExerciseGrader for melodies */
     public ArrayList<Note> pickMelody(Difficulty difficulty){
 
         //will need to build intervals

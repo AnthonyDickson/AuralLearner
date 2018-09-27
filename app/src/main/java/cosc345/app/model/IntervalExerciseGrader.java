@@ -7,12 +7,12 @@ import cosc345.app.model.Interval;
 import cosc345.app.model.Difficulty;
 import java.util.Random;
 
-public class IntervalExerciseCreator extends Grader{
+public class IntervalExerciseGrader extends Grader{
 
     private Random random = new Random();
     public Interval interval;
 
-    public IntervalExerciseCreator(Difficulty difficulty){
+    public IntervalExerciseGrader(Difficulty difficulty){
         super.notes = pickInterval(difficulty);
     }
 

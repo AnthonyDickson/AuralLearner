@@ -1,6 +1,5 @@
 package cosc345.app.controller;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
@@ -11,20 +10,12 @@ import android.widget.TextView;
 
 import java.util.Locale;
 
-import cosc345.app.MainActivity;
 import cosc345.app.R;
 import cosc345.app.model.Difficulty;
 import cosc345.app.model.Interval;
-import cosc345.app.model.IntervalExerciseCreator;
-import cosc345.app.model.Note;
+import cosc345.app.model.IntervalExerciseGrader;
 import cosc345.app.model.Playable;
-import cosc345.app.model.TextToSpeechManager;
 import cosc345.app.model.VoiceRecognitionManager;
-
-import cosc345.app.model.Intervals;
-import static cosc345.app.model.Intervals.P5;
-import static cosc345.app.model.Note.NoteLength.MINIM;
-import static cosc345.app.model.Utilities.random;
 
 public class IntervalExercise extends AppCompatActivity implements Playable.Delegate {
     private boolean isListening, isPlaying;
@@ -36,7 +27,7 @@ public class IntervalExercise extends AppCompatActivity implements Playable.Dele
     //this class still needs to be able to stop exercise
     //also tested
 
-    private IntervalExerciseCreator intervalExerciseCreator;
+    private IntervalExerciseGrader intervalExerciseGrader;
     private TextView scoreView;
     public TextToSpeech tts;
 
@@ -96,22 +87,24 @@ public class IntervalExercise extends AppCompatActivity implements Playable.Dele
 
             startBtn.setVisibility(View.GONE);
             stopBtn.setVisibility(View.VISIBLE);
+
             if (getIntent().getStringExtra("EXTRA_DIFFICULTY").equals("Easy")){
-                intervalExerciseCreator = new IntervalExerciseCreator(Difficulty.EASY);
+                intervalExerciseGrader = new IntervalExerciseGrader(Difficulty.EASY);
 
             } else if (getIntent().getStringExtra("EXTRA_DIFFICULTY").equals("Medium")){
-                intervalExerciseCreator = new IntervalExerciseCreator(Difficulty.MEDIUM);
+                intervalExerciseGrader = new IntervalExerciseGrader(Difficulty.MEDIUM);
 
             } else{
-                intervalExerciseCreator = new IntervalExerciseCreator(Difficulty.HARD);
+                intervalExerciseGrader = new IntervalExerciseGrader(Difficulty.HARD);
 
             }
-            targetInterval = intervalExerciseCreator.interval;//playthis
-            targetInterval.play();
-            targetInterval.play();
-            intervalExerciseCreator.start();
 
-            double grade = intervalExerciseCreator.getScore() * 100;
+            targetInterval = intervalExerciseGrader.interval;
+            targetInterval.play();
+            targetInterval.play();
+            intervalExerciseGrader.start();
+
+            double grade = intervalExerciseGrader.getScore() * 100;
 
             if (grade <60.0) {
                 tts.speak("Your score was bad", TextToSpeech.QUEUE_ADD, null);
@@ -131,7 +124,7 @@ public class IntervalExercise extends AppCompatActivity implements Playable.Dele
         if (isListening) {
             stopBtn.setVisibility(View.GONE);
             startBtn.setVisibility(View.VISIBLE);
-            intervalExerciseCreator.stop();
+            intervalExerciseGrader.stop();
             isListening = false;
         }
     }
