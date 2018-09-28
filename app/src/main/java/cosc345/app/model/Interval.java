@@ -63,9 +63,8 @@ public class Interval extends Playable {
             // What was the second note in the interval becomes the root.
             String newRootNoteName = Note.NOTE_NAMES[root.getNameIndex() + interval.ordinal()];
             this.root = new Note(newRootNoteName);
-            // old root node raised one octave and becomes second note in interval.
-            String otherNoteName = Note.NOTE_NAMES[root.getNameIndex() + Note.NUM_HALF_STEPS];
-            other = new Note(otherNoteName);
+            // old root node becomes second note in interval.
+            other = root;
         } else {
             // prevent out of range intervals.
             if (root.getNameIndex() + interval.ordinal() >= Note.NOTE_NAMES.length) {
