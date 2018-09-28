@@ -24,15 +24,19 @@ public class Grader implements PitchDetectionHandler {
     private ArrayList<Note> userNotes;
     private PitchDetector pitchDetector;
     private Callback callback = null;
+    private Callback onSuccess = null;
     private final Handler handler = new Handler();
+    private boolean shouldWaitForInput;
+    private int timesWaited;
 
-    public Grader(){
+    public Grader() {
         this(new ArrayList<>());
     }
 
     public Grader(ArrayList<Note> notes) {
         this.notes = notes;
         this.pitchDetector = new PitchDetector(this);
+        timesWaited = 0;
 
         reset();
     }
@@ -66,6 +70,15 @@ public class Grader implements PitchDetectionHandler {
     }
 
     /**
+     * Set the callback to be called once grading is finished.
+     *
+     * @param callback the callback to be called after grading is finished.
+     */
+    public void setOnSuccessCallback(Callback callback) {
+        this.onSuccess = callback;
+    }
+
+    /**
      * Record the user's pitch.
      */
     @Override
@@ -73,12 +86,19 @@ public class Grader implements PitchDetectionHandler {
         float frequency = pitchDetectionResult.getPitch();
 
         if (frequency == -1) {
-            Log.d(LOG_TAG, "Pitch Detection gave a reading of -1 for frequency during grading, " +
-                    "skipping this reading.");
-            return;
+            if (shouldWaitForInput && timesWaited % 10 == 0) {
+                Log.d(LOG_TAG, "Pitch Detection gave a reading of -1 while waiting for input, " +
+                        "waiting some more.");
+            } else {
+                Log.d(LOG_TAG, "Pitch Detection gave a reading of -1 for frequency during grading, " +
+                        "skipping this reading.");
+            }
+        } else if (shouldWaitForInput) {
+            shouldWaitForInput = false;
+            playNextNote();
+        } else {
+            frequencyReadings.add((double) frequency);
         }
-
-        frequencyReadings.add((double) frequency);
     }
 
     /**
@@ -89,9 +109,9 @@ public class Grader implements PitchDetectionHandler {
 
         Log.i(LOG_TAG, "Starting grading.");
         Log.i(LOG_TAG, String.format("Target notes: %s", notes.toString()));
+        shouldWaitForInput = true;
         notesIterator = notes.iterator();
         pitchDetector.start();
-        playNextNote();
     }
 
     /**
@@ -140,12 +160,18 @@ public class Grader implements PitchDetectionHandler {
         Log.d(LOG_TAG, String.format("User notes: %s", userNotes.toString()));
         score = calculateScore();
         Log.i(LOG_TAG, String.format("Finished grading, user's score is %f.", score));
+
+        if (onSuccess != null) {
+            onSuccess.execute();
+        }
+
         stop();
     }
 
     /**
      * Calculate the user's score by comparing the distance of each note the user sang against the
      * grader's sequence of notes.
+     *
      * @return the user's score as a number in the range [0.0, 100.0]
      */
     private double calculateScore() {

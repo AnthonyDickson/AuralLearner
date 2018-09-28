@@ -20,17 +20,11 @@ import cosc345.app.model.TextToSpeechManager;
 import cosc345.app.model.VoiceRecognitionManager;
 
 public class IntervalExercise extends AppCompatActivity implements Playable.Delegate {
-    private boolean isListening, isPlaying;
     private Button startBtn;
     private Button stopBtn;
-    private Button playTargetBtn;
-    private Button stopTargetBtn;
     Interval targetInterval;
-    //this class still needs to be able to stop exercise
-    //also tested
 
     private IntervalExerciseGrader intervalExerciseGrader;
-    private TextView scoreView;
     public TextToSpeechManager tts;
     private Difficulty difficulty;
     private int timesPlayed;
@@ -39,8 +33,6 @@ public class IntervalExercise extends AppCompatActivity implements Playable.Dele
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_interval_exercise);
-
-        isPlaying = false;
 
         startBtn = findViewById(R.id.interval_startBtn);
         stopBtn = findViewById(R.id.interval_stopBtn);
@@ -66,14 +58,6 @@ public class IntervalExercise extends AppCompatActivity implements Playable.Dele
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-
-        // TODO: remove this line when bug with VoiceRecognitionManager is fixed.
-        VoiceRecognitionManager.getInstance().close();
-    }
-
-    @Override
     protected void onPause() {
         super.onPause();
 
@@ -82,12 +66,16 @@ public class IntervalExercise extends AppCompatActivity implements Playable.Dele
     }
 
     private void startExercise() {
+        // TODO: remove this line when bug with VoiceRecognitionManager is fixed.
+        VoiceRecognitionManager.getInstance().close();
+
         timesPlayed = 0;
 
         startBtn.setVisibility(View.GONE);
         stopBtn.setVisibility(View.VISIBLE);
 
         intervalExerciseGrader = new IntervalExerciseGrader(difficulty);
+        intervalExerciseGrader.setOnSuccessCallback(this::onGradingDone);
         intervalExerciseGrader.setCallback(this::onDone);
         targetInterval = intervalExerciseGrader.interval;
         targetInterval.setDelegate(this);
@@ -100,23 +88,6 @@ public class IntervalExercise extends AppCompatActivity implements Playable.Dele
         intervalExerciseGrader.stop();
 
         onDone();
-    }
-
-    private void onDone() {
-        double grade = intervalExerciseGrader.getScore();
-
-        if (grade <60.0) {
-            tts.speak("Your score was bad");
-        } else if (grade > 60.0 && grade < 80.0){
-            tts.speak("Your score was ok");
-        } else if (grade < 90.0){
-            tts.speak("Your score was good");
-        } else {
-            tts.speak("Your score was perfect");
-        }
-
-        stopBtn.setVisibility(View.GONE);
-        startBtn.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -132,4 +103,22 @@ public class IntervalExercise extends AppCompatActivity implements Playable.Dele
             intervalExerciseGrader.start();
         }
     }
+
+    private void onGradingDone() {
+        double grade = intervalExerciseGrader.getScore();
+
+        if (grade < 60.0) {
+            tts.speak("Your score was bad");
+        } else if (grade < 80.0) {
+            tts.speak("Your score was ok");
+        } else if (grade < 90.0) {
+            tts.speak("Your score was good");
+        } else {
+            tts.speak("Your score was perfect");
+        }
+    }
+
+    private void onDone() {
+        startBtn.setVisibility(View.VISIBLE);
+        stopBtn.setVisibility(View.GONE);}
 }
