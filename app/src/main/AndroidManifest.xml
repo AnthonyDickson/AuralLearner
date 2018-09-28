@@ -20,11 +20,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".controller.VoiceControlActivity"></activity>
-        <activity android:name=".controller.IntervalsMenu">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="cosc345.app.MainActivity" />
-        </activity>
         <activity android:name=".controller.MelodiesMenu">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -45,12 +40,7 @@
             android:name="android.support.PARENT_ACTIVITY"
             android:value="cosc345.app.MainActivity" />
         </activity>
-        <activity android:name=".controller.testing.fftTest">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="cosc345.app.MainActivity" />
-        </activity>
-        <activity android:name=".controller.testing.PlayNote">
+        <activity android:name=".controller.IntervalsMenu">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="cosc345.app.MainActivity" />
@@ -58,7 +48,7 @@
         <activity android:name=".controller.IntervalExercise">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="cosc345.app.MainActivity" />
+                android:value="cosc345.app.controller.IntervalsMenu" />
         </activity>
     </application>
 

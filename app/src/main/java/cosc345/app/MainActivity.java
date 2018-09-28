@@ -11,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.widget.Button;
 
+import cosc345.app.controller.IntervalsMenu;
 import cosc345.app.model.MenuAction;
 import cosc345.app.model.TextToSpeechManager;
 import cosc345.app.model.VoiceRecognitionManager;
@@ -80,7 +81,7 @@ public class MainActivity extends VoiceControlActivity implements ActivityCompat
 
     private void setupMenuButtons() {
         setupMenuButton(R.id.pitchMatchingMenuBtn, PitchMatchingExercise.class);
-        setupMenuButton(R.id.intervalsMenuBtn, IntervalsExercise.class);
+        setupMenuButton(R.id.intervalsMenuBtn, IntervalsMenu.class);
         setupMenuButton(R.id.melodiesMenuBtn, MelodiesMenu.class);
         setupMenuButton(R.id.rhythmsMenuBtn, RhythmsMenu.class);
         findViewById(R.id.voiceControlHelpBtn).setOnClickListener(v -> {
