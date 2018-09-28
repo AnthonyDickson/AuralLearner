@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 
 import java.util.Objects;
@@ -40,22 +41,22 @@ public class IntervalsMenu extends VoiceControlActivity {
     }
 
     public void exerciseEasy(android.view.View view){
-        Intent intent = new Intent(IntervalsMenu.this, IntervalExercise.class);
-        intent.putExtra("EXTRA_DIFFICULTY", "Easy");
-        startActivity(intent);
+        openExercise(Difficulty.EASY);
 
     }
     public void exerciseMedium(android.view.View view){
-        Intent intent = new Intent(IntervalsMenu.this, IntervalExercise.class);
-        intent.putExtra("EXTRA_DIFFICULTY", "Medium");
-        startActivity(intent);
+        openExercise(Difficulty.MEDIUM);
 
     }
     public void exerciseHard(android.view.View view){
-        Intent intent = new Intent(IntervalsMenu.this, IntervalExercise.class);
-        intent.putExtra("EXTRA_DIFFICULTY", "Hard");
-        startActivity(intent);
+        openExercise(Difficulty.HARD);
 
+    }
+
+    public void openExercise(Difficulty difficulty) {
+        Intent intent = new Intent(IntervalsMenu.this, IntervalExercise.class);
+        intent.putExtra("EXTRA_DIFFICULTY", difficulty.toString());
+        startActivity(intent);
     }
     //this needs voice recognition
     //this needs to be tested

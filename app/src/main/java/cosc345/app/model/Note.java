@@ -58,6 +58,7 @@ public class Note extends Playable implements Comparable<Note>,
             "C6"};
 
     public static final int A4_INDEX = 33;
+    public static final int C4_INDEX = A4_INDEX - 9;
 
     public static final double A4_FREQUENCY = 440.0; // in Hertz
     public static final int NUM_HALF_STEPS = 12; // per octave.
@@ -101,7 +102,7 @@ public class Note extends Playable implements Comparable<Note>,
         int hsDist = Note.halfStepDistance(frequency);
         double refFreq = Note.frequency(hsDist);
 
-        nameIndex = Note.A4_INDEX + hsDist;
+        nameIndex = Math.min(Note.A4_INDEX + hsDist, NOTE_NAMES.length - 1);
         this.frequency = frequency;
         halfStepDistance = hsDist;
         octave = Note.octave(hsDist);
@@ -141,7 +142,7 @@ public class Note extends Playable implements Comparable<Note>,
             throw new IllegalArgumentException("Invalid Note Name");
         }
 
-        nameIndex = noteIndex;
+        nameIndex = Math.min(noteIndex, NOTE_NAMES.length - 1);
         halfStepDistance = noteIndex - Note.A4_INDEX;
         frequency = Note.frequency(halfStepDistance);
         octave = Note.octave(halfStepDistance);
@@ -236,13 +237,28 @@ public class Note extends Playable implements Comparable<Note>,
     }
 
     /**
+     * Choose a note at random.
+     *
      * @return a note chosen at random.
      */
     public static Note getRandom() {
         double weighted_i = Utilities.random.nextGaussian() *
                 Note.NUM_HALF_STEPS + Note.NOTE_NAMES.length / 2;
-        int i = (int) Math.max(0, Math.min(weighted_i, Note.NOTE_NAMES.length));
+        int i = (int) Math.max(0, Math.min(weighted_i, Note.NOTE_NAMES.length - 1));
         return new Note(Note.NOTE_NAMES[i], NoteLength.CROTCHET);
+    }
+
+
+    /**
+     * Choose a note at random, normally distributed around C4 with a std dev of 4 halfsteps.
+     *
+     * @param length The length of the note to generate.
+     * @return a note chosen at random.
+     */
+    public static Note getRandomAroundC3(NoteLength length) {
+        double weighted_i = Utilities.random.nextGaussian() * 4.0 + (C4_INDEX - 12);
+        int i = (int) Math.max(0, Math.min(weighted_i, Note.NOTE_NAMES.length - 1));
+        return new Note(Note.NOTE_NAMES[i], length);
     }
 
 

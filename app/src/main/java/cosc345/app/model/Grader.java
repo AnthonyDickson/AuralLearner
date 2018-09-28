@@ -16,7 +16,6 @@ import be.tarsos.dsp.pitch.PitchDetectionResult;
  */
 public class Grader implements PitchDetectionHandler {
     private static final String LOG_TAG = "Grader";
-    private static Grader instance = null;
 
     private double score;
     private ArrayList<Double> frequencyReadings;
@@ -28,19 +27,14 @@ public class Grader implements PitchDetectionHandler {
     private final Handler handler = new Handler();
 
     public Grader(){
-        reset();
+        this(new ArrayList<>());
     }
 
     public Grader(ArrayList<Note> notes) {
-        if (Grader.instance != null) {
-            Grader.instance.stop();
-        }
-
         this.notes = notes;
         this.pitchDetector = new PitchDetector(this);
 
         reset();
-        instance = this;
     }
 
     /**
@@ -94,6 +88,7 @@ public class Grader implements PitchDetectionHandler {
         reset();
 
         Log.i(LOG_TAG, "Starting grading.");
+        Log.i(LOG_TAG, String.format("Target notes: %s", notes.toString()));
         notesIterator = notes.iterator();
         pitchDetector.start();
         playNextNote();
@@ -118,12 +113,6 @@ public class Grader implements PitchDetectionHandler {
     private void onNoteDone() {
         double avgFrequency = 0.0;
 
-        if (frequencyReadings.size() == 0) {
-            // TODO: Need to show a message to the user explaining what happened.
-            Log.d(LOG_TAG, "Failed to get any readings, terminating grading session.");
-            stop();
-            return;
-        }
 
         for (double reading : frequencyReadings) {
             avgFrequency += reading;
@@ -168,8 +157,8 @@ public class Grader implements PitchDetectionHandler {
 
             double centDist = Note.centDistance(userNote, referenceNote);
             Log.d(LOG_TAG, String.format("Reference Pitch: %f Hz; User's Pitch: %f Hz; Distance in Cents: %f",
-                    userNote.getFrequency(),
                     referenceNote.getFrequency(),
+                    userNote.getFrequency(),
                     centDist));
 
             avgCentDist += centDist;

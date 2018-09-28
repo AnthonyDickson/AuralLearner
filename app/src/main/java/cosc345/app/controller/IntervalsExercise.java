@@ -178,6 +178,11 @@ public class IntervalsExercise extends AppCompatActivity implements Playable.Del
         for (Note note : targetInterval.getNotes()) {
             Log.d("Intervals Exercise", String.format("Note with frequency %f with a duration of %d ms.", note.getFrequency(), note.getDuration()));
         }
+
+        if (grader != null) {
+            grader.stop();
+        }
+
         grader = new Grader(targetInterval.getNotes());
         grader.setCallback(this::onGradingDone);
     }

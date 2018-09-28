@@ -13,6 +13,8 @@ public class MelodyExerciseGrader extends Grader{
     public ArrayList<Note> melody = new ArrayList<>();
 
     public MelodyExerciseGrader(Difficulty difficulty){
+        super();
+
         super.notes = pickMelody(difficulty);
     }
     /* Similiar to IntervalExerciseGrader for melodies */
