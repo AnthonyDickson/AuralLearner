@@ -85,9 +85,6 @@ public class IntervalExercise extends AppCompatActivity implements Playable.Dele
     }
 
     private void startExercise() {
-        // TODO: remove this line when bug with VoiceRecognitionManager is fixed.
-        VoiceRecognitionManager.getInstance().close();
-
         timesPlayed = 0;
 
         startBtn.setVisibility(View.GONE);

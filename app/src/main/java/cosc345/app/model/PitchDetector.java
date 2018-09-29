@@ -20,7 +20,6 @@ public class PitchDetector {
     private final int bufferOverlap;
     private final PitchDetectionHandler handler;
     private Thread audioThread;
-    private State state;
 
     /**
      * Convenience constructor.
@@ -44,7 +43,6 @@ public class PitchDetector {
         this.bufferOverlap = bufferOverlap;
         this.handler = handler;
         this.dispatcher = getAudioDispatcher();
-        this.state = State.READY;
     }
 
     private AudioDispatcher getAudioDispatcher() {
@@ -59,26 +57,23 @@ public class PitchDetector {
      * Start the pitch detection thread and start processing audio input.
      */
     public void start() {
-        if (state != State.READY) return;
-
         if (dispatcher.isStopped()) {
             dispatcher = getAudioDispatcher();
         }
 
         audioThread = new Thread(dispatcher, "Audio Thread");
         audioThread.start();
-        state = State.BUSY;
     }
 
     /**
      * Stop the pitch detection thread and stop processing audio input.
      */
     public void stop() {
-        if (state != State.BUSY) return;
-
         dispatcher.stop();
-        audioThread.interrupt();
-        audioThread = null;
-        state = State.READY;
+
+        if (audioThread != null) {
+            audioThread.interrupt();
+            audioThread = null;
+        }
     }
 }
