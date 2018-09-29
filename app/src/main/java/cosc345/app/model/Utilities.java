@@ -26,4 +26,24 @@ public class Utilities {
 
         return -1;
     }
+
+
+    /**
+     * Restrict the value to specified range, more specifically puts the given value into the range
+     * [min, max].
+     *
+     * @param x the value to clamp.
+     * @param min the minimum value  that <code>x</code> can be.
+     * @param max the maximum value that <code>x</code> can be.
+     * @return <code>x</code> clamped to the range [<code>min</code>, <code>max</code>].
+     */
+    public static int clamp(int x, int min, int max) {
+        if (x < min) {
+            return min;
+        } else if (x > max) {
+            return max;
+        } else {
+            return x;
+        }
+    }
 }

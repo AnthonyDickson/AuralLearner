@@ -39,7 +39,6 @@ public class MelodyExerciseGrader extends Grader{
         double invertProbability;
         /* the notes used for the exercise, should be in a key */
         Note[] scale;
-        Note startingNote =  Note.getRandom();
 
         int melodyRange;
         int exerciseLength;
@@ -73,10 +72,9 @@ public class MelodyExerciseGrader extends Grader{
 
 
         }
-        //insures the range
-        while (startingNote.getName().charAt(-1) != (3 | 4)){
-            startingNote = Note.getRandom();
-        }
+
+        Note startingNote = Note.getRandom(Note.C4_INDEX - 12, 4.0, Note.NoteLength.CROTCHET);
+
         ArrayList<Note> exercise = new ArrayList<>();
         scale = scaleGenerator(startingNote);
         boolean pastHalfWay = false; //only change if middle note has been reached
@@ -85,7 +83,7 @@ public class MelodyExerciseGrader extends Grader{
         exercise.add(scale[0]);
         for (int i = 1; i < exerciseLength-1; i++){
             //adds mostly higher notes
-            if (pastHalfWay == false ){
+            if (!pastHalfWay){
                 if (i == exerciseLength-1){//final two scale notes
                     exercise.add(scale[7]);
                     exercise.add(scale[8]);
@@ -144,6 +142,7 @@ public class MelodyExerciseGrader extends Grader{
         return exercise;
 
     }
+
     public Note[] scaleGenerator(Note startingNote){
         //use note from string constructor
         //find that note, then look for the higher one which should be an arrayindex
@@ -166,8 +165,6 @@ public class MelodyExerciseGrader extends Grader{
 
 
             }
-
-
         } else {
             for (int i = 1; i < scale.length; i++){
                 notePosition += majorScaleSemitoneLeaps[i-1];

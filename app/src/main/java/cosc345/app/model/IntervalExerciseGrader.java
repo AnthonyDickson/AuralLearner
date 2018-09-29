@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import java.util.Random;
 
-public class IntervalExerciseGrader extends Grader{
-
+public class IntervalExerciseGrader extends Grader {
+    static private final int C3_INDEX = Note.C4_INDEX - 12;
 
     static private Intervals[] exerciseConstraintsEasy = {Intervals.P1,Intervals.P4, Intervals.P5, Intervals.P8};
 
@@ -28,8 +28,8 @@ public class IntervalExerciseGrader extends Grader{
 
         Intervals[] exerciseConstraints;
         double invertProbability;
-        //insures the range
-        Note startingNote = Note.getRandomAroundC3(Note.NoteLength.MINIM);
+
+        Note startingNote = Note.getRandom(C3_INDEX, 4.0, Note.NoteLength.MINIM);
 
         if (difficulty == Difficulty.EASY){
 

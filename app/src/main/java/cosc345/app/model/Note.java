@@ -102,7 +102,7 @@ public class Note extends Playable implements Comparable<Note>,
         int hsDist = Note.halfStepDistance(frequency);
         double refFreq = Note.frequency(hsDist);
 
-        nameIndex = Math.min(Note.A4_INDEX + hsDist, NOTE_NAMES.length - 1);
+        nameIndex = Utilities.clamp(Note.A4_INDEX + hsDist, 0, NOTE_NAMES.length - 1);
         this.frequency = frequency;
         halfStepDistance = hsDist;
         octave = Note.octave(hsDist);
@@ -142,7 +142,7 @@ public class Note extends Playable implements Comparable<Note>,
             throw new IllegalArgumentException("Invalid Note Name");
         }
 
-        nameIndex = Math.min(noteIndex, NOTE_NAMES.length - 1);
+        nameIndex = Utilities.clamp(noteIndex, 0, NOTE_NAMES.length - 1);
         halfStepDistance = noteIndex - Note.A4_INDEX;
         frequency = Note.frequency(halfStepDistance);
         octave = Note.octave(halfStepDistance);
@@ -237,27 +237,29 @@ public class Note extends Playable implements Comparable<Note>,
     }
 
     /**
-     * Choose a note at random.
+     * Choose a note at random from the gaussian distribution N~(Note.NOTE_NAMES.length / 2, Note.NUM_HALF_STEPS^2).
      *
      * @return a note chosen at random.
      */
     public static Note getRandom() {
-        double weighted_i = Utilities.random.nextGaussian() *
-                Note.NUM_HALF_STEPS + Note.NOTE_NAMES.length / 2;
-        int i = (int) Math.max(0, Math.min(weighted_i, Note.NOTE_NAMES.length - 1));
-        return new Note(Note.NOTE_NAMES[i], NoteLength.CROTCHET);
+        return getRandom(Note.NOTE_NAMES.length / 2, Note.NUM_HALF_STEPS, NoteLength.CROTCHET);
     }
 
-
     /**
-     * Choose a note at random, normally distributed around C4 with a std dev of 4 halfsteps.
+     * Choose a note at random, from the specified gaussian distribution.
      *
+     * @param mean The center of the distribution. For reference, C4 should be at 24 (this is
+     *             calculated from the note names array).
+     * @param stddev The standard deviation of the distribution. As an example, you could set the
+     *               standard deviation to 4.0, which would mean that 99.9% of notes would be within
+     *               one octave of the note specified by the mean.
      * @param length The length of the note to generate.
-     * @return a note chosen at random.
+     * @return a note picked at random from the gaussian distribution described by
+     * <code>mean</code> and <code>stddev</code>.
      */
-    public static Note getRandomAroundC3(NoteLength length) {
-        double weighted_i = Utilities.random.nextGaussian() * 4.0 + (C4_INDEX - 12);
-        int i = (int) Math.max(0, Math.min(weighted_i, Note.NOTE_NAMES.length - 1));
+    public static Note getRandom(double mean, double stddev, NoteLength length) {
+        double weighted_i = Utilities.random.nextGaussian() * stddev + mean;
+        int i = Utilities.clamp((int) weighted_i, 0, Note.NOTE_NAMES.length - 1);
         return new Note(Note.NOTE_NAMES[i], length);
     }
 
