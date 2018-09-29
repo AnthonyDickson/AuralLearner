@@ -41,17 +41,17 @@
             android:text="@string/intervalMenuBtn" />
 
         <Button
+            android:id="@+id/scalesMenuBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/scalesMenuBtn"
+            android:visibility="visible" />
+
+        <Button
             android:id="@+id/melodiesMenuBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/melodiesMenuBtn"
-            android:visibility="gone" />
-
-        <Button
-            android:id="@+id/rhythmsMenuBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/rhythmsMenuBtn"
             android:visibility="gone" />
 
         <TextView

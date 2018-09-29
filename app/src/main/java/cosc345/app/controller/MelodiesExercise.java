@@ -26,8 +26,8 @@ public class MelodiesExercise extends VoiceControlActivity implements Playable.D
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_melodies_exercise);
 
-        startBtn = findViewById(R.id.interval_startBtn);
-        stopBtn = findViewById(R.id.interval_stopBtn);
+        startBtn = findViewById(R.id.melodiesExercise_startBtn);
+        stopBtn = findViewById(R.id.melodiesExercise_stopBtn);
 
         startBtn.setOnClickListener(v -> startExercise());
         stopBtn.setOnClickListener(v -> stopExercise());

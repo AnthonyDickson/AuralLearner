@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".controller.IntervalExercise">
+    tools:context=".controller.ScalesExercise">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -23,13 +23,13 @@
 
 
         <Button
-            android:id="@+id/interval_startBtn"
+            android:id="@+id/scalesExercise_startBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/startBtnLabel" />
 
         <Button
-            android:id="@+id/interval_stopBtn"
+            android:id="@+id/scalesExercise_stopBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/stopBtnLabel"

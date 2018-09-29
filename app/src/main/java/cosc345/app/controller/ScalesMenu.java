@@ -1,9 +1,10 @@
 package cosc345.app.controller;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Button;
 
@@ -12,24 +13,24 @@ import java.util.Objects;
 import cosc345.app.R;
 import cosc345.app.model.Difficulty;
 
-public class IntervalsMenu extends VoiceControlActivity {
+public class ScalesMenu extends VoiceControlActivity {
 
-    //needs voice control stuff
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_intervals_menu);
+        setContentView(R.layout.activity_scales_menu);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-        Button easyBtn = findViewById(R.id.intervalsMenu_easyBtn);
-        easyBtn.setOnClickListener(view -> IntervalsMenu.this.openExercise(Difficulty.EASY));
-        Button mediumBtn = findViewById(R.id.intervalsMenu_mediumBtn);
-        mediumBtn.setOnClickListener(view -> IntervalsMenu.this.openExercise(Difficulty.MEDIUM));
-        Button hardBtn = findViewById(R.id.intervalsMenu_hardBtn);
-        hardBtn.setOnClickListener(view -> IntervalsMenu.this.openExercise(Difficulty.HARD));
-        findViewById(R.id.intervalsMenu_helpBtn).setOnClickListener(v -> {
+        Button easyBtn = findViewById(R.id.scalesMenu_easyBtn);
+        easyBtn.setOnClickListener(view -> ScalesMenu.this.openExercise(Difficulty.EASY));
+        Button mediumBtn = findViewById(R.id.scalesMenu_mediumBtn);
+        mediumBtn.setOnClickListener(view -> ScalesMenu.this.openExercise(Difficulty.MEDIUM));
+        Button hardBtn = findViewById(R.id.scalesMenu_hardBtn);
+        hardBtn.setOnClickListener(view -> ScalesMenu.this.openExercise(Difficulty.HARD));
+        findViewById(R.id.scalesMenu_helpBtn).setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(R.string.intervalsMenu_difficultyHelpTitle)
-                    .setMessage(R.string.intervalsMenu_difficultyHelpText)
+            builder.setTitle(R.string.scalesMenu_difficultyHelpTitle)
+                    .setMessage(R.string.scalesMenu_difficultyHelpText)
                     .setPositiveButton(R.string.dialogOk, null);
             builder.create()
                     .show();
@@ -49,7 +50,7 @@ public class IntervalsMenu extends VoiceControlActivity {
     }
 
     public void openExercise(Difficulty difficulty) {
-        Intent intent = new Intent(IntervalsMenu.this, IntervalsExercise.class);
+        Intent intent = new Intent(ScalesMenu.this, ScalesExercise.class);
         intent.putExtra("EXTRA_DIFFICULTY", difficulty.toString());
         startActivity(intent);
     }

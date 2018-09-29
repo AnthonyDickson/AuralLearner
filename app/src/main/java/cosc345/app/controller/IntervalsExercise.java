@@ -1,199 +1,121 @@
 package cosc345.app.controller;
 
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
-
-import java.util.Locale;
 
 import cosc345.app.R;
-import cosc345.app.model.Grader;
+import cosc345.app.model.Difficulty;
 import cosc345.app.model.Interval;
-import cosc345.app.model.Note;
+import cosc345.app.model.IntervalExerciseGrader;
 import cosc345.app.model.Playable;
-
+import cosc345.app.model.TextToSpeechManager;
 import cosc345.app.model.VoiceRecognitionManager;
 
-import cosc345.app.model.Intervals;
-import static cosc345.app.model.Intervals.P5;
-
-import static cosc345.app.model.Note.NoteLength.MINIM;
-
-public class IntervalsExercise extends AppCompatActivity implements Playable.Delegate {
-    private boolean isListening, isPlaying;
-    private Interval targetInterval;
+public class IntervalsExercise extends VoiceControlActivity implements Playable.Delegate {
     private Button startBtn;
     private Button stopBtn;
-    private Button playTargetBtn;
-    private Button stopTargetBtn;
-    private TextView targetIntervalView;
-    private int choice;
-    private int intervalChoice;
-    private Grader grader;
-    private TextView scoreView;
+    Interval targetInterval;
+
+    private IntervalExerciseGrader intervalExerciseGrader;
+    private Difficulty difficulty;
+    private int timesPlayed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intervals_exercise);
 
-        isListening = false;
-        isPlaying = false;
+        startBtn = findViewById(R.id.intervalsExercise_startBtn);
+        stopBtn = findViewById(R.id.intervalsExercise_stopBtn);
 
-        startBtn = findViewById(R.id.intervals_startBtn);
-        stopBtn = findViewById(R.id.intervals_stopBtn);
-        playTargetBtn = findViewById(R.id.intervals_playTargetBtn);
-        stopTargetBtn = findViewById(R.id.intervals_stopTargetBtn);
-        targetIntervalView = findViewById(R.id.intervals_targetName);
-        scoreView = findViewById(R.id.intervals_scoreText);
+        startBtn.setOnClickListener(v -> startExercise());
+        stopBtn.setOnClickListener(v -> stopExercise());
 
-        setTargetInterval(new Interval(new Note("C4", MINIM), P5));
-        AlertDialog chooseNoteDialog = createNotePickerDialog();
-        AlertDialog chooseIntervalDialog = createIntervalPickerDialog();
+        String difficulty = getIntent().getStringExtra("EXTRA_DIFFICULTY");
 
-        startBtn.setOnClickListener(v -> startListening());
-        stopBtn.setOnClickListener(v -> stopListening());
-        playTargetBtn.setOnClickListener(v -> startTargetPlayback());
-        stopTargetBtn.setOnClickListener(v -> stopTargetPlayback());
-        findViewById(R.id.intervals_changeTargetRootBtn).setOnClickListener(v -> {
-            stopListening();
-            stopTargetPlayback();
-            chooseNoteDialog.show();
-        });
-        findViewById(R.id.intervals_changeTargetIntervalBtn).setOnClickListener(v -> {
-            stopListening();
-            stopTargetPlayback();
-            chooseIntervalDialog.show();
-        });
+        if (difficulty.equals(Difficulty.EASY.toString())) {
+            this.difficulty = Difficulty.EASY;
+        } else if (difficulty.equals(Difficulty.MEDIUM.toString())) {
+            this.difficulty = Difficulty.MEDIUM;
+        } else {
+            this.difficulty = Difficulty.HARD;
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
 
-        stopListening();
-        stopTargetPlayback();
+        stopExercise();
+        TextToSpeechManager.getInstance().close();
     }
 
-    private void startListening() {
-        if (!isListening) {
-            if (isPlaying) {
-                stopTargetPlayback();
-            }
+    private void startExercise() {
+        // TODO: remove this line when bug with VoiceRecognitionManager is fixed.
+        VoiceRecognitionManager.getInstance().close();
 
-            // TODO: remove this line when bug with VoiceRecognitionManager is fixed.
-            VoiceRecognitionManager.getInstance().close();
+        timesPlayed = 0;
 
-            startBtn.setVisibility(View.GONE);
-            stopBtn.setVisibility(View.VISIBLE);
-            grader.start();
-            isListening = true;
-        }
-    }
+        startBtn.setVisibility(View.GONE);
+        stopBtn.setVisibility(View.VISIBLE);
 
-    private void stopListening() {
-        if (isListening) {
-            stopBtn.setVisibility(View.GONE);
-            startBtn.setVisibility(View.VISIBLE);
-            grader.stop();
-            isListening = false;
-        }
-    }
-
-    private void startTargetPlayback() {
-        if (isListening) {
-            stopListening();
-        }
-        if (isPlaying) {
-            stopTargetPlayback();
-        }
-
-        playTargetBtn.setVisibility(View.GONE);
-        stopTargetBtn.setVisibility(View.VISIBLE);
+        intervalExerciseGrader = new IntervalExerciseGrader(difficulty);
+        intervalExerciseGrader.setOnSuccessCallback(this::onGradingDone);
+        intervalExerciseGrader.setCallback(this::showStartButton);
+        targetInterval = intervalExerciseGrader.interval;
+        targetInterval.setDelegate(this);
         targetInterval.play();
-        isPlaying = true;
     }
 
-    private void stopTargetPlayback() {
-        if (!isPlaying) {
-            return;
+
+    private void stopExercise() {
+        if (intervalExerciseGrader != null) {
+            intervalExerciseGrader.stop();
+            intervalExerciseGrader.interval.stop();
         }
 
-        targetInterval.stop();
+        showStartButton();
     }
 
     @Override
-    public void onPlaybackStarted() {}
+    public void onPlaybackStarted() {
+        timesPlayed++;
+    }
 
     @Override
-    public void onPlaybackFinished() {}
+    public void onPlaybackFinished() {
+        if (timesPlayed < 2) {
+            targetInterval.play();
+        } else {
+            intervalExerciseGrader.start();
+        }
+    }
 
     @Override
     public void onDone() {
-        stopTargetBtn.setVisibility(View.GONE);
-        playTargetBtn.setVisibility(View.VISIBLE);
-        isPlaying = false;
-    }
 
-    private AlertDialog createNotePickerDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        builder.setTitle("Note")
-                .setSingleChoiceItems(Note.NOTE_NAMES, targetInterval.root.getNameIndex(),
-                        (dialog, which) -> choice = which)
-                .setPositiveButton(R.string.dialogOk, (dialog, id) -> setTargetRoot(new Note(Note.NOTE_NAMES[choice])))
-                .setNeutralButton("Choose For Me", (dialog, id) -> setTargetRoot(Note.getRandom()))
-                .setNegativeButton(R.string.dialogCancel, (dialog, id) -> choice = Note.A4_INDEX);
-
-        return builder.create();
-    }
-
-    private AlertDialog createIntervalPickerDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        builder.setTitle("Note")
-                .setSingleChoiceItems(Interval.getFullNames(), targetInterval.interval.ordinal(),
-                        (dialog, which) -> intervalChoice = which)
-                .setPositiveButton(R.string.dialogOk, (dialog, id) -> setTargetInterval(new Interval(targetInterval.root, Intervals.values()[intervalChoice])))
-
-                .setNeutralButton("Choose For Me", (dialog, id) -> setTargetInterval(Interval.randomInterval(targetInterval.root)))
-                .setNegativeButton(R.string.dialogCancel, (dialog, id) -> intervalChoice = Intervals.P1.ordinal());
-
-
-        return builder.create();
-    }
-
-    private void setTargetRoot(Note note) {
-        setTargetInterval(new Interval(note, targetInterval.interval));
-    }
-
-    private void setTargetInterval(Interval interval) {
-        targetInterval = interval;
-        targetInterval.root.setNoteLength(Note.NoteLength.MINIM);
-        targetInterval.other.setNoteLength(Note.NoteLength.MINIM);
-        targetInterval.setDelegate(this);
-        targetIntervalView.setText(targetInterval.toString());
-
-        for (Note note : targetInterval.getNotes()) {
-            Log.d("Intervals Exercise", String.format("Note with frequency %f with a duration of %d ms.", note.getFrequency(), note.getDuration()));
-        }
-
-        if (grader != null) {
-            grader.stop();
-        }
-
-        grader = new Grader(targetInterval.getNotes());
-        grader.setCallback(this::onGradingDone);
     }
 
     private void onGradingDone() {
-        scoreView.setText(String.format(Locale.ENGLISH, "%.2f", grader.getScore()));
-        stopBtn.setVisibility(View.GONE);
+        double grade = intervalExerciseGrader.getScore();
+        String msg;
+
+        if (grade < 60.0) {
+            msg = "Your score was bad";
+        } else if (grade < 80.0) {
+            msg = "Your score was ok";
+        } else if (grade < 90.0) {
+            msg = "Your score was good";
+        } else {
+            msg = "Your score was perfect";
+        }
+
+        TextToSpeechManager.getInstance().speak(msg);
+    }
+
+    private void showStartButton() {
         startBtn.setVisibility(View.VISIBLE);
-        isListening = false;
+        stopBtn.setVisibility(View.GONE);
     }
 }
