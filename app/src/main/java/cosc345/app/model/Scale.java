@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /** Represents a musical scale. */
 public class Scale extends Playable {
     /** the notes in the scale. */
-    public Note[] notes;
+    public ArrayList<Note> notes;
 
     /**
      * Create a scale starting of the given type (e.g. major/minor), starting at the given note.
@@ -17,14 +17,14 @@ public class Scale extends Playable {
         int[] scalePattern = scaleType.getSemitonePattern();
 
         int scaleSize = scalePattern.length + 1;
-        notes = new Note[scaleSize];
-        notes[0] = root;
+        notes = new ArrayList<>(scaleSize);
+        notes.add(root);
 
         for (int i = 0; i < scalePattern.length; i++) {
-            Note currNote = notes[i];
+            Note currNote = notes.get(i);
             String nextNoteName = Note.NOTE_NAMES[currNote.getNameIndex() + scalePattern[i]];
             Note nextNote = new Note(nextNoteName);
-            notes[i + 1] = nextNote;
+            notes.add(nextNote);
         }
     }
 
@@ -37,14 +37,14 @@ public class Scale extends Playable {
 
     /** Play each note in the scale recursively. */
     private void playNextNote(int index) {
-        if (index == notes.length) {
+        if (index == notes.size()) {
             if (delegate != null) {
                 delegate.onPlaybackFinished();
             }
 
             onDone();
         } else {
-            Note next = notes[index];
+            Note next = notes.get(index);
             next.setDelegate(new Delegate() {
                 @Override
                 public void onPlaybackStarted() {

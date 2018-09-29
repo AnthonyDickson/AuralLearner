@@ -76,40 +76,40 @@ public class MelodyExerciseGrader extends Grader {
         boolean pastHalfWay = false; //only change if middle note has been reached
         //use past Halfway to decide the end of the scale
         int scalePointer = 1;
-        exercise.add(scale.notes[0]);
+        exercise.add(scale.notes.get(0));
         for (int i = 1; i < exerciseLength-1; i++){
             //adds mostly higher notes
             if (!pastHalfWay){
                 if (i == exerciseLength-1){//final two scale notes
-                    exercise.add(scale.notes[7]);
-                    exercise.add(scale.notes[8]);
+                    exercise.add(scale.notes.get(7));
+                    exercise.add(scale.notes.get(8));
 
                 } else {
                     int step = scaleSteps[random.nextInt(scaleSteps.length)];
                     if (random.nextDouble() > invertProbability || i == 1){
                         scalePointer += step;
-                        exercise.add(scale.notes[scalePointer]);
+                        exercise.add(scale.notes.get(scalePointer));
 
                         if (scalePointer >melodyRange ){
                             pastHalfWay = true;
                             scalePointer = melodyRange;
                         }
-                        exercise.add(scale.notes[scalePointer]);
+                        exercise.add(scale.notes.get(scalePointer));
 
                     } else {
                         scalePointer -=step;
                         if (scalePointer > 0){
                             scalePointer = 0;
                         }
-                        exercise.add(scale.notes[scalePointer]);
+                        exercise.add(scale.notes.get(scalePointer));
                     }
                 }
 
 
             } else if (pastHalfWay == true){ //adds mostly down
                 if (i == exerciseLength-1){//final two scale notes
-                    exercise.add(scale.notes[2]);
-                    exercise.add(scale.notes[1]);
+                    exercise.add(scale.notes.get(2));
+                    exercise.add(scale.notes.get(1));
 
                 } else {
                     int step = scaleSteps[random.nextInt(scaleSteps.length)];
@@ -118,14 +118,14 @@ public class MelodyExerciseGrader extends Grader {
                         if (scalePointer > 0){
                             scalePointer = 0;
                         }
-                        exercise.add(scale.notes[scalePointer]);
+                        exercise.add(scale.notes.get(scalePointer));
 
                     } else {
                         scalePointer +=step;
                         if (scalePointer >melodyRange ){
                             scalePointer = melodyRange;
                         }
-                        exercise.add(scale.notes[scalePointer]);
+                        exercise.add(scale.notes.get(scalePointer));
                     }
                 }
 

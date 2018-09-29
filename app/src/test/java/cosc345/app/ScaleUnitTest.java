@@ -27,7 +27,7 @@ public class ScaleUnitTest {
         final Scale scale = new Scale(expected[0], Scale.ScaleType.MAJOR);
 
         for (int i = 0; i < expected.length; i++) {
-            assertEquals(scale.notes[i], expected[i]);
+            assertEquals(scale.notes.get(i), expected[i]);
         }
     }
 
@@ -48,7 +48,7 @@ public class ScaleUnitTest {
 
         for (int i = 0; i < expected.length; i++) {
             assertEquals(
-                    scale.notes[i].getName(true),
+                    scale.notes.get(i).getName(true),
                     expected[i].getName(true));
         }
     }
@@ -70,7 +70,7 @@ public class ScaleUnitTest {
 
         for (int i = 0; i < expected.length; i++) {
             assertEquals(
-                    scale.notes[i].getName(true),
+                    scale.notes.get(i).getName(true),
                     expected[i].getName(true));
         }
     }
@@ -92,7 +92,7 @@ public class ScaleUnitTest {
 
         for (int i = 0; i < expected.length; i++) {
             assertEquals(
-                    scale.notes[i].getName(true),
+                    scale.notes.get(i).getName(true),
                     expected[i].getName(true));
         }
     }
@@ -112,7 +112,7 @@ public class ScaleUnitTest {
 
         for (int i = 0; i < expected.length; i++) {
             assertEquals(
-                    scale.notes[i].getName(true),
+                    scale.notes.get(i).getName(true),
                     expected[i].getName(true));
         }
     }
@@ -132,7 +132,7 @@ public class ScaleUnitTest {
 
         for (int i = 0; i < expected.length; i++) {
             assertEquals(
-                    scale.notes[i].getName(true),
+                    scale.notes.get(i).getName(true),
                     expected[i].getName(true));
         }
     }
