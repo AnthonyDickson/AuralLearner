@@ -130,7 +130,10 @@ public class IntervalsExercise extends AppCompatActivity implements Playable.Del
     public void onPlaybackStarted() {}
 
     @Override
-    public void onPlaybackFinished() {
+    public void onPlaybackFinished() {}
+
+    @Override
+    public void onDone() {
         stopTargetBtn.setVisibility(View.GONE);
         playTargetBtn.setVisibility(View.VISIBLE);
         isPlaying = false;

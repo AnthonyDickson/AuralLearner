@@ -424,6 +424,10 @@ public class Note extends Playable implements Comparable<Note>,
 
     @Override
     public void onMarkerReached(AudioTrack track) {
+        if (delegate != null) {
+            delegate.onPlaybackFinished();
+        }
+
         onDone();
     }
 
@@ -444,17 +448,17 @@ public class Note extends Playable implements Comparable<Note>,
             thread = null;
         }
 
-        onDone();
+        super.stop();
     }
 
     @Override
     protected void onDone() {
-        super.onDone();
-
         if (audioTrack != null) {
             audioTrack.release();
         }
 
         Log.i(Note.LOG_TAG, "Playback finished.");
+
+        super.onDone();
     }
 }

@@ -56,7 +56,7 @@ public abstract class Playable {
         isPlaying = false;
 
         if (delegate != null) {
-            delegate.onPlaybackFinished();
+            delegate.onDone();
         }
     }
 
@@ -65,7 +65,12 @@ public abstract class Playable {
      * when a playable starts and finishes playback.
      */
     public interface Delegate {
+        /** Handle anything that should be done after playback starts. */
         void onPlaybackStarted();
+        /** Handle anything that should be done after playback successfully finishes. */
         void onPlaybackFinished();
+        /** Handle cleanup that should be done after playback finishes, regardless if playback finished
+         * uninterrupted (i.e. stop() was called) or not. */
+        void onDone();
     }
 }

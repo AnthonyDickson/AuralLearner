@@ -7,18 +7,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import java.util.Locale;
 
 import cosc345.app.R;
-import cosc345.app.model.Callback;
 import cosc345.app.model.Difficulty;
 import cosc345.app.model.Interval;
 import cosc345.app.model.IntervalExerciseGrader;
 import cosc345.app.model.Playable;
-import cosc345.app.model.State;
-import cosc345.app.model.TextToSpeechManager;
 import cosc345.app.model.VoiceRecognitionManager;
 
 public class IntervalExercise extends AppCompatActivity implements Playable.Delegate {
@@ -99,7 +95,7 @@ public class IntervalExercise extends AppCompatActivity implements Playable.Dele
 
         intervalExerciseGrader = new IntervalExerciseGrader(difficulty);
         intervalExerciseGrader.setOnSuccessCallback(this::onGradingDone);
-        intervalExerciseGrader.setCallback(this::onDone);
+        intervalExerciseGrader.setCallback(this::showStartButton);
         targetInterval = intervalExerciseGrader.interval;
         targetInterval.setDelegate(this);
         targetInterval.play();
@@ -110,7 +106,7 @@ public class IntervalExercise extends AppCompatActivity implements Playable.Dele
         targetInterval.stop();
         intervalExerciseGrader.stop();
 
-        onDone();
+        showStartButton();
     }
 
     @Override
@@ -127,6 +123,11 @@ public class IntervalExercise extends AppCompatActivity implements Playable.Dele
         }
     }
 
+    @Override
+    public void onDone() {
+
+    }
+
     private void onGradingDone() {
         double grade = intervalExerciseGrader.getScore();
 
@@ -141,7 +142,7 @@ public class IntervalExercise extends AppCompatActivity implements Playable.Dele
         }
     }
 
-    private void onDone() {
+    private void showStartButton() {
         startBtn.setVisibility(View.VISIBLE);
         stopBtn.setVisibility(View.GONE);}
 }

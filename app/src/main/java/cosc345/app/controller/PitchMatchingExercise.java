@@ -130,7 +130,10 @@ public class PitchMatchingExercise extends AppCompatActivity
     public void onPlaybackStarted() {}
 
     @Override
-    public void onPlaybackFinished() {
+    public void onPlaybackFinished() {}
+
+    @Override
+    public void onDone() {
         stopTargetPitch.setVisibility(View.GONE);
         playTargetPitch.setVisibility(View.VISIBLE);
         isPlaying = false;

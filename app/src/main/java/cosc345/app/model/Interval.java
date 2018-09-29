@@ -128,7 +128,13 @@ public class Interval extends Playable {
 
             @Override
             public void onPlaybackFinished() {
-                playNext();
+                Log.i(LOG_TAG, "Playing next note.");
+                other.play();
+            }
+
+            @Override
+            public void onDone() {
+
             }
         });
 
@@ -139,7 +145,16 @@ public class Interval extends Playable {
 
             @Override
             public void onPlaybackFinished() {
+                if (delegate != null) {
+                    delegate.onPlaybackFinished();
+                }
+
                 onDone();
+            }
+
+            @Override
+            public void onDone() {
+
             }
         });
     }
@@ -184,32 +199,19 @@ public class Interval extends Playable {
     //// Playback related stuff ////
     @Override
     public void play() {
-        if (isPlaying) return;
-
-        super.play();
         Log.i(LOG_TAG, "Playing interval.");
+        super.play();
         root.play();
     }
 
     @Override
     public void stop() {
-        if (!isPlaying) return;
-
         Log.i(LOG_TAG, "Stopping interval playback.");
         isPlaying = false;
         root.stop();
         other.stop();
-        onDone();
-    }
 
-    /**
-     * Play the next note in the interval.
-     */
-    private void playNext() {
-        if (!isPlaying) return;
-
-        Log.i(LOG_TAG, "Playing next note.");
-        other.play();
+        super.stop();
     }
 
     @Override
