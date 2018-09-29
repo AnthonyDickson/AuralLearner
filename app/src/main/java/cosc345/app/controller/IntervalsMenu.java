@@ -3,21 +3,16 @@ package cosc345.app.controller;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.AlertDialog;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 
 import java.util.Objects;
 
-import cosc345.app.MainActivity;
 import cosc345.app.R;
 import cosc345.app.model.Difficulty;
-import cosc345.app.model.Intervals;
 
 public class IntervalsMenu extends VoiceControlActivity {
-    private Button easyBtn;
-    private Button mediumBtn;
-    private Button hardBtn;
 
     //needs voice control stuff
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +20,20 @@ public class IntervalsMenu extends VoiceControlActivity {
         setContentView(R.layout.activity_intervals_menu);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-
+        Button easyBtn = findViewById(R.id.intervalsMenu_easyBtn);
+        easyBtn.setOnClickListener(view -> IntervalsMenu.this.openExercise(Difficulty.EASY));
+        Button mediumBtn = findViewById(R.id.intervalsMenu_mediumBtn);
+        mediumBtn.setOnClickListener(view -> IntervalsMenu.this.openExercise(Difficulty.MEDIUM));
+        Button hardBtn = findViewById(R.id.intervalsMenu_hardBtn);
+        hardBtn.setOnClickListener(view -> IntervalsMenu.this.openExercise(Difficulty.HARD));
+        findViewById(R.id.intervalsMenu_helpBtn).setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.intervalsMenu_difficultyHelpTitle)
+                    .setMessage(R.string.intervalsMenu_difficultyHelpText)
+                    .setPositiveButton(R.string.dialogOk, null);
+            builder.create()
+                    .show();
+        });
     }
 
     @Override
@@ -40,24 +48,9 @@ public class IntervalsMenu extends VoiceControlActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void exerciseEasy(android.view.View view){
-        openExercise(Difficulty.EASY);
-
-    }
-    public void exerciseMedium(android.view.View view){
-        openExercise(Difficulty.MEDIUM);
-
-    }
-    public void exerciseHard(android.view.View view){
-        openExercise(Difficulty.HARD);
-
-    }
-
     public void openExercise(Difficulty difficulty) {
         Intent intent = new Intent(IntervalsMenu.this, IntervalExercise.class);
         intent.putExtra("EXTRA_DIFFICULTY", difficulty.toString());
         startActivity(intent);
     }
-    //this needs voice recognition
-    //this needs to be tested
 }

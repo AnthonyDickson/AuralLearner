@@ -31,4 +31,10 @@
     <string name="intervals_changeTargetIntervalBtnLabel">Change Target Interval</string>
     <string name="intervals_changeTargetRootBtnLabel">Change Interval Root</string>
     <string name="intervals_scoreLabel">Your Score</string>
+    <string name="intervalsMenu_title">Choose your difficulty</string>
+    <string name="intervalsMenu_difficultyHelpTitle">Intervals Difficulty Help</string>
+    <string name="intervalsMenu_difficultyHelpText">The intervals exercise has three difficulties: easy, medium, and hard. Each difficulty adds more intervals, and includes the intervals from the lower difficulties.
+        \n\nEasy starts with four intervals: unision, perfect fourth, perfect fifth, and octave.
+        \n\nThe medium difficulty adds the intervals: major second, minor third, major sixth, and minor sixth.
+        \n\nThe hard difficulty adds the intervals: minor second, augmented fourth, major seventh, and minor seventh.</string>
 </resources>
