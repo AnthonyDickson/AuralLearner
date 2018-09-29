@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="cosc345.app.controller.IntervalsMenu">
-
+    tools:context=".controller.MelodiesExercise">
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,32 +27,28 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:gravity="center"
-            android:text="@string/intervalsMenu_title"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.501"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:text="@string/medodiesMenu_title" />
 
         <Button
-            android:id="@+id/intervalsMenu_easyBtn"
+            android:id="@+id/medodiesMenu_easyBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Easy" />
 
         <Button
-            android:id="@+id/intervalsMenu_mediumBtn"
+            android:id="@+id/medodiesMenu_mediumBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Medium" />
 
         <Button
-            android:id="@+id/intervalsMenu_hardBtn"
+            android:id="@+id/medodiesMenu_hardBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Hard" />
 
         <Button
-            android:id="@+id/intervalsMenu_helpBtn"
+            android:id="@+id/medodiesMenu_helpBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Help" />

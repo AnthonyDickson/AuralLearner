@@ -37,4 +37,5 @@
         \n\nEasy starts with four intervals: unision, perfect fourth, perfect fifth, and octave.
         \n\nThe medium difficulty adds the intervals: major second, minor third, major sixth, and minor sixth.
         \n\nThe hard difficulty adds the intervals: minor second, augmented fourth, major seventh, and minor seventh.</string>
+    <string name="medodiesMenu_title">Choose a difficulty</string>
 </resources>

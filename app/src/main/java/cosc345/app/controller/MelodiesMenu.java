@@ -1,12 +1,16 @@
 package cosc345.app.controller;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.AlertDialog;
 import android.view.MenuItem;
+import android.widget.Button;
 
 import java.util.Objects;
 
 import cosc345.app.R;
+import cosc345.app.model.Difficulty;
 
 
 public class MelodiesMenu extends VoiceControlActivity {
@@ -15,6 +19,21 @@ public class MelodiesMenu extends VoiceControlActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_melodies_menu);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+
+        Button easyBtn = findViewById(R.id.intervalsMenu_easyBtn);
+        easyBtn.setOnClickListener(view -> MelodiesMenu.this.openExercise(Difficulty.EASY));
+        Button mediumBtn = findViewById(R.id.intervalsMenu_mediumBtn);
+        mediumBtn.setOnClickListener(view -> MelodiesMenu.this.openExercise(Difficulty.MEDIUM));
+        Button hardBtn = findViewById(R.id.intervalsMenu_hardBtn);
+        hardBtn.setOnClickListener(view -> MelodiesMenu.this.openExercise(Difficulty.HARD));
+        findViewById(R.id.intervalsMenu_helpBtn).setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.intervalsMenu_difficultyHelpTitle)
+                    .setMessage(R.string.intervalsMenu_difficultyHelpText)
+                    .setPositiveButton(R.string.dialogOk, null);
+            builder.create()
+                    .show();
+        });
     }
 
     @Override
@@ -27,5 +46,11 @@ public class MelodiesMenu extends VoiceControlActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void openExercise(Difficulty difficulty) {
+        Intent intent = new Intent(MelodiesMenu.this, MelodiesExercise.class);
+        intent.putExtra("EXTRA_DIFFICULTY", difficulty.toString());
+        startActivity(intent);
     }
 }

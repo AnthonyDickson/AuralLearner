@@ -19,7 +19,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".controller.VoiceControlActivity"></activity>
+        <activity android:name=".controller.VoiceControlActivity" />
         <activity android:name=".controller.MelodiesMenu">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -32,13 +32,13 @@
         </activity>
         <activity android:name=".controller.PitchMatchingExercise">
             <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value="cosc345.app.MainActivity" />
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="cosc345.app.MainActivity" />
         </activity>
         <activity android:name=".controller.IntervalsExercise">
             <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value="cosc345.app.MainActivity" />
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="cosc345.app.MainActivity" />
         </activity>
         <activity android:name=".controller.IntervalsMenu">
             <meta-data
@@ -50,6 +50,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="cosc345.app.controller.IntervalsMenu" />
         </activity>
+        <activity android:name=".controller.MelodiesExercise"></activity>
     </application>
 
 </manifest>
