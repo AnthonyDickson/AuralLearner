@@ -1,7 +1,9 @@
 package cosc345.app.model;
 
+import java.util.ArrayList;
+
 /** Represents a musical scale. */
-public class Scale {
+public class Scale extends Playable {
     /** the notes in the scale. */
     public Note[] notes;
 
@@ -24,6 +26,52 @@ public class Scale {
             Note nextNote = new Note(nextNoteName);
             notes[i + 1] = nextNote;
         }
+    }
+
+    @Override
+    public void play() {
+        super.play();
+
+        playNextNote(0);
+    }
+
+    /** Play each note in the scale recursively. */
+    private void playNextNote(int index) {
+        if (index == notes.length) {
+            if (delegate != null) {
+                delegate.onPlaybackFinished();
+            }
+
+            onDone();
+        } else {
+            Note next = notes[index];
+            next.setDelegate(new Delegate() {
+                @Override
+                public void onPlaybackStarted() {
+                }
+
+                @Override
+                public void onPlaybackFinished() {
+                    playNextNote(index + 1);
+                }
+
+                @Override
+                public void onDone() {
+
+                }
+            });
+
+            next.play();
+        }
+    }
+
+    @Override
+    public void stop() {
+        for (Note note : notes) {
+            note.stop();
+        }
+
+        super.stop();
     }
 
     /** Captures the different types of scales. */
