@@ -28,28 +28,28 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:gravity="center"
-            android:text="@string/medodiesMenu_title" />
+            android:text="@string/melodiesMenu_title" />
 
         <Button
-            android:id="@+id/medodiesMenu_easyBtn"
+            android:id="@+id/melodiesMenu_easyBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Easy" />
 
         <Button
-            android:id="@+id/medodiesMenu_mediumBtn"
+            android:id="@+id/melodiesMenu_mediumBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Medium" />
 
         <Button
-            android:id="@+id/medodiesMenu_hardBtn"
+            android:id="@+id/melodiesMenu_hardBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Hard" />
 
         <Button
-            android:id="@+id/medodiesMenu_helpBtn"
+            android:id="@+id/melodiesMenu_helpBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Help" />

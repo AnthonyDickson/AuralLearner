@@ -3,19 +3,19 @@ package cosc345.app.model;
 public class ScaleExerciseGrader extends Grader {
     public Scale scale;
 
-    private static final Scale.ScaleType[] EASY_SCALES = {
+    static final Scale.ScaleType[] EASY_SCALES = {
             Scale.ScaleType.MAJOR,
             Scale.ScaleType.MAJOR_PENTATONIC
     };
 
-    private static final Scale.ScaleType[] MEDIUM_SCALES = {
+    static final Scale.ScaleType[] MEDIUM_SCALES = {
             Scale.ScaleType.MAJOR,
             Scale.ScaleType.MAJOR_PENTATONIC,
             Scale.ScaleType.NATURAL_MINOR,
             Scale.ScaleType.MINOR_PENTATONIC
     };
 
-    private static final Scale.ScaleType[] HARD_SCALES = Scale.ScaleType.values();
+    static final Scale.ScaleType[] HARD_SCALES = Scale.ScaleType.values();
 
     public ScaleExerciseGrader(Difficulty difficulty) {
         super();

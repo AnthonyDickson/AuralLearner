@@ -20,16 +20,16 @@ public class MelodiesMenu extends VoiceControlActivity {
         setContentView(R.layout.activity_melodies_menu);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-        Button easyBtn = findViewById(R.id.intervalsMenu_easyBtn);
+        Button easyBtn = findViewById(R.id.melodiesMenu_easyBtn);
         easyBtn.setOnClickListener(view -> MelodiesMenu.this.openExercise(Difficulty.EASY));
-        Button mediumBtn = findViewById(R.id.intervalsMenu_mediumBtn);
+        Button mediumBtn = findViewById(R.id.melodiesMenu_mediumBtn);
         mediumBtn.setOnClickListener(view -> MelodiesMenu.this.openExercise(Difficulty.MEDIUM));
-        Button hardBtn = findViewById(R.id.intervalsMenu_hardBtn);
+        Button hardBtn = findViewById(R.id.melodiesMenu_hardBtn);
         hardBtn.setOnClickListener(view -> MelodiesMenu.this.openExercise(Difficulty.HARD));
-        findViewById(R.id.intervalsMenu_helpBtn).setOnClickListener(v -> {
+        findViewById(R.id.melodiesMenu_helpBtn).setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(R.string.intervalsMenu_difficultyHelpTitle)
-                    .setMessage(R.string.intervalsMenu_difficultyHelpText)
+            builder.setTitle(R.string.melodiesMenu_difficultyHelpTitle)
+                    .setMessage(R.string.melodiesMenu_difficultyHelpText)
                     .setPositiveButton(R.string.dialogOk, null);
             builder.create()
                     .show();

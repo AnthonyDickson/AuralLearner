@@ -30,18 +30,32 @@
     <string name="intervals_changeTargetIntervalBtnLabel">Change Target Interval</string>
     <string name="intervals_changeTargetRootBtnLabel">Change Interval Root</string>
     <string name="intervals_scoreLabel">Your Score</string>
-    <string name="intervalsMenu_title">Choose your difficulty</string>
-    <string name="intervalsMenu_difficultyHelpTitle">Intervals Difficulty Help</string>
+    <string name="intervalsMenu_title">Choose a difficulty</string>
+
+    <string name="intervalsMenu_difficultyHelpTitle">Intervals Difficulty Levels</string>
     <string name="intervalsMenu_difficultyHelpText">The intervals exercise has three difficulties: easy, medium, and hard. Each difficulty adds more intervals, and includes the intervals from the lower difficulties.
         \n\nEasy starts with four intervals: unision, perfect fourth, perfect fifth, and octave.
         \n\nThe medium difficulty adds the intervals: major second, minor third, major sixth, and minor sixth.
         \n\nThe hard difficulty adds the intervals: minor second, augmented fourth, major seventh, and minor seventh.</string>
-    <string name="medodiesMenu_title">Choose a difficulty</string>
-    <string name="scalesMenu_difficultyHelpTitle">Scales Difficulty Help</string>
+    <string name="melodiesMenu_title">Choose a difficulty</string>
+
+    <string name="scalesMenu_difficultyHelpTitle">Scales Difficulty Levels</string>
     <string name="scalesMenu_difficultyHelpText">Each level of difficulty adds new scales to the exercise.
         \n\nThe easy difficulty will test you on the Major scale and the Pentatonic Major scale.
         \n\nMedium will add the scales: Natural Minor, and Pentatonic Minor.
         \n\nThe hard difficulty will add the scales: Harmonic Minor, and Melodic Minor.</string>
     <string name="scalesMenu_title">Choose a difficulty</string>
     <string name="scalesMenuBtn">Scales</string>
+
+    <string name="melodiesMenu_difficultyHelpTitle">Melodies Difficulty Levels</string>
+    <string name="melodiesMenu_difficultyHelpText">The melodies exercise has three difficulties: easy, medium, and hard.
+        Similar to the scale exercises, each level of difficulty adds more scales, from which the melodies are created.
+        \nThe level of difficulty also makes the melodies more challenging by: increasing the length of the melody;
+        increasing the maximum jump between notes in the melody; increasing the range of the melody;
+        and reversing the direction of the melody with increasing chance.
+
+        \nThe scales tested for each difficulty are as follows:
+        \n\nThe easy difficulty will test you on the Major scale and the Pentatonic Major scale.
+        \n\nMedium will add the scales: Natural Minor, and Pentatonic Minor.
+        \n\nThe hard difficulty will add the scales: Harmonic Minor, and Melodic Minor.</string>
 </resources>

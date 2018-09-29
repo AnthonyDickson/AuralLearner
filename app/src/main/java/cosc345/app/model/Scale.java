@@ -5,7 +5,8 @@ import java.util.ArrayList;
 /** Represents a musical scale. */
 public class Scale extends Playable {
     /** the notes in the scale. */
-    public ArrayList<Note> notes;
+    public final ArrayList<Note> notes;
+    public final ScaleType scaleType;
 
     /**
      * Create a scale starting of the given type (e.g. major/minor), starting at the given note.
@@ -14,6 +15,7 @@ public class Scale extends Playable {
      * @param scaleType the type of scale to create.
      */
     public Scale(Note root, ScaleType scaleType) {
+        this.scaleType = scaleType;
         int[] scalePattern = scaleType.getSemitonePattern();
 
         int scaleSize = scalePattern.length + 1;
@@ -72,6 +74,11 @@ public class Scale extends Playable {
         }
 
         super.stop();
+    }
+
+    @Override
+    public String toString() {
+        return scaleType.toString() + " " + notes.toString();
     }
 
     /** Captures the different types of scales. */

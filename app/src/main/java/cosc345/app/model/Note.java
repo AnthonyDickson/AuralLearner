@@ -404,8 +404,6 @@ public class Note extends Playable implements Comparable<Note>,
     //// Note Playback Stuff ////
     @Override
     public void play() {
-        if (isPlaying) return;
-
         super.play();
 
         thread = new Thread(() -> {
@@ -438,8 +436,6 @@ public class Note extends Playable implements Comparable<Note>,
 
     @Override
     public void stop() {
-        if (!isPlaying) return;
-
         if (audioTrack != null && audioTrack.getPlayState() == AudioTrack.PLAYSTATE_PLAYING) {
             audioTrack.pause();
             audioTrack.flush();
