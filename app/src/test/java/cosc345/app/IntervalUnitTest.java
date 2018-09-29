@@ -43,7 +43,7 @@ public class IntervalUnitTest {
     public void createInversions() {
         Interval inverted = new Interval(new Note("C4"), Intervals.P5, true);
         assertEquals(Intervals.P4, inverted.interval);
-        assertEquals("Perfect fourth (G4, C4)", inverted.toString());
+        assertEquals("Perfect fourth (G4, C5)", inverted.toString());
         assertEquals(5, inverted.size);
     }
 

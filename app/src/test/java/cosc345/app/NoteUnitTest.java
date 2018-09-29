@@ -9,7 +9,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * Tests the Note class.
  *
- * @author Anthony Dickson
+ * @author Anthony Dickson, Rory Jackson
  */
 public class NoteUnitTest {
     @Test
@@ -19,6 +19,7 @@ public class NoteUnitTest {
         assertEquals(0, a4.getCents());
         assertEquals("A4", a4.getName());
         assertEquals("A4", a4.toString());
+	    assertEquals(33, a4.getNameIndex());
 
         Note c4 = new Note(261.63);
         assertEquals(4, c4.getOctave());
@@ -87,5 +88,24 @@ public class NoteUnitTest {
     @Test(expected = IllegalArgumentException.class)
     public void testBadStringInput() {
         new Note("A@OY*");
+    }
+
+    @Test
+    public void testCompareTo() {
+        Note a4 = new Note("A4");
+        Note fSharp5 = new Note("F#5");
+        assertEquals(9, a4.compareTo(fSharp5));
+        assertEquals(-9, fSharp5.compareTo(a4));
+    }
+
+    @Test
+    public void testEquals(){
+        Note a4 = new Note("A4");
+        Note anotherA4 = new Note("A4");
+        Note fSharp5 = new Note("F#5");
+        String notNote = "not a note";
+        assertEquals(true, a4.equals(anotherA4));
+        assertEquals(false, a4.equals(fSharp5));
+        assertEquals(false, a4.equals(notNote));
     }
 }
