@@ -68,27 +68,26 @@ public class Utilities {
     }
 
     /**
-     * Calculate the standard deviation of the numbers in the given list.
+     * Calculate the sample standard deviation of the numbers in the given list.
      *
      * Code pinched from https://www.programiz.com/java-programming/examples/standard-deviation
      *
-     * @return the standard deviation of the numbers in the given list.
+     * @param a the list of numbers to process.
+     * @return the sample standard deviation of the numbers in the given list.
      */
     public static double stddev(ArrayList<Double> a) {
-        double sum = 0.0, standardDeviation = 0.0;
-        int length = a.size();
+        // Avoid divide by zero.
+        if (a.size() == 1) return 0.0;
 
-        for(double num : a) {
-            sum += num;
-        }
-
-        double mean = sum/length;
+        double standardDeviation = 0.0;
+        int length = a.size() - 1;
+        double mean = mean(a);
 
         for(double num: a) {
             standardDeviation += Math.pow(num - mean, 2);
         }
 
-        return Math.sqrt(standardDeviation/length);
+        return Math.sqrt(standardDeviation/(length - 1));
     }
 
     /**
