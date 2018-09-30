@@ -38,7 +38,7 @@ public class MainActivity extends VoiceControlActivity implements ActivityCompat
 
         if (recordAudioPermissions == PackageManager.PERMISSION_GRANTED &&
                 writePermissions == PackageManager.PERMISSION_GRANTED) {
-//            setupVoiceRecognition();
+            setupVoiceRecognition();
             setupTextToSpeech();
         } else {
             AlertDialog alertDialog = createPermissionsExplanationDialog(((dialog, which) -> {
@@ -59,9 +59,9 @@ public class MainActivity extends VoiceControlActivity implements ActivityCompat
 
     private void setupTextToSpeech() {
         TextToSpeechManager.getInstance().init(
-                this,
-                () -> VoiceRecognitionManager.getInstance().pause(),
-                () -> VoiceRecognitionManager.getInstance().resume());
+                this, null, null);
+//                () -> VoiceRecognitionManager.getInstance().pause(),
+//                () -> VoiceRecognitionManager.getInstance().resume());
     }
 
     private void setupVoiceRecognition() {
@@ -102,10 +102,18 @@ public class MainActivity extends VoiceControlActivity implements ActivityCompat
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        VoiceRecognitionManager.getInstance().restart();
+        TextToSpeechManager.getInstance().restart();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
 
-//        VoiceRecognitionManager.getInstance().close();
+        VoiceRecognitionManager.getInstance().close();
         TextToSpeechManager.getInstance().close();
     }
 
