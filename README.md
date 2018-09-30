@@ -38,7 +38,7 @@ when you get to step three you need to select from the menu
 something like 'select the Android APK' try selecting from the menu 
 `File -> Sync Project With Gradle Files`.
 
-## Using the Application
+## Disability support
 
 ### Voice Control
 
@@ -47,8 +47,16 @@ anywhere else in the application. You can activate voice control by saying
 'menu' while in any of the menus. A list of commands can be found from the 
 main menu or by saying 'menu', followed by 'help'.
 
-Voice control has not been implemented so that it can be used in the exercises
-yet.
+The user should also be able to select various aural music exercises by saying
+the exercise and a difficulty if one applies to the exercise. Voice control
+is not available during the exercises.
+
+### Text to Speech
+
+The information that a user would need from the app, such as grades and how to
+use the app is spoken to the user when it is relevant.
+
+## Exercises
 
 ### Pitch Matching Exercise
 
@@ -71,3 +79,25 @@ on how accurately they sing both of the notes in the interval. The setup is
 similar to the setup of the pitch matching exercise however the user can
 change both the root note of the interval and the type of interval. 
 Unfortunately this exercise is still buggy and not working correctly.
+
+### Random Interval Exercise
+
+Once the user has chosen this exercise and a difficulty, an algorithm
+generates a sequence of random notes given the various constraints as difficulty
+which include the likely hood of an inversion, and the quality/type of interval.
+Once this is generated, it is played to the user two times, once to listen, the 
+second to practice and the third to recieve a grade. The grade is spoken back to 
+the user at the end, a grade of 'bad' to 'perfect'.
+
+### Random Melody Exercise
+
+The melody exercise is very similiar to the interval exercise except that it
+is forms tonal melodies according to musical rules of tonal melody. This exercise starts
+by creating a scale, from that scale it accesses the scale degrees to add notes to a list.
+The difficulty of the exercises relates to constraints such as melody length, melody range, 
+and intervals used.
+
+### Human Vocal Ranges
+
+To accomadate for multiple people with various vocal ranges, the app allows a user to 
+sing any octave of a pitch and still have it marked correct.
