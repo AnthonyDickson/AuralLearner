@@ -3,7 +3,7 @@
     <string name="mainMenuExercisesHeading">Exercise Modes</string>
     <string name="intervalMenuBtn">Intervals</string>
     <string name="melodiesMenuBtn">Melodies</string>
-    <string name="voiceControlHelp">To use voice control, say \'menu\', followed by a command. Available commands at present are \'pitch matching\', \'intervals\', \'rhythms\', \'melodies\' and \'help\'. You can also say \'cancel\' to cancel voice control. Voice control is only available outside of exercises, if you need to quit an exercise use the back button on your device. If you need this help section again at a later time, say \"menu\", followed by \"help\".</string>
+    <string name="voiceControlHelp">To use voice control, say \'menu\', followed by a command. Available commands at present are \'pitch matching\', \'intervals\', \'rhythms\', \'melodies\', \'about\', \'terminology\' and \'help\'. You can also say \'cancel\' to cancel voice control. Voice control is only available outside of exercises, if you need to quit an exercise use the back button on your device. If you need this help section again at a later time, say \"menu\", followed by \"help\".</string>
     <string name="permissionsExplanation">This app needs to record audio for voice recognition and the music exercises to work, also this app needs to write to external storage to setup voice recognition.</string>
     <string name="pitchMatching_targetPitchLabel">Target Pitch</string>
     <string name="pitchMatching_titleLabel">Pitch Matching</string>
@@ -58,4 +58,17 @@
         \n\nThe easy difficulty will test you on the Major scale and the Pentatonic Major scale.
         \n\nMedium will add the scales: Natural Minor, and Pentatonic Minor.
         \n\nThe hard difficulty will add the scales: Harmonic Minor, and Melodic Minor.</string>
+
+    <string name="aboutBtn">About</string>
+    <string name="aboutTitle">About</string>
+    <string name="aboutText">This app is for learning the aural (sound) components of music theory. It is tailored towards people with visual impairments; each aspect of the app can be controlled with your voice, and all of the instructions are implemented with text to speech. There are pitch matching exercises, in which you hear a pitch and match that pitch with your voice. There are interval exercises, in which you do the same thing only with two notes in succession. There are scale exercises, in which you do the same thing with a musical scale. There are also melody exercises, in which you do the same thing with a unique melody. If there is any terminology you don\'t understand, you can view the Terminology menu to see a list of terms and their meanings. If you need any help with the voice commands, say \'help\'.</string>
+
+    <string name="terminologyBtn">Terminology</string>
+    <string name="terminologyTitle">Terminology</string>
+    <string name="terminologyText">Pitch - any single stationary sound, whether it\'s exactly the same as a note or not (for example, you can have a pitch that sounds exactly the same as an A note, or you could have one that sounds slightly off in pitch)
+        \n\nCents - a measure of how far away a particular pitch is from a note
+        \n\nMelody - a set of notes one after the other
+        \n\nScale - an organized series of notes from which melodies can be written
+        \nInterval - two notes any particular distance apart (for example, the interval formed by an A and an A# is a minor second)
+    </string>
 </resources>
