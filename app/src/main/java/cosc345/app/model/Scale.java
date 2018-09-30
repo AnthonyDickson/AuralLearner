@@ -47,7 +47,11 @@ public class Scale extends Playable {
         playNextNote(0);
     }
 
-    /** Play each note in the scale recursively. */
+    /**
+     * Play each note in the scale recursively.
+     *
+     * @param index the index of the next note to play.
+     */
     private void playNextNote(int index) {
         if (index == notes.size()) {
             if (delegate != null) {

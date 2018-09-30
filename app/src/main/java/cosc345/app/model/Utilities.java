@@ -67,7 +67,13 @@ public class Utilities {
         }
     }
 
-    /** Code pinched from https://www.programiz.com/java-programming/examples/standard-deviation */
+    /**
+     * Calculate the standard deviation of the numbers in the given list.
+     *
+     * Code pinched from https://www.programiz.com/java-programming/examples/standard-deviation
+     *
+     * @return the standard deviation of the numbers in the given list.
+     */
     public static double stddev(ArrayList<Double> a) {
         double sum = 0.0, standardDeviation = 0.0;
         int length = a.size();
@@ -85,6 +91,13 @@ public class Utilities {
         return Math.sqrt(standardDeviation/length);
     }
 
+    /**
+     * Calculate the mean of the numbers in the given list.
+     *
+     * Code pinched from https://www.programiz.com/java-programming/examples/standard-deviation
+     *
+     * @return the mean of the numbers in the given list.
+     */
     public static double mean(ArrayList<Double> a) {
         double sum = 0;
 

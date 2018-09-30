@@ -11,14 +11,14 @@ import cosc345.app.model.Playable;
 import cosc345.app.model.TextToSpeechManager;
 
 /**
- * A generalised form of the exercise activities. <br />
- * <br />
+ * A generalised form of the exercise activities. <br >
+ * <br >
  * Any implementing class should override
- * the onCreate() method and make sure to: <br />
- * - set the activity layout<br />
- * - assign the startBtn and stopBtn buttons<br />
+ * the onCreate() method and make sure to: <br >
+ * - set the activity layout<br >
+ * - assign the startBtn and stopBtn buttons<br >
  * - set the startBtn onClickListener to startExercise(), and set the onClickListener of the stopBtn
- *   to be stopExercise()<br />
+ *   to be stopExercise()<br >
  * - override the startExercise() method and add the grader and target playable (where a target
  * would be an instance of Interval, Scale, or Melody) initialisation.
  */
