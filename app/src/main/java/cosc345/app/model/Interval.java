@@ -56,13 +56,15 @@ public class Interval extends Playable {
      * @param invert   inverts the
      */
     public Interval(Note root, Intervals interval, boolean invert) {
+        Note.NoteLength length = root.noteLength;
+
         if (invert) {
             size = Math.abs(Note.NUM_HALF_STEPS - interval.ordinal());
             name = Interval.intervalNames.get(size);
             this.interval = Intervals.values()[size % (Intervals.values().length - 1)];
             // What was the second note in the interval becomes the root.
             String newRootNoteName = Note.NOTE_NAMES[root.getNameIndex() + interval.ordinal()];
-            this.root = new Note(newRootNoteName);
+            this.root = new Note(newRootNoteName, length);
             // old root node becomes second note in interval.
             other = root;
         } else {
@@ -77,10 +79,9 @@ public class Interval extends Playable {
             this.interval = Intervals.values()[size % (Intervals.values().length - 1)];
             this.root = root;
             String otherNoteName = Note.NOTE_NAMES[root.getNameIndex() + size];
-            other = new Note(otherNoteName);
+            other = new Note(otherNoteName, length);
         }
 
-        other.setNoteLength(root.noteLength);
         setNoteDelegates();
     }
 
