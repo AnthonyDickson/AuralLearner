@@ -1,10 +1,6 @@
 package cosc345.app.model;
 
-import android.util.Log;
-
 public class ScaleExerciseGrader extends Grader {
-    public Scale scale;
-
     public ScaleExerciseGrader() {
         super();
 
@@ -13,8 +9,9 @@ public class ScaleExerciseGrader extends Grader {
 
         int i = Utilities.random.nextInt(possibleScaleTypes.length);
 
-        scale = new Scale(rootNote, possibleScaleTypes[i], Note.NoteLength.MINIM);
+        Scale scale = new Scale(rootNote, possibleScaleTypes[i], Note.NoteLength.MINIM);
 
         super.notes = scale.notes;
+        this.playable = scale;
     }
 }

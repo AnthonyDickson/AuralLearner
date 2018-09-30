@@ -16,7 +16,6 @@ public class IntervalExerciseGrader extends Grader {
             Intervals.m7, Intervals.M7};
 
     private Random random = new Random();
-    public Interval interval;
 
     public IntervalExerciseGrader(Difficulty difficulty){
         super();
@@ -54,15 +53,13 @@ public class IntervalExerciseGrader extends Grader {
         Boolean invert;
         Intervals intervalPick = exerciseConstraints[random.nextInt(exerciseConstraints.length)];
 
-        if (random.nextDouble() < invertProbability){
-            invert = true;
-        } else {
-            invert = false;
-        }
+        invert = random.nextDouble() < invertProbability;
 
-        this.interval = new Interval(startingNote, intervalPick, invert); //need to add notes
-        exercise.add(this.interval.root);
-        exercise.add(this.interval.other);
+        Interval interval = new Interval(startingNote, intervalPick, invert); //need to add notes
+        exercise.add(interval.root);
+        exercise.add(interval.other);
+
+        this.playable = interval;
 
         return exercise;
     }

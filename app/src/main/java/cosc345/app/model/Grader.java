@@ -29,6 +29,9 @@ public class Grader implements PitchDetectionHandler {
     private boolean shouldWaitForInput;
     private int timesWaited;
 
+    /** The playable that this grader is grading, which is possibly null */
+    public Playable playable;
+
     public Grader() {
         this(new ArrayList<>());
     }
