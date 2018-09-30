@@ -226,14 +226,16 @@ public class Grader implements PitchDetectionHandler {
      * @return feedback on the last grading session.
      */
     public String getFeedback() {
-        if (score < 40.0) {
-            return "Your score was bad.";
-        } else if (score < 60.0) {
-            return "Your score was ok.";
-        } else if (score < 80.0) {
-            return "Your score was good.";
-        } else {
+        if (score == 100.0) {
+            return "Your score was perfect!";
+        } else if (score >= 80.0) {
             return "Your score was great!";
+        } else if (score >= 60.0) {
+            return "Your score was good.";
+        } else if (score >= 40.0) {
+            return "Your score was ok.";
+        } else {
+            return "Your score was bad.";
         }
     }
 }
