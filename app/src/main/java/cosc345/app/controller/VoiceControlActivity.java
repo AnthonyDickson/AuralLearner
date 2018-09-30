@@ -15,7 +15,7 @@ public class VoiceControlActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-//        VoiceRecognitionManager.getInstance().restart();
+        VoiceRecognitionManager.getInstance().restart();
         TextToSpeechManager.getInstance().restart();
     }
 
@@ -23,7 +23,7 @@ public class VoiceControlActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
 
-//        VoiceRecognitionManager.getInstance().close();
+        VoiceRecognitionManager.getInstance().close();
         TextToSpeechManager.getInstance().close();
     }
 }

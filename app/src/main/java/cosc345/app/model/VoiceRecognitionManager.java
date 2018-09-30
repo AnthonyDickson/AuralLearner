@@ -34,6 +34,7 @@ public class VoiceRecognitionManager implements RecognitionListener {
     private State state = State.NOT_READY;
     private SpeechRecognizer recogniser;
     private WeakReference<Context> parentContext;
+    private VoiceRecognitionInitialiser initialiser;
 
     private VoiceRecognitionManager() {}
 
@@ -57,7 +58,8 @@ public class VoiceRecognitionManager implements RecognitionListener {
         this.parentContext = new WeakReference<>(parentContext);
         // recogniser initialization is a time-consuming and it involves IO,
         // so we execute it in async task
-        new VoiceRecognitionInitialiser(this).execute();
+        initialiser = new VoiceRecognitionInitialiser(this);
+        initialiser.execute();
     }
 
     /**
@@ -267,6 +269,10 @@ public class VoiceRecognitionManager implements RecognitionListener {
                 System.out.println(result.getMessage());
             } else {
                 VoiceRecognitionManager context = activityReference.get();
+
+                // This might happen if the voice recognition was closed during setup.
+                if (context.state == State.SHUTDOWN) return;
+
                 context.switchSearch(VoiceRecognitionManager.KWS_SEARCH);
                 context.state = State.READY;
                 Log.i(VoiceRecognitionManager.LOG_TAG, "Initialisation Complete.");
