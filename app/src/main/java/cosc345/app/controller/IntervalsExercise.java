@@ -15,22 +15,8 @@ import cosc345.app.model.Playable;
 import cosc345.app.model.TextToSpeechManager;
 import cosc345.app.model.VoiceRecognitionManager;
 
-public class IntervalsExercise extends AppCompatActivity implements Playable.Delegate {
-    private Button startBtn;
-    private Button stopBtn;
-    Interval targetInterval;
-
-    private IntervalExerciseGrader intervalExerciseGrader;
+public class IntervalsExercise extends ExerciseActivity implements Playable.Delegate {
     private Difficulty difficulty;
-    private int timesPlayed;
-    private Handler handler = new Handler();
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        TextToSpeechManager.getInstance().restart();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,76 +41,14 @@ public class IntervalsExercise extends AppCompatActivity implements Playable.Del
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void startExercise() {
+        super.startExercise();
 
-        stopExercise();
-        TextToSpeechManager.getInstance().close();
-    }
-
-    private void startExercise() {
-
-        timesPlayed = 0;
-
-        startBtn.setVisibility(View.GONE);
-        stopBtn.setVisibility(View.VISIBLE);
-
-        intervalExerciseGrader = new IntervalExerciseGrader(difficulty);
-        intervalExerciseGrader.setOnSuccessCallback(this::onGradingDone);
-        intervalExerciseGrader.setCallback(this::showStartButton);
-        targetInterval = intervalExerciseGrader.interval;
-        targetInterval.setDelegate(this);
-        targetInterval.play();
-    }
-
-
-    private void stopExercise() {
-        if (intervalExerciseGrader != null) {
-            intervalExerciseGrader.stop();
-            intervalExerciseGrader.interval.stop();
-        }
-
-        showStartButton();
-    }
-
-    @Override
-    public void onPlaybackStarted() {
-        timesPlayed++;
-    }
-
-    @Override
-    public void onPlaybackFinished() {
-        if (timesPlayed < 2) {
-            handler.postDelayed(targetInterval::play, Note.NoteLengthMap.get(Note.NoteLength.CROTCHET));
-        } else {
-            intervalExerciseGrader.start();
-        }
-    }
-
-    @Override
-    public void onDone() {
-
-    }
-
-    private void onGradingDone() {
-        double grade = intervalExerciseGrader.getScore();
-        String msg;
-
-        if (grade < 60.0) {
-            msg = "Your score was bad";
-        } else if (grade < 80.0) {
-            msg = "Your score was ok";
-        } else if (grade < 90.0) {
-            msg = "Your score was good";
-        } else {
-            msg = "Your score was perfect";
-        }
-
-        TextToSpeechManager.getInstance().speak(msg);
-    }
-
-    private void showStartButton() {
-        startBtn.setVisibility(View.VISIBLE);
-        stopBtn.setVisibility(View.GONE);
+        grader = new IntervalExerciseGrader(difficulty);
+        grader.setOnSuccessCallback(this::onGradingDone);
+        grader.setCallback(this::showStartButton);
+        target = grader.playable;
+        target.setDelegate(this);
+        target.play();
     }
 }
