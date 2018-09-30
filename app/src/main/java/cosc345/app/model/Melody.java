@@ -1,11 +1,14 @@
 package cosc345.app.model;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 
 /**
  * represents a melody.
  */
 public class Melody extends Playable {
+    private static final String LOG_TAG = "Melody";
     /**
      * the notes in the melody.
      */
@@ -32,8 +35,8 @@ public class Melody extends Playable {
         notes = new ArrayList<>();
         notes.add(scale.notes.get(noteIndex));
 
-        for (int i = 1; i < melodyLength; i++) {
-            int step = Utilities.random.nextInt(maxStep);
+        for (int i = 1; i < melodyLength - 2; i++) {
+            int step = Utilities.random.nextInt(maxStep) + 1;
 
             if (i > melodyLength / 2 &&
                     Utilities.random.nextDouble() > probabilityToNotReverse) {
@@ -43,11 +46,21 @@ public class Melody extends Playable {
             noteIndex = Utilities.clamp(noteIndex + step, 0, maxRange);
             notes.add(scale.notes.get(noteIndex));
         }
+
+        if (noteIndex < scale.notes.size() / 2.0) {
+            notes.add(scale.notes.get(1));
+            notes.add(scale.notes.get(0));
+        } else {
+            notes.add(scale.notes.get(scale.notes.size() - 2));
+            notes.add(scale.notes.get(scale.notes.size() - 1));
+        }
     }
 
     @Override
     public void play() {
         super.play();
+
+        Log.i(LOG_TAG, this.toString());
 
         playNote(0);
     }

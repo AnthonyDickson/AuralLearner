@@ -1,5 +1,7 @@
 package cosc345.app.model;
 
+import android.util.Log;
+
 public class ScaleExerciseGrader extends Grader {
     public Scale scale;
 

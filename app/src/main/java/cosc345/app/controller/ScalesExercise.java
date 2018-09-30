@@ -1,11 +1,13 @@
 package cosc345.app.controller;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 
 import cosc345.app.R;
 import cosc345.app.model.Difficulty;
+import cosc345.app.model.Note;
 import cosc345.app.model.Playable;
 import cosc345.app.model.Scale;
 import cosc345.app.model.ScaleExerciseGrader;
@@ -20,6 +22,7 @@ public class ScalesExercise extends VoiceControlActivity implements Playable.Del
     private ScaleExerciseGrader scaleExerciseGrader;
     private Difficulty difficulty;
     private int timesPlayed;
+    private Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +79,7 @@ public class ScalesExercise extends VoiceControlActivity implements Playable.Del
     @Override
     public void onPlaybackFinished() {
         if (timesPlayed < 2) {
-            targetScale.play();
+            handler.postDelayed(targetScale::play, Note.NoteLengthMap.get(Note.NoteLength.CROTCHET));
         } else {
             scaleExerciseGrader.start();
         }

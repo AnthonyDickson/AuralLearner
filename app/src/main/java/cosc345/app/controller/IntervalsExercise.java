@@ -1,6 +1,7 @@
 package cosc345.app.controller;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -9,6 +10,7 @@ import cosc345.app.R;
 import cosc345.app.model.Difficulty;
 import cosc345.app.model.Interval;
 import cosc345.app.model.IntervalExerciseGrader;
+import cosc345.app.model.Note;
 import cosc345.app.model.Playable;
 import cosc345.app.model.TextToSpeechManager;
 import cosc345.app.model.VoiceRecognitionManager;
@@ -21,6 +23,7 @@ public class IntervalsExercise extends AppCompatActivity implements Playable.Del
     private IntervalExerciseGrader intervalExerciseGrader;
     private Difficulty difficulty;
     private int timesPlayed;
+    private Handler handler = new Handler();
 
     @Override
     protected void onResume() {
@@ -92,7 +95,7 @@ public class IntervalsExercise extends AppCompatActivity implements Playable.Del
     @Override
     public void onPlaybackFinished() {
         if (timesPlayed < 2) {
-            targetInterval.play();
+            handler.postDelayed(targetInterval::play, Note.NoteLengthMap.get(Note.NoteLength.CROTCHET));
         } else {
             intervalExerciseGrader.start();
         }

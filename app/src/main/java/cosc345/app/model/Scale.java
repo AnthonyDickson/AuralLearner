@@ -1,9 +1,12 @@
 package cosc345.app.model;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 
 /** Represents a musical scale. */
 public class Scale extends Playable {
+    private static final String LOG_TAG = "Scale";
     /** the notes in the scale. */
     public final ArrayList<Note> notes;
     public final ScaleType scaleType;
@@ -38,6 +41,8 @@ public class Scale extends Playable {
     @Override
     public void play() {
         super.play();
+
+        Log.i(LOG_TAG, this.toString());
 
         playNextNote(0);
     }
