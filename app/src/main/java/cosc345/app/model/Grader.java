@@ -89,12 +89,14 @@ public class Grader implements PitchDetectionHandler {
         float frequency = pitchDetectionResult.getPitch();
 
         if (frequency == -1 || timesWaited < 3) {
-            if (shouldWaitForInput && timesWaited % 10 == 0) {
+            if (shouldWaitForInput) {
                 Log.d(LOG_TAG, "Pitch Detection gave a reading of -1 while waiting for input, " +
                         "waiting some more.");
+
+                timesWaited++;
             } else {
                 Log.d(LOG_TAG, "Pitch Detection gave a reading of -1 for frequency during grading, " +
-                        "skipping this reading.");
+                        "skipping thi reading.");
             }
         } else if (shouldWaitForInput) {
             shouldWaitForInput = false;
@@ -202,7 +204,7 @@ public class Grader implements PitchDetectionHandler {
             }
         }
 
-        return 1.0 * numCorrect / notes.size();
+        return 100.0 * numCorrect / notes.size();
     }
 
     /**
@@ -215,6 +217,23 @@ public class Grader implements PitchDetectionHandler {
 
         if (callback != null) {
             callback.execute();
+        }
+    }
+
+    /**
+     * Get simple feedback on the previous grading session.
+     *
+     * @return feedback on the last grading session.
+     */
+    public String getFeedback() {
+        if (score < 40.0) {
+            return "Your score was bad.";
+        } else if (score < 60.0) {
+            return "Your score was ok.";
+        } else if (score < 80.0) {
+            return "Your score was good.";
+        } else {
+            return "Your score was great!";
         }
     }
 }
