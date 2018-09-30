@@ -175,6 +175,7 @@ public class Note extends Playable implements Comparable<Note>,
      * Generate the tone of the note.
      */
     private void generateTone() {
+
         // Code adapted from http://marblemice.blogspot.com/2010/04/generate-and-play-tone-in-android.html
         numSamples = Note.SAMPLE_RATE * duration / 1000;
         generatedSnd = new byte[2 * numSamples];

@@ -15,26 +15,23 @@ public class MelodyExerciseGrader extends Grader {
         int melodyLength;
         int maxStep;
         double reverseProbability;
-        Scale.ScaleType[] scaleTypes;
+        Scale.ScaleType[] scaleTypes = Scale.ScaleType.values();
 
         if (difficulty == Difficulty.EASY) {
             melodyRange = 3;
             melodyLength = 4;
             reverseProbability = 0;
             maxStep = 1;
-            scaleTypes = ScaleExerciseGrader.EASY_SCALES;
         } else if (difficulty == Difficulty.MEDIUM) {
             melodyRange = random.nextInt(3) + 3;
             reverseProbability = 0.2;
             melodyLength = 8;
             maxStep = 2;
-            scaleTypes = ScaleExerciseGrader.MEDIUM_SCALES;
         } else {
             melodyRange = random.nextInt(3) + 5;
             melodyLength = 8;
             reverseProbability = 0.3;
             maxStep = 3;
-            scaleTypes = ScaleExerciseGrader.HARD_SCALES;
         }
 
         Note startingNote = Note.getRandom(Note.C4_INDEX - 12, 4.0, Note.NoteLength.CROTCHET);

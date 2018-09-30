@@ -96,6 +96,7 @@ public class Interval extends Playable {
         interval = Intervals.values()[size % (Intervals.values().length - 1)];
         this.root = root;
         this.other = other;
+        this.other.setNoteLength(root.noteLength);
 
         setNoteDelegates();
     }

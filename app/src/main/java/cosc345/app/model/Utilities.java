@@ -1,5 +1,6 @@
 package cosc345.app.model;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -64,5 +65,33 @@ public class Utilities {
         } else {
             return x;
         }
+    }
+
+    /** Code pinched from https://www.programiz.com/java-programming/examples/standard-deviation */
+    public static double stddev(ArrayList<Double> a) {
+        double sum = 0.0, standardDeviation = 0.0;
+        int length = a.size();
+
+        for(double num : a) {
+            sum += num;
+        }
+
+        double mean = sum/length;
+
+        for(double num: a) {
+            standardDeviation += Math.pow(num - mean, 2);
+        }
+
+        return Math.sqrt(standardDeviation/length);
+    }
+
+    public static double mean(ArrayList<Double> a) {
+        double sum = 0;
+
+        for (double v : a) {
+            sum += v;
+        }
+
+        return sum / a.size();
     }
 }

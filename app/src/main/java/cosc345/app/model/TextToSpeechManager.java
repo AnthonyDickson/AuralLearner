@@ -102,6 +102,10 @@ public class TextToSpeechManager {
      * @param text The text to read out.
      */
     public void speak(String text) {
+        if (tts == null) {
+            tts = TextToSpeechManager.getInstance().tts;
+        }
+
         tts.speak(text, TextToSpeech.QUEUE_FLUSH, ttsParams);
     }
 

@@ -10,9 +10,9 @@ import be.tarsos.dsp.pitch.PitchProcessor;
  * Listens to microphone input and detects the pitch of the audio.
  */
 public class PitchDetector {
-    private static final int DEFAULT_SAMPLE_RATE = 22050;
-    private static final int DEFAULT_BUFFER_SIZE = 1024;
-    private static final int DEFAULT_BUFFER_OVERLAP = 0;
+    public static final int DEFAULT_SAMPLE_RATE = 22050;
+    public static final int DEFAULT_BUFFER_SIZE = 1024;
+    public static final int DEFAULT_BUFFER_OVERLAP = 0;
 
     private AudioDispatcher dispatcher;
     private final int sampleRate;

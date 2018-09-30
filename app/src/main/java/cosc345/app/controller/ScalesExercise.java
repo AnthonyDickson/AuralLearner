@@ -31,16 +31,6 @@ public class ScalesExercise extends VoiceControlActivity implements Playable.Del
 
         startBtn.setOnClickListener(v -> startExercise());
         stopBtn.setOnClickListener(v -> stopExercise());
-
-        String difficulty = getIntent().getStringExtra("EXTRA_DIFFICULTY");
-
-        if (difficulty.equals(Difficulty.EASY.toString())) {
-            this.difficulty = Difficulty.EASY;
-        } else if (difficulty.equals(Difficulty.MEDIUM.toString())) {
-            this.difficulty = Difficulty.MEDIUM;
-        } else {
-            this.difficulty = Difficulty.HARD;
-        }
     }
 
     @Override
@@ -60,7 +50,7 @@ public class ScalesExercise extends VoiceControlActivity implements Playable.Del
         startBtn.setVisibility(View.GONE);
         stopBtn.setVisibility(View.VISIBLE);
 
-        scaleExerciseGrader = new ScaleExerciseGrader(difficulty);
+        scaleExerciseGrader = new ScaleExerciseGrader();
         scaleExerciseGrader.setOnSuccessCallback(this::onGradingDone);
         scaleExerciseGrader.setCallback(this::showStartButton);
         targetScale = scaleExerciseGrader.scale;

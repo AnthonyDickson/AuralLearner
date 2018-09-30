@@ -12,11 +12,10 @@ import android.support.v7.app.AlertDialog;
 import android.widget.Button;
 
 import cosc345.app.controller.IntervalsMenu;
-import cosc345.app.controller.ScalesMenu;
+import cosc345.app.controller.ScalesExercise;
 import cosc345.app.model.MenuAction;
 import cosc345.app.model.TextToSpeechManager;
 import cosc345.app.model.VoiceRecognitionManager;
-import cosc345.app.controller.IntervalsExercise;
 import cosc345.app.controller.MelodiesMenu;
 import cosc345.app.controller.PitchMatchingExercise;
 import cosc345.app.controller.VoiceControlActivity;
@@ -39,7 +38,7 @@ public class MainActivity extends VoiceControlActivity implements ActivityCompat
 
         if (recordAudioPermissions == PackageManager.PERMISSION_GRANTED &&
                 writePermissions == PackageManager.PERMISSION_GRANTED) {
-            setupVoiceRecognition();
+//            setupVoiceRecognition();
             setupTextToSpeech();
         } else {
             AlertDialog alertDialog = createPermissionsExplanationDialog(((dialog, which) -> {
@@ -71,7 +70,7 @@ public class MainActivity extends VoiceControlActivity implements ActivityCompat
         voiceRecognitionManager.registerAction(new MenuAction("pitch matching", () -> startActivity(new Intent(MainActivity.this, PitchMatchingExercise.class))));
         voiceRecognitionManager.registerAction(new MenuAction("intervals", () -> startActivity(new Intent(MainActivity.this, IntervalsMenu.class))));
         voiceRecognitionManager.registerAction(new MenuAction("melodies", () -> startActivity(new Intent(MainActivity.this, MelodiesMenu.class))));
-        voiceRecognitionManager.registerAction(new MenuAction("scales", () -> startActivity(new Intent(MainActivity.this, ScalesMenu.class))));
+        voiceRecognitionManager.registerAction(new MenuAction("scales", () -> startActivity(new Intent(MainActivity.this, ScalesExercise.class))));
         voiceRecognitionManager.registerAction(new MenuAction("help", () -> {
             String text = getResources().getString(R.string.voiceControlHelp);
             TextToSpeechManager.getInstance().speak(text);
@@ -82,7 +81,7 @@ public class MainActivity extends VoiceControlActivity implements ActivityCompat
     private void setupMenuButtons() {
         setupMenuButton(R.id.pitchMatchingMenuBtn, PitchMatchingExercise.class);
         setupMenuButton(R.id.intervalsMenuBtn, IntervalsMenu.class);
-        setupMenuButton(R.id.scalesMenuBtn, ScalesMenu.class);
+        setupMenuButton(R.id.scalesMenuBtn, ScalesExercise.class);
         setupMenuButton(R.id.melodiesMenuBtn, MelodiesMenu.class);
         findViewById(R.id.voiceControlHelpBtn).setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -106,7 +105,7 @@ public class MainActivity extends VoiceControlActivity implements ActivityCompat
     protected void onDestroy() {
         super.onDestroy();
 
-        VoiceRecognitionManager.getInstance().close();
+//        VoiceRecognitionManager.getInstance().close();
         TextToSpeechManager.getInstance().close();
     }
 

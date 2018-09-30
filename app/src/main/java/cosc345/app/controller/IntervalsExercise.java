@@ -1,6 +1,7 @@
 package cosc345.app.controller;
 
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
@@ -12,7 +13,7 @@ import cosc345.app.model.Playable;
 import cosc345.app.model.TextToSpeechManager;
 import cosc345.app.model.VoiceRecognitionManager;
 
-public class IntervalsExercise extends VoiceControlActivity implements Playable.Delegate {
+public class IntervalsExercise extends AppCompatActivity implements Playable.Delegate {
     private Button startBtn;
     private Button stopBtn;
     Interval targetInterval;
@@ -20,6 +21,13 @@ public class IntervalsExercise extends VoiceControlActivity implements Playable.
     private IntervalExerciseGrader intervalExerciseGrader;
     private Difficulty difficulty;
     private int timesPlayed;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        TextToSpeechManager.getInstance().restart();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +60,6 @@ public class IntervalsExercise extends VoiceControlActivity implements Playable.
     }
 
     private void startExercise() {
-        // TODO: remove this line when bug with VoiceRecognitionManager is fixed.
-        VoiceRecognitionManager.getInstance().close();
 
         timesPlayed = 0;
 

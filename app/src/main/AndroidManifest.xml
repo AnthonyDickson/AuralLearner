@@ -48,15 +48,10 @@
                 android:value="cosc345.app.controller.MelodiesMenu" />
         </activity>
 
-        <activity android:name=".controller.ScalesMenu">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="cosc345.app.MainActivity" />
-        </activity>
         <activity android:name=".controller.ScalesExercise">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="cosc345.app.controller.ScalesMenu" />
+                android:value="cosc345.app.MainActivity" />
         </activity>
     </application>
 

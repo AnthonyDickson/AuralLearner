@@ -131,14 +131,21 @@ public class Grader implements PitchDetectionHandler {
      * Calculate the average frequency the user sang for the last note, and then start
      */
     private void onNoteDone() {
+        double stddev = Utilities.stddev(frequencyReadings);
+        double mean = Utilities.mean(frequencyReadings);
+
         double avgFrequency = 0.0;
+        int numFrequencyReadings = 0;
 
-
-        for (double reading : frequencyReadings) {
-            avgFrequency += reading;
+        for (double frequency: frequencyReadings) {
+            if (Math.abs(mean - frequency) < 2.0 * stddev) {
+                avgFrequency += frequency;
+                numFrequencyReadings++;
+            }
         }
 
-        avgFrequency /= frequencyReadings.size();
+        avgFrequency /= numFrequencyReadings;
+
         Log.d(LOG_TAG, String.format("Average frequency: %s.", avgFrequency));
         frequencyReadings.clear();
         Note userNote;
@@ -175,7 +182,7 @@ public class Grader implements PitchDetectionHandler {
      * @return the user's score as a number in the range [0.0, 100.0]
      */
     private double calculateScore() {
-        double avgCentDist = 0.0;
+        int numCorrect = 0;
 
         for (int i = 0; i < notes.size(); i++) {
             Note userNote = userNotes.get(i);
@@ -187,16 +194,12 @@ public class Grader implements PitchDetectionHandler {
                     userNote.getFrequency(),
                     centDist));
 
-            avgCentDist += centDist;
+            if (userNote.getName().equals(referenceNote.getName())) {
+                numCorrect++;
+            }
         }
 
-        avgCentDist /= notes.size();
-
-        if (Math.abs(avgCentDist) > 50) {
-            return 0.0;
-        } else {
-            return 100 - 100 * Math.abs(avgCentDist) / 50.0;
-        }
+        return 1.0 * numCorrect / notes.size();
     }
 
     /**

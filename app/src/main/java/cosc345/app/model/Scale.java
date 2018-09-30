@@ -15,7 +15,12 @@ public class Scale extends Playable {
      * @param scaleType the type of scale to create.
      */
     public Scale(Note root, ScaleType scaleType) {
+        this(root, scaleType, Note.NoteLength.CROTCHET);
+    }
+
+    public Scale(Note root, ScaleType scaleType, Note.NoteLength length) {
         this.scaleType = scaleType;
+        root.setNoteLength(Note.NoteLength.MINIM);
         int[] scalePattern = scaleType.getSemitonePattern();
 
         int scaleSize = scalePattern.length + 1;
@@ -25,7 +30,7 @@ public class Scale extends Playable {
         for (int i = 0; i < scalePattern.length; i++) {
             Note currNote = notes.get(i);
             String nextNoteName = Note.NOTE_NAMES[currNote.getNameIndex() + scalePattern[i]];
-            Note nextNote = new Note(nextNoteName);
+            Note nextNote = new Note(nextNoteName, length);
             notes.add(nextNote);
         }
     }
@@ -83,7 +88,7 @@ public class Scale extends Playable {
 
     /** Captures the different types of scales. */
     public enum ScaleType {
-        MAJOR, NATURAL_MINOR, HARMONIC_MINOR, MELODIC_MINOR, MAJOR_PENTATONIC, MINOR_PENTATONIC;
+        MAJOR, NATURAL_MINOR;
 
         /**
          * Get a list of numbers where each number represents how many semitones higher the
@@ -97,14 +102,6 @@ public class Scale extends Playable {
                     return new int[] {2, 2, 1, 2, 2, 2, 1};
                 case NATURAL_MINOR:
                     return new int[] {2, 1, 2, 2, 1, 2, 2};
-                case HARMONIC_MINOR:
-                    return new int[] {2, 1, 2, 2, 1, 3, 1};
-                case MELODIC_MINOR:
-                    return new int[] {2, 1, 2, 2, 2, 2, 1};
-                case MAJOR_PENTATONIC:
-                    return new int[] {2, 2, 3, 2, 3};
-                case MINOR_PENTATONIC:
-                    return new int[] {3, 2, 2, 3, 2};
                 default:
                     return new int[0];
             }
