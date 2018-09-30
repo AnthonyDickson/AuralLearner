@@ -1,16 +1,13 @@
 package cosc345.app.controller;
 
-import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
-import cosc345.app.R;
 import cosc345.app.model.Grader;
 import cosc345.app.model.Note;
 import cosc345.app.model.Playable;
-import cosc345.app.model.ScaleExerciseGrader;
 import cosc345.app.model.TextToSpeechManager;
 
 /**
@@ -22,6 +19,8 @@ import cosc345.app.model.TextToSpeechManager;
  * - assign the startBtn and stopBtn buttons<br />
  * - set the startBtn onClickListener to startExercise(), and set the onClickListener of the stopBtn
  *   to be stopExercise()<br />
+ * - override the startExercise() method and add the grader and target playable (where a target
+ * would be an instance of Interval, Scale, or Melody) initialisation.
  */
 public abstract class ExerciseActivity extends AppCompatActivity implements Playable.Delegate {
     protected Button startBtn;
@@ -52,13 +51,6 @@ public abstract class ExerciseActivity extends AppCompatActivity implements Play
 
         startBtn.setVisibility(View.GONE);
         stopBtn.setVisibility(View.VISIBLE);
-
-        grader = new ScaleExerciseGrader();
-        grader.setOnSuccessCallback(this::onGradingDone);
-        grader.setCallback(this::showStartButton);
-        target = grader.playable;
-        target.setDelegate(this);
-        target.play();
     }
 
 
