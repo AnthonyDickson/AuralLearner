@@ -62,6 +62,18 @@
             android:textSize="24sp" />
 
         <Button
+            android:id="@+id/aboutBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/aboutBtn" />
+
+        <Button
+            android:id="@+id/terminologyBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/terminologyBtn" />
+
+        <Button
             android:id="@+id/voiceControlHelpBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
