@@ -51,7 +51,7 @@ The user should also be able to select various aural music exercises by saying
 the exercise and a difficulty if one applies to the exercise. Voice control
 is not available during the exercises.
 
-It should be noted that voice control is a bit buggy at the moment, and may mishear you occassionally.
+It should be noted that voice control is a bit buggy at the moment, and may mishear you occasionally.
 
 ### Text to Speech
 
