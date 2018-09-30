@@ -85,7 +85,7 @@ public class Grader implements PitchDetectionHandler {
     public void handlePitch(PitchDetectionResult pitchDetectionResult, AudioEvent audioEvent) {
         float frequency = pitchDetectionResult.getPitch();
 
-        if (frequency == -1) {
+        if (frequency == -1 || timesWaited < 3) {
             if (shouldWaitForInput && timesWaited % 10 == 0) {
                 Log.d(LOG_TAG, "Pitch Detection gave a reading of -1 while waiting for input, " +
                         "waiting some more.");
