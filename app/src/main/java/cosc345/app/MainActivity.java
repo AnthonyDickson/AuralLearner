@@ -75,6 +75,14 @@ public class MainActivity extends VoiceControlActivity implements ActivityCompat
             String text = getResources().getString(R.string.voiceControlHelp);
             TextToSpeechManager.getInstance().speak(text);
         }));
+        voiceRecognitionManager.registerAction(new MenuAction("about", () -> {
+            String text = getResources().getString(R.string.aboutText);
+            TextToSpeechManager.getInstance().speak(text);
+        }));
+        voiceRecognitionManager.registerAction(new MenuAction("terminology", () -> {
+            String text = getResources().getString(R.string.terminologyText);
+            TextToSpeechManager.getInstance().speak(text);
+        }));
         voiceRecognitionManager.registerAction(new MenuAction("cancel", null));
     }
 
@@ -87,6 +95,22 @@ public class MainActivity extends VoiceControlActivity implements ActivityCompat
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(R.string.voiceControlHelpTitle)
                     .setMessage(R.string.voiceControlHelp)
+                    .setPositiveButton(R.string.dialogOk, null);
+            builder.create()
+                    .show();
+        });
+        findViewById(R.id.aboutBtn).setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.aboutTitle)
+                    .setMessage(R.string.aboutText)
+                    .setPositiveButton(R.string.dialogOk, null);
+            builder.create()
+                    .show();
+        });
+        findViewById(R.id.terminologyBtn).setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.terminologyTitle)
+                    .setMessage(R.string.terminologyText)
                     .setPositiveButton(R.string.dialogOk, null);
             builder.create()
                     .show();
