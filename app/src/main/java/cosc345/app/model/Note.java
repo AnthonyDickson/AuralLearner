@@ -397,6 +397,16 @@ public class Note extends Playable implements Comparable<Note>,
         }
     }
 
+    /**
+     * Get the name of the note, without the octave number on the end.
+     *
+     * @return the name of the note, without the octave number on the end.
+     */
+    public String getNameWithoutOctave() {
+        String name = getName();
+        return name.substring(0, name.length() - 1);
+    }
+
     @Override
     public String toString() {
         return getName();

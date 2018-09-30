@@ -21,7 +21,7 @@ public class Grader implements PitchDetectionHandler {
     private ArrayList<Double> frequencyReadings;
     public ArrayList<Note> notes;
     private Iterator<Note> notesIterator;
-    private ArrayList<Note> userNotes;
+    private ArrayList<Note> detectedNotes;
     private PitchDetector pitchDetector;
     private Callback callback = null;
     private Callback onSuccess = null;
@@ -50,7 +50,7 @@ public class Grader implements PitchDetectionHandler {
     private void reset() {
         score = 0.0;
         frequencyReadings = new ArrayList<>();
-        userNotes = new ArrayList<>();
+        detectedNotes = new ArrayList<>();
     }
 
     /**
@@ -96,7 +96,7 @@ public class Grader implements PitchDetectionHandler {
                 timesWaited++;
             } else {
                 Log.d(LOG_TAG, "Pitch Detection gave a reading of -1 for frequency during grading, " +
-                        "skipping thi reading.");
+                        "skipping this reading.");
             }
         } else if (shouldWaitForInput) {
             shouldWaitForInput = false;
@@ -113,7 +113,7 @@ public class Grader implements PitchDetectionHandler {
         reset();
 
         Log.i(LOG_TAG, "Starting grading.");
-        Log.i(LOG_TAG, String.format("Target notes: %s", notes.toString()));
+        Log.i(LOG_TAG, String.format("Reference notes: %s", notes.toString()));
         shouldWaitForInput = true;
         notesIterator = notes.iterator();
         pitchDetector.start();
@@ -161,15 +161,15 @@ public class Grader implements PitchDetectionHandler {
             userNote = new Note(avgFrequency < Note.MIN_FREQUENCY ? Note.MIN_FREQUENCY : Note.MAX_FREQUENCY);
         }
 
-        Log.i(LOG_TAG, String.format("User sung: %s.", userNote));
-        userNotes.add(userNote);
+        Log.i(LOG_TAG, String.format("Detected Note: %s.", userNote));
+        detectedNotes.add(userNote);
 
         playNextNote();
     }
 
     private void onSequenceDone() {
-        Log.d(LOG_TAG, String.format("Target notes: %s", notes.toString()));
-        Log.d(LOG_TAG, String.format("User notes: %s", userNotes.toString()));
+        Log.d(LOG_TAG, String.format("Reference notes: %s", notes.toString()));
+        Log.d(LOG_TAG, String.format("Detected notes: %s", detectedNotes.toString()));
         score = calculateScore();
         Log.i(LOG_TAG, String.format("Finished grading, user's score is %f.", score));
 
@@ -190,16 +190,16 @@ public class Grader implements PitchDetectionHandler {
         int numCorrect = 0;
 
         for (int i = 0; i < notes.size(); i++) {
-            Note userNote = userNotes.get(i);
+            Note detectedNote = detectedNotes.get(i);
             Note referenceNote = notes.get(i);
 
-            double centDist = Note.centDistance(userNote, referenceNote);
-            Log.d(LOG_TAG, String.format("Reference Pitch: %f Hz; User's Pitch: %f Hz; Distance in Cents: %f",
+            double centDist = Note.centDistance(detectedNote, referenceNote);
+            Log.d(LOG_TAG, String.format("Reference Pitch: %f Hz; Detected Pitch: %f Hz; Distance in Cents: %f",
                     referenceNote.getFrequency(),
-                    userNote.getFrequency(),
+                    detectedNote.getFrequency(),
                     centDist));
 
-            if (userNote.getName().equals(referenceNote.getName())) {
+            if (detectedNote.getNameWithoutOctave().equals(referenceNote.getNameWithoutOctave())) {
                 numCorrect++;
             }
         }
