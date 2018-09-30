@@ -139,8 +139,11 @@ public class VoiceRecognitionManager implements RecognitionListener {
         if (text.equals(VoiceRecognitionManager.KEYPHRASE)) {
             switchSearch(VoiceRecognitionManager.MENU_SEARCH);
         } else {
+            String command = text.replace("open", "");
+            command = command.trim();
+
             for (MenuAction a : actions) {
-                if (text.equals(a.activation)) {
+                if (command.equals(a.activation)) {
                     a.execute();
                 }
             }

@@ -2,9 +2,12 @@
 
 grammar menu;
 
-public <menu> = pitch matching|
-                intervals|
-                rhythms  |
-                melodies |
-                help     |
-                cancel   ;
+public <difficulty> = easy | medium | hard;
+public <exercises> = /5/ pitch matching |/5/ scales |/5/ ((intervals | melodies) [<difficulty>]) [/1/ help];
+public <menu> = /10/ terminology     |
+                /10/ help            |
+                /10/ about           |
+                /10/ cancel          |
+                /10/ stop (talking | speaking) |
+                /1/ <exercises>     ;
+public <command> = [open] <menu>;

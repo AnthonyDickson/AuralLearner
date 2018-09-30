@@ -11,8 +11,11 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.widget.Button;
 
+import cosc345.app.controller.IntervalsExercise;
 import cosc345.app.controller.IntervalsMenu;
+import cosc345.app.controller.MelodiesExercise;
 import cosc345.app.controller.ScalesExercise;
+import cosc345.app.model.Difficulty;
 import cosc345.app.model.MenuAction;
 import cosc345.app.model.TextToSpeechManager;
 import cosc345.app.model.VoiceRecognitionManager;
@@ -67,23 +70,93 @@ public class MainActivity extends VoiceControlActivity implements ActivityCompat
     private void setupVoiceRecognition() {
         VoiceRecognitionManager voiceRecognitionManager = VoiceRecognitionManager.getInstance();
         voiceRecognitionManager.init(this);
-        voiceRecognitionManager.registerAction(new MenuAction("pitch matching", () -> startActivity(new Intent(MainActivity.this, PitchMatchingExercise.class))));
-        voiceRecognitionManager.registerAction(new MenuAction("intervals", () -> startActivity(new Intent(MainActivity.this, IntervalsMenu.class))));
-        voiceRecognitionManager.registerAction(new MenuAction("melodies", () -> startActivity(new Intent(MainActivity.this, MelodiesMenu.class))));
-        voiceRecognitionManager.registerAction(new MenuAction("scales", () -> startActivity(new Intent(MainActivity.this, ScalesExercise.class))));
-        voiceRecognitionManager.registerAction(new MenuAction("help", () -> {
-            String text = getResources().getString(R.string.voiceControlHelp);
+        voiceRecognitionManager.registerAction(
+                new MenuAction("pitch matching", () -> {
+                    startActivity(new Intent(MainActivity.this, PitchMatchingExercise.class));
+                }));
+
+        setupIntervalsCommands(voiceRecognitionManager);
+        setupMelodiesCommands(voiceRecognitionManager);
+
+        voiceRecognitionManager.registerAction(new MenuAction("scales", () -> {
+            startActivity(new Intent(MainActivity.this, ScalesExercise.class));
+        }));
+        voiceRecognitionManager.registerAction(new MenuAction("terminology", () -> {
+            String text = getResources().getString(R.string.terminologyText);
             TextToSpeechManager.getInstance().speak(text);
         }));
         voiceRecognitionManager.registerAction(new MenuAction("about", () -> {
             String text = getResources().getString(R.string.aboutText);
             TextToSpeechManager.getInstance().speak(text);
         }));
-        voiceRecognitionManager.registerAction(new MenuAction("terminology", () -> {
-            String text = getResources().getString(R.string.terminologyText);
+        voiceRecognitionManager.registerAction(new MenuAction("help", () -> {
+            String text = getResources().getString(R.string.voiceControlHelp);
             TextToSpeechManager.getInstance().speak(text);
         }));
+
+        voiceRecognitionManager.registerAction(new MenuAction("stop speaking", () -> {
+            TextToSpeechManager.getInstance().pause();
+        }));
+        voiceRecognitionManager.registerAction(new MenuAction("stop talking", () -> {
+            TextToSpeechManager.getInstance().pause();
+        }));
+
         voiceRecognitionManager.registerAction(new MenuAction("cancel", null));
+    }
+
+    private void setupIntervalsCommands(VoiceRecognitionManager voiceRecognitionManager) {
+        voiceRecognitionManager.registerAction(
+                new MenuAction("intervals", () -> {
+                    startActivity(new Intent(MainActivity.this, IntervalsMenu.class));
+                }));
+
+        voiceRecognitionManager.registerAction(
+                new MenuAction("intervals help", () -> {
+                    String text = getResources().getString(R.string.intervalsMenu_difficultyHelpText);
+                    TextToSpeechManager.getInstance().speak(text);
+                }));
+
+        for (Difficulty d: Difficulty.values()) {
+            voiceRecognitionManager.registerAction(
+                    new MenuAction("intervals " + d.toString().toLowerCase(), () -> {
+                        Intent intent = new Intent(MainActivity.this, IntervalsExercise.class);
+                        intent.putExtra("EXTRA_DIFFICULTY", d.toString());
+                        startActivity(intent);
+                    }));
+
+            voiceRecognitionManager.registerAction(
+                    new MenuAction("intervals " + d.toString().toLowerCase() + " help", () -> {
+                        String text = getResources().getString(R.string.intervalsMenu_difficultyHelpText);
+                        TextToSpeechManager.getInstance().speak(text);
+                    }));
+        }
+    }
+    private void setupMelodiesCommands(VoiceRecognitionManager voiceRecognitionManager) {
+        voiceRecognitionManager.registerAction(
+                new MenuAction("melodies", () -> {
+                    startActivity(new Intent(MainActivity.this, MelodiesMenu.class));
+                }));
+
+        voiceRecognitionManager.registerAction(
+                new MenuAction("melodies help", () -> {
+                    String text = getResources().getString(R.string.melodiesMenu_difficultyHelpText);
+                    TextToSpeechManager.getInstance().speak(text);
+                }));
+
+        for (Difficulty d: Difficulty.values()) {
+            voiceRecognitionManager.registerAction(
+                    new MenuAction("melodies " + d.toString().toLowerCase(), () -> {
+                        Intent intent = new Intent(MainActivity.this, MelodiesExercise.class);
+                        intent.putExtra("EXTRA_DIFFICULTY", d.toString());
+                        startActivity(intent);
+                    }));
+
+            voiceRecognitionManager.registerAction(
+                    new MenuAction("melodies " + d.toString().toLowerCase() + " help", () -> {
+                        String text = getResources().getString(R.string.melodiesMenu_difficultyHelpTitle);
+                        TextToSpeechManager.getInstance().speak(text);
+                    }));
+        }
     }
 
     private void setupMenuButtons() {
