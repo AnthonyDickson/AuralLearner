@@ -1,7 +1,6 @@
 package cosc345.AuralLearner.controller;
 
 import android.os.Bundle;
-import android.widget.TextView;
 
 import java.util.Locale;
 
@@ -15,13 +14,6 @@ public class IntervalsExercise extends ExerciseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_intervals_exercise);
-
-        startBtn = findViewById(R.id.intervalsExercise_startBtn);
-        stopBtn = findViewById(R.id.intervalsExercise_stopBtn);
-
-        startBtn.setOnClickListener(v -> startExercise());
-        stopBtn.setOnClickListener(v -> stopExercise());
 
         String difficulty = getIntent().getStringExtra("EXTRA_DIFFICULTY");
 
@@ -33,8 +25,9 @@ public class IntervalsExercise extends ExerciseActivity {
             this.difficulty = Difficulty.HARD;
         }
 
-        TextView title = findViewById(R.id.title);
-        title.append(String.format(Locale.ENGLISH, " (%s)", difficulty));
+        title.setText(String.format(Locale.ENGLISH, "%s (%s)",
+                getResources().getString(R.string.intervals_title), difficulty));
+        shortDescription.setText(R.string.intervals_short_desc);
     }
 
     @Override

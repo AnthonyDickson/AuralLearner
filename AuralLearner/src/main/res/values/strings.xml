@@ -11,7 +11,7 @@
         If you need this help section again at a later time, say \"menu\", followed by \"help\".</string>
     <string name="permissionsExplanation">This app needs to record audio for voice recognition and the music exercises to work, also this app needs to write to external storage to setup voice recognition.</string>
     <string name="pitchMatching_targetPitchLabel">Target Pitch</string>
-    <string name="pitchMatching_titleLabel">Pitch Matching</string>
+    <string name="pitchMatching_title">Pitch Matching</string>
     <string name="pitchMatching_pitchDifferenceLabel">Difference</string>
     <string name="startBtnLabel">Start</string>
     <string name="stopBtnLabel">Stop</string>
@@ -25,8 +25,8 @@
     <string name="voiceControlHelpTitle">Voice Control Help</string>
     <string name="dialogOk">OK</string>
     <string name="dialogCancel">Cancel</string>
-    <string name="intervals_titleLabel">Intervals Exercise</string>
-    <string name="pitchMatching_description">Try match your pitch with the target pitch!</string>
+    <string name="intervals_title">Intervals Exercise</string>
+    <string name="pitchMatching_short_desc">Try match your pitch with the target pitch!</string>
     <string name="pitchMatching_currentPitchLabel">Your Current Pitch</string>
     <string name="intervals_description">Try sing an interval!</string>
     <string name="intervals_targetLabel">Target Interval</string>

@@ -1,24 +1,28 @@
 package cosc345.AuralLearner.controller;
 
+import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
+import java.util.Locale;
+
+import cosc345.AuralLearner.R;
 import cosc345.AuralLearner.model.Grader;
 import cosc345.AuralLearner.model.Note;
 import cosc345.AuralLearner.model.Playable;
 import cosc345.AuralLearner.model.TextToSpeechManager;
+import cosc345.AuralLearner.model.VoiceRecognitionManager;
 
 /**
  * A generalised form of the exercise activities. <br >
  * <br >
  * Any implementing class should override
  * the onCreate() method and make sure to: <br >
- * - set the activity layout<br >
- * - assign the startBtn and stopBtn buttons<br >
- * - set the startBtn onClickListener to startExercise(), and set the onClickListener of the stopBtn
- *   to be stopExercise()<br >
+ * - set the text in the title and shortDescription text views to the appropriate values. <br >
  * - override the setupExercise() method and initialise grader.
  */
 public abstract class ExerciseActivity extends AppCompatActivity implements Playable.Delegate {
@@ -29,12 +33,32 @@ public abstract class ExerciseActivity extends AppCompatActivity implements Play
     protected Grader grader;
     protected int timesPlayed;
     protected Handler handler = new Handler();
+    protected TextView title;
+    protected TextView shortDescription;
+    protected TextView score;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.excercise);
+
+        title = findViewById(R.id.title);
+        shortDescription = findViewById(R.id.short_description);
+        score = findViewById(R.id.score);
+
+        startBtn = findViewById(R.id.startBtn);
+        stopBtn = findViewById(R.id.stopBtn);
+
+        startBtn.setOnClickListener(v -> startExercise());
+        stopBtn.setOnClickListener(v -> stopExercise());
+    }
 
     @Override
     protected void onResume() {
         super.onResume();
 
         TextToSpeechManager.getInstance().restart();
+        VoiceRecognitionManager.getInstance().close();
     }
 
     @Override
@@ -54,8 +78,8 @@ public abstract class ExerciseActivity extends AppCompatActivity implements Play
         timesPlayed = 0;
         startBtn.setVisibility(View.GONE);
         stopBtn.setVisibility(View.VISIBLE);
-        grader.setOnSuccessCallback(this::onGradingDone);
-        grader.setCallback(this::showStartButton);
+        grader.setOnSuccessCallback(() -> runOnUiThread(this::onGradingDone));
+        grader.setCallback(() -> runOnUiThread(this::showStartButton));
         target = grader.playable;
         target.setDelegate(this);
 
@@ -66,7 +90,7 @@ public abstract class ExerciseActivity extends AppCompatActivity implements Play
     /**
      * Prepare the exercise. <br >
      * Implementing classes should use this method to: <br >
-     *     - Initialise the grader for the exercise.
+     * - Initialise the grader for the exercise.
      */
     abstract void setupExercise();
 
@@ -107,6 +131,9 @@ public abstract class ExerciseActivity extends AppCompatActivity implements Play
      */
     protected void onGradingDone() {
         TextToSpeechManager.getInstance().speak(grader.getFeedback());
+        score.setText(String.format(Locale.ENGLISH, "Your score was: %.2f",
+                grader.getScore()));
+        score.setVisibility(View.VISIBLE);
     }
 
     /**
