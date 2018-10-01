@@ -1,6 +1,9 @@
 package cosc345.AuralLearner.controller;
 
 import android.os.Bundle;
+import android.widget.TextView;
+
+import java.util.Locale;
 
 import cosc345.AuralLearner.R;
 import cosc345.AuralLearner.model.Difficulty;
@@ -29,6 +32,9 @@ public class IntervalsExercise extends ExerciseActivity {
         } else {
             this.difficulty = Difficulty.HARD;
         }
+
+        TextView title = findViewById(R.id.title);
+        title.append(String.format(Locale.ENGLISH, " (%s)", difficulty));
     }
 
     @Override

@@ -22,6 +22,22 @@
         app:layout_constraintTop_toTopOf="parent">
 
 
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/intervals_titleLabel"
+            android:textAllCaps="false"
+            android:textSize="@dimen/menuTitleTextSize" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/intervals_short_desc" />
+
         <Button
             android:id="@+id/intervalsExercise_startBtn"
             android:layout_width="match_parent"

@@ -87,4 +87,9 @@
         \n\nMelody - A melody is basically a sequence of notes.
         \nInterval - two difference between two pitches (for example, the interval formed by an A and an A# is a minor second).
     </string>
+    <string name="intervals_short_desc">Try sing an interval!</string>
+    <string name="melodies_title">Melodies Exercise</string>
+    <string name="melodies_short_desc">Try sing a melody!</string>
+    <string name="scales_title">Scales Exercise</string>
+    <string name="scales_short_desc">Try sing a scale!</string>
 </resources>
