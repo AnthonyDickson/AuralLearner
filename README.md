@@ -1,6 +1,6 @@
-# COSC345 Project - Aural Learner
-
 [![Build Status](https://travis-ci.org/eight0153/AuralLearner.svg?branch=master)](https://travis-ci.org/eight0153/AuralLearner)
+
+# COSC345 Project - Aural Learner
 
 For our project we aim to make an Android app that teaches some of the basic
 parts of aural music theory through exercises that aim to improve the users'
@@ -63,15 +63,11 @@ use the app is spoken to the user when it is relevant.
 ### Pitch Matching Exercise
 
 The first type of exercise we have implemented is a pitch matching exercise.
-The goal is for the user to sing a given pitch (or note) as accurately as
-possible. Accuracy is measured by how many semitones and how many cents away
-from the target pitch the user is singing, and the closer these number are to
-zero the better. The exercise can be started by selecting 'Pitch Matching' 
-from the main menu and pressing the 'start' button.
-
-The user can also have the target pitch played to them by pressing the 
-button that says 'Play Target Pitch'. The user can also change the target
-pitch by pressing the button 'Change Target Pitch'.
+The goal in this exercise is for the user to sing a given pitch (or note) as accurately as
+possible. 
+The app will choose a note a random for the user to sing, it then announces which note was chosen, plays it twice through, and then waits for the user to sing. 
+The user is then graded based on how close the pitch they sang was to the desired note, and given a score ranging from 0 to 100, where 0 means the user sang the wrong note and 100 meaning the user's pitch was pretty much spot on. 
+The user will also be given feedback via text-to-speech giving a more general grade ranging from 'bad' to 'perfect'.
 
 ### Intervals Exercise
 
@@ -80,11 +76,11 @@ this time the user needs to sing a musical interval. The user is graded based
 on how accurately they sing both of the notes in the interval. 
 
 Once the user has chosen this exercise and a difficulty, an algorithm
-generates a sequence of random notes given the various constraints as difficulty
-which include the likely hood of an inversion, and the quality/type of interval.
+generates a sequence of random notes based on constraints for the chosen difficulty,
+which includes the likelihood of an inversion, and the quality/type of interval.
 Once this is generated, it is played to the user two times, once to listen, the 
-second to practice and the third to recieve a grade. The grade is spoken back to 
-the user at the end, a grade ranging from 'bad' to 'perfect'.
+second to practice, and after that the user is required to sing. 
+The user's singing is graded from 'bad' to 'perfect' based on the proportion of notes they sang correctly, and the grade is then spoken back to the user.
 
 ### Scales Exercise
 
