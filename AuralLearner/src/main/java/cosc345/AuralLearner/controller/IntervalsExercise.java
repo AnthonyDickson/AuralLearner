@@ -5,9 +5,8 @@ import android.os.Bundle;
 import cosc345.AuralLearner.R;
 import cosc345.AuralLearner.model.Difficulty;
 import cosc345.AuralLearner.model.IntervalExerciseGrader;
-import cosc345.AuralLearner.model.Playable;
 
-public class IntervalsExercise extends ExerciseActivity implements Playable.Delegate {
+public class IntervalsExercise extends ExerciseActivity {
     private Difficulty difficulty;
 
     @Override

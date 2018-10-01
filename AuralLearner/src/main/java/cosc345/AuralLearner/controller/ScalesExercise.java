@@ -3,10 +3,9 @@ package cosc345.AuralLearner.controller;
 import android.os.Bundle;
 
 import cosc345.AuralLearner.R;
-import cosc345.AuralLearner.model.Playable;
 import cosc345.AuralLearner.model.ScaleExerciseGrader;
 
-public class ScalesExercise extends ExerciseActivity implements Playable.Delegate {
+public class ScalesExercise extends ExerciseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
