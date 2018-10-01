@@ -3,6 +3,7 @@ package cosc345.AuralLearner.model;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * represents a melody.
@@ -111,8 +112,14 @@ public class Melody extends Playable {
     @Override
     public String toString() {
         return String.format("Melody in %s %s %s",
-                notes.get(0).getName(),
+                notes.get(0).getNameWithoutOctave(),
                 scale.scaleType,
                 notes.toString());
+    }
+
+    @Override
+    public String prettyPrint() {
+        return String.format(Locale.ENGLISH,"Melody in %s %s.",
+                notes.get(0).getNameWithoutOctave(), scale.scaleType);
     }
 }

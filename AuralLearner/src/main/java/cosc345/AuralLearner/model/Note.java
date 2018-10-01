@@ -410,6 +410,11 @@ public class Note extends Playable implements Comparable<Note>,
         return getName();
     }
 
+    @Override
+    public String prettyPrint() {
+        return toString();
+    }
+
     //// Note Playback Stuff ////
     @Override
     public void play() {

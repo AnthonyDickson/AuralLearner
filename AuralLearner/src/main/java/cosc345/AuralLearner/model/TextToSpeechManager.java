@@ -21,6 +21,8 @@ public class TextToSpeechManager {
     private WeakReference<Context> parentContext;
     private Callback onStart;
     private Callback onDone;
+    /** A callback that will be used exactly once, then discarded. */
+    private Callback oneTimeCallback;
     private State state = State.NOT_READY;
 
     private TextToSpeechManager() {
@@ -89,6 +91,34 @@ public class TextToSpeechManager {
 
                 state = State.READY;
                 Log.i(TextToSpeechManager.LOG_TAG, "Initialisation Complete.");
+            }
+        });
+    }
+
+    /**
+     * Set the one time callback.
+     *
+     * @param callback the callback that should be used exactly once.
+     */
+    public void setOneTimeCallback(Callback callback) {
+        oneTimeCallback = callback;
+        tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+            @Override
+            public void onStart(String s) {
+
+            }
+
+            @Override
+            public void onDone(String s) {
+                if (oneTimeCallback != null) {
+                    oneTimeCallback.execute();
+                    oneTimeCallback = null;
+                }
+            }
+
+            @Override
+            public void onError(String s) {
+
             }
         });
     }

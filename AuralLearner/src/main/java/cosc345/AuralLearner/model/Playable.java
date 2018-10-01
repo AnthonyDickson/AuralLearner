@@ -61,6 +61,12 @@ public abstract class Playable {
     }
 
     /**
+     * Provide a 'pretty print' string of the playable.
+     * @return the string representing the playable object.
+     */
+    public abstract String prettyPrint();
+
+    /**
      * Delegate provides an interface for objects playing a playable to control what happens
      * when a playable starts and finishes playback.
      */

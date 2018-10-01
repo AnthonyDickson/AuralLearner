@@ -33,14 +33,7 @@ public class IntervalsExercise extends ExerciseActivity implements Playable.Dele
     }
 
     @Override
-    protected void startExercise() {
-        super.startExercise();
-
+    void setupExercise() {
         grader = new IntervalExerciseGrader(difficulty);
-        grader.setOnSuccessCallback(this::onGradingDone);
-        grader.setCallback(this::showStartButton);
-        target = grader.playable;
-        target.setDelegate(this);
-        target.play();
     }
 }

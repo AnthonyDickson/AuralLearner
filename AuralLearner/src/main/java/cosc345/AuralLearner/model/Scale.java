@@ -3,6 +3,7 @@ package cosc345.AuralLearner.model;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 /** Represents a musical scale. */
 public class Scale extends Playable {
@@ -91,6 +92,11 @@ public class Scale extends Playable {
     }
 
     @Override
+    public String prettyPrint() {
+        return String.format(Locale.ENGLISH ,"%s scale starting at %s.", scaleType, notes.get(0));
+    }
+
+    @Override
     public String toString() {
         return scaleType.toString() + " " + notes.toString();
     }
@@ -113,6 +119,18 @@ public class Scale extends Playable {
                     return new int[] {2, 1, 2, 2, 1, 2, 2};
                 default:
                     return new int[0];
+            }
+        }
+
+        @Override
+        public String toString() {
+            switch (this) {
+                case MAJOR:
+                    return "Major";
+                case NATURAL_MINOR:
+                    return "Natural Minor";
+                default:
+                    return "Unknown";
             }
         }
     }

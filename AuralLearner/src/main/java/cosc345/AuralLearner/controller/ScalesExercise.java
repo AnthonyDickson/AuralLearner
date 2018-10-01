@@ -27,14 +27,7 @@ public class ScalesExercise extends ExerciseActivity implements Playable.Delegat
     }
 
     @Override
-    protected void startExercise() {
-        super.startExercise();
-        
+    protected void setupExercise() {
         grader = new ScaleExerciseGrader();
-        grader.setOnSuccessCallback(this::onGradingDone);
-        grader.setCallback(this::showStartButton);
-        target = grader.playable;
-        target.setDelegate(this);
-        target.play();
     }
 }

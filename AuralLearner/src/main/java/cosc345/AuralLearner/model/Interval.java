@@ -4,6 +4,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import static cosc345.AuralLearner.model.Utilities.random;
@@ -176,7 +177,10 @@ public class Interval extends Playable {
                 String.format("(%s, %s)", root.getName(), other.getName());
     }
 
-
+    @Override
+    public String prettyPrint() {
+        return String.format(Locale.ENGLISH, "%s starting on %s.", name, root);
+    }
 
     public static String[] getShortNames() {
         String[] names = new String[Interval.intervalNames.size()];

@@ -33,15 +33,8 @@ public class MelodiesExercise extends ExerciseActivity implements Playable.Deleg
     }
 
     @Override
-    protected void startExercise() {
-        super.startExercise();
-
+    protected void setupExercise() {
         grader = new MelodyExerciseGrader(difficulty);
-        grader.setOnSuccessCallback(this::onGradingDone);
-        grader.setCallback(this::showStartButton);
-        target = grader.playable;
-        target.setDelegate(this);
-        target.play();
     }
 }
 
