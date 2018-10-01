@@ -18,7 +18,7 @@ git config --global user.name "travis-ci"
 git remote -v
 # Might have to do the below
 git remote rm origin
-git remote add origin https://eight0153:$GITHUB_TOKEN@github.com/eight0153/ourcontributiontoblindmusicians
+git remote add origin https://eight0153:$GITHUB_TOKEN@github.com/eight0153/AuralLearner
 
 git add . -f
 git commit -m "Lastest javadoc on successful travis build $TRAVIS_BUILD_NUMBER auto-pushed to gh-pages"

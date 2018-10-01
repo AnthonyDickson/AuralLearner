@@ -1,6 +1,6 @@
 # COSC345 Project
 
-[![Build Status](https://travis-ci.org/eight0153/ourcontributiontoblindmusicians.svg?branch=master)](https://travis-ci.org/eight0153/ourcontributiontoblindmusicians)
+[![Build Status](https://travis-ci.org/eight0153/AuralLearner.svg?branch=master)](https://travis-ci.org/eight0153/AuralLearner)
 
 For our project we aim to make an Android app that teaches some of the basic
 parts of aural music theory through exercises that aim to improve the users'
@@ -13,7 +13,7 @@ All of the reports for the project can be found under the directory 'reports'.
 
 ## Javadocs Documentation
 The javadocs for this project are hosted on GitHub pages and can be found
-[here](https://eight0153.github.io/ourcontributiontoblindmusicians/).
+[here](https://eight0153.github.io/AuralLearner/).
 
 ## How to Build
 
