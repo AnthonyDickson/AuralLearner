@@ -51,6 +51,8 @@ The user should also be able to select various aural music exercises by saying
 the exercise and a difficulty if one applies to the exercise. Voice control
 is not available during the exercises.
 
+It should be noted that voice control is a bit buggy at the moment, and may mishear you occasionally.
+
 ### Text to Speech
 
 The information that a user would need from the app, such as grades and how to
@@ -75,21 +77,21 @@ pitch by pressing the button 'Change Target Pitch'.
 
 The goal of this exercise is similar to the pitch matching exercise, however
 this time the user needs to sing a musical interval. The user is graded based
-on how accurately they sing both of the notes in the interval. The setup is 
-similar to the setup of the pitch matching exercise however the user can
-change both the root note of the interval and the type of interval. 
-Unfortunately this exercise is still buggy and not working correctly.
-
-### Random Interval Exercise
+on how accurately they sing both of the notes in the interval. 
 
 Once the user has chosen this exercise and a difficulty, an algorithm
 generates a sequence of random notes given the various constraints as difficulty
 which include the likely hood of an inversion, and the quality/type of interval.
 Once this is generated, it is played to the user two times, once to listen, the 
 second to practice and the third to recieve a grade. The grade is spoken back to 
-the user at the end, a grade of 'bad' to 'perfect'.
+the user at the end, a grade ranging from 'bad' to 'perfect'.
 
-### Random Melody Exercise
+### Scales Exercise
+
+The scales exercise is very similiar to the interval exercise except that it
+is tests the user's ability to sing a musical scale.
+
+### Melody Exercise
 
 The melody exercise is very similiar to the interval exercise except that it
 is forms tonal melodies according to musical rules of tonal melody. This exercise starts
