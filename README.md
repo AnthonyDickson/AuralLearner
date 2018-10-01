@@ -1,4 +1,4 @@
-# COSC345 Project
+# COSC345 Project - Aural Learner
 
 [![Build Status](https://travis-ci.org/eight0153/AuralLearner.svg?branch=master)](https://travis-ci.org/eight0153/AuralLearner)
 
@@ -26,7 +26,7 @@ The javadocs for this project are hosted on GitHub pages and can be found
 ## How to Run the Application in an Emulator
 
 Make sure your computer has a microphone available, otherwise you will not be able
-to use the application. 
+to use the application. Also the app is best used with earphones/headphones, as some of the pitches played in the exercises may be difficult to hear otherwise.
 
 You can use pretty much any emulator as long as it is running a version of
 Android that is equivalent to, or newer than, Android API level 15
