@@ -35,45 +35,6 @@
             android:paddingBottom="8dp"
             android:text="@string/pitchMatching_description" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/pitchMatching_targetPitchLabel" />
-
-        <TextView
-            android:id="@+id/pitchMatching_targetPitchText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="-" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/pitchMatching_currentPitchLabel" />
-
-        <TextView
-            android:id="@+id/pitchMatching_userPitchText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="-" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/pitchMatching_pitchDifferenceLabel" />
-
-        <TextView
-            android:id="@+id/pitchMatching_pitchDifferenceText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="-" />
-
         <Button
             android:id="@+id/pitchMatching_startBtn"
             android:layout_width="match_parent"
@@ -86,25 +47,6 @@
             android:layout_height="wrap_content"
             android:text="@string/stopBtnLabel"
             android:visibility="gone" />
-
-        <Button
-            android:id="@+id/pitchMatching_playTargetPitchBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/pitchMatching_playTargetPitchBtnLabel" />
-
-        <Button
-            android:id="@+id/pitchMatching_stopTargetPitchBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/pitchMatching_stopTargetPitchBtnLabel"
-            android:visibility="gone" />
-
-        <Button
-            android:id="@+id/pitchMatching_changeTargetPitchBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/pitchMatching_changeTargetPitchBtnLabel" />
 
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
