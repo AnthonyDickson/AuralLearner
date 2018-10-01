@@ -15,13 +15,13 @@ import be.tarsos.dsp.pitch.PitchDetectionResult;
  * based on how close what the user's singing was compared to the original sequence of notes.
  */
 public class Grader implements PitchDetectionHandler {
-    private static final String LOG_TAG = "Grader";
+    protected static final String LOG_TAG = "Grader";
 
     private double score;
     private ArrayList<Double> frequencyReadings;
     public ArrayList<Note> notes;
     private Iterator<Note> notesIterator;
-    private ArrayList<Note> detectedNotes;
+    protected ArrayList<Note> detectedNotes;
     private PitchDetector pitchDetector;
     private Callback callback = null;
     private Callback onSuccess = null;
@@ -186,7 +186,7 @@ public class Grader implements PitchDetectionHandler {
      *
      * @return the user's score as a number in the range [0.0, 100.0]
      */
-    private double calculateScore() {
+    protected double calculateScore() {
         int numCorrect = 0;
 
         for (int i = 0; i < notes.size(); i++) {
